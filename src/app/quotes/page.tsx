@@ -90,7 +90,7 @@ export default function QuotesListPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search QTN, Project, Client..."
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#002060] bg-slate-50/50"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
           />
         </div>
 
@@ -99,7 +99,7 @@ export default function QuotesListPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs font-medium px-3 py-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#002060]"
+            className="text-xs font-medium px-3 py-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e]"
           >
             <option value="ALL">All Statuses</option>
             <option value="DRAFT">Draft</option>
@@ -134,7 +134,7 @@ export default function QuotesListPage() {
             </p>
             <Link
               href="/quotes/new"
-              className="mt-4 inline-block px-4 py-2 rounded-lg bg-[#002060] text-white text-xs font-bold"
+              className="mt-4 inline-block px-4 py-2 rounded-lg bg-[#00488e] text-white text-xs font-bold"
             >
               Start New Quote
             </Link>
@@ -157,7 +157,7 @@ export default function QuotesListPage() {
               <tbody className="divide-y divide-slate-100 font-medium">
                 {quotes.map((q) => (
                   <tr key={q.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-[#002060]">
+                    <td className="py-3 px-4 font-mono font-bold text-[#00488e]">
                       <Link href={`/quotes/${q.id}`} className="hover:underline">
                         {q.quoteNumber}
                       </Link>

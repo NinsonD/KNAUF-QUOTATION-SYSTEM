@@ -96,7 +96,19 @@ export async function GET(
       date: new Date(quote.createdAt).toLocaleDateString('en-GB'),
     };
 
-    const excelBuffer = await generateAlNamariqExcel(meta, systemDef, calc);
+    let logoBuffer: Buffer | undefined;
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const p = path.join(process.cwd(), 'public', 'logo', 'logo.png');
+      if (fs.existsSync(p)) {
+        logoBuffer = fs.readFileSync(p);
+      }
+    } catch (e) {
+      console.warn('Could not read logo for excel export:', e);
+    }
+
+    const excelBuffer = await generateAlNamariqExcel(meta, systemDef, calc, logoBuffer);
 
     const safeFilename = `${quote.quoteNumber.replace(/[^a-zA-Z0-9-_]/g, '_')}_Knauf_Quotation.xlsx`;
 

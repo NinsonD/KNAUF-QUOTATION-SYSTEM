@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/db';
-import knaufSystemsData from '@/data/knauf-systems.json';
 import {
   FileSpreadsheet,
   PlusCircle,
@@ -41,14 +40,12 @@ export default async function DashboardPage() {
       code: 'CEILING',
       desc: 'Concealed Furring & Cleaneo Acoustic Suspended Ceilings (KC B001, KC A001, D127)',
       count: 4,
-      bg: 'from-blue-600 to-indigo-700',
     },
     {
       title: 'Partition Systems',
       code: 'PARTITION',
       desc: 'Single & Double Stud Partitions with optional Head Deflection (KW 111, 112, 115, 116)',
       count: 4,
-      bg: 'from-sky-600 to-blue-700',
       hasDeflection: true,
     },
     {
@@ -56,7 +53,6 @@ export default async function DashboardPage() {
       code: 'SHAFT_WALL',
       desc: 'Coreboard 25.4mm + C-T Studs 64mm for Lift Shafts & Mechanical Ducts (KSW 120)',
       count: 1,
-      bg: 'from-slate-700 to-slate-900',
       hasDeflection: true,
     },
     {
@@ -64,36 +60,45 @@ export default async function DashboardPage() {
       code: 'WALL_LINING',
       desc: 'Direct Fix, Independent & Perlfix Dot & Dab Wall Linings (KW 625, B626, A611, D623, D611)',
       count: 5,
-      bg: 'from-amber-600 to-amber-700',
     },
   ];
 
   return (
     <div className="space-y-8">
-      {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#002060] via-[#003399] to-[#001740] p-6 sm:p-8 text-white shadow-md">
+      {/* Hero Welcome Banner with Official Logo */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#00488e] via-[#003c77] to-[#002d5a] p-6 sm:p-8 text-white shadow-lg border border-blue-900/50">
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider mb-4">
-            Al Namariq Commercial Estimator
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-white p-2 rounded-xl shadow-xs border border-white/40">
+              <img
+                src="/logo/logo.png"
+                alt="Al Namariq Logo"
+                className="h-10 w-auto object-contain"
+              />
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f86c29]/20 text-[#f86c29] border border-[#f86c29]/40 text-xs font-black uppercase tracking-wider">
+              Official Quotation Engine
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-            Knauf Quotation Engine
+
+          <h1 className="text-2xl sm:text-4xl font-black tracking-tight">
+            Knauf Commercial Estimator SaaS
           </h1>
           <p className="mt-2 text-sm sm:text-base text-blue-100/90 leading-relaxed">
-            Automated dry construction quotation calculator based on official Knauf per-m² consumption factors, dynamic bill of materials, head deflection options, and Al Namariq corporate Excel exports.
+            Automated dry construction quotation platform for Al Namariq Building Material Trading Co. LLC. Calculate official Knauf per-m² consumption factors, deflection head assemblies, and generate branded corporate Excel sheets.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link
               href="/quotes/new"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm transition-all hover:shadow"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#f86c29] hover:bg-[#e05615] text-white font-black text-xs uppercase tracking-wider shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
             >
               <PlusCircle className="w-4 h-4" />
               Create New Quotation
             </Link>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/20 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/25 transition-colors"
             >
               <Layers className="w-4 h-4" />
               Browse 14 Knauf Systems
@@ -114,11 +119,11 @@ export default async function DashboardPage() {
             <span className="text-xs font-bold uppercase text-slate-500 tracking-wider">
               Total Quotations
             </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#002060] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#00488e] flex items-center justify-center">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-2xl font-black text-slate-900 font-mono">
+          <div className="mt-3 text-2xl font-black text-[#00488e] font-mono">
             {totalQuotesCount}
           </div>
           <p className="mt-1 text-xs text-slate-500">Live quotations recorded</p>
@@ -129,7 +134,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-bold uppercase text-slate-500 tracking-wider">
               Total Pipeline Volume
             </span>
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-[#fff3ec] text-[#f86c29] flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
@@ -159,7 +164,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-bold uppercase text-slate-500 tracking-wider">
               Knauf Systems
             </span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#00488e] flex items-center justify-center">
               <Layers className="w-4 h-4" />
             </div>
           </div>
@@ -174,14 +179,14 @@ export default async function DashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Knauf System Categories</h2>
+            <h2 className="text-lg font-black text-slate-900">Knauf System Categories</h2>
             <p className="text-xs text-slate-500">
               Quick launch quotation by selecting an assembly category
             </p>
           </div>
           <Link
             href="/catalog"
-            className="text-xs font-bold text-[#002060] hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-[#00488e] hover:underline flex items-center gap-1"
           >
             Explore all specifications <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -192,7 +197,7 @@ export default async function DashboardPage() {
             <Link
               key={cat.code}
               href={`/quotes/new?category=${cat.code}`}
-              className="group bg-white rounded-xl border border-slate-200 p-5 hover:border-[#002060] hover:shadow-md transition-all flex flex-col justify-between"
+              className="group bg-white rounded-xl border border-slate-200 p-5 hover:border-[#00488e] hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -200,12 +205,12 @@ export default async function DashboardPage() {
                     {cat.count} Systems
                   </span>
                   {cat.hasDeflection && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#f86c29] bg-[#fff3ec] px-2 py-0.5 rounded border border-[#fed7aa]">
                       <ShieldCheck className="w-3 h-3" /> Deflection
                     </span>
                   )}
                 </div>
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#002060] transition-colors mb-2">
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#00488e] transition-colors mb-2">
                   {cat.title}
                 </h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -213,7 +218,7 @@ export default async function DashboardPage() {
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#002060]">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#00488e]">
                 <span>Launch Quote</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -224,10 +229,10 @@ export default async function DashboardPage() {
 
       {/* Recent Quotations Section */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/70">
           <div>
             <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#002060]" />
+              <Clock className="w-4 h-4 text-[#00488e]" />
               Recent Commercial Quotations
             </h2>
             <p className="text-xs text-slate-500">
@@ -236,7 +241,7 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/quotes"
-            className="text-xs font-bold text-[#002060] hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-[#00488e] hover:underline flex items-center gap-1"
           >
             View All <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -247,7 +252,7 @@ export default async function DashboardPage() {
             <p className="text-sm">No quotations created yet.</p>
             <Link
               href="/quotes/new"
-              className="mt-3 inline-block text-xs font-bold text-[#002060] hover:underline"
+              className="mt-3 inline-block text-xs font-bold text-[#00488e] hover:underline"
             >
               Create your first quote &rarr;
             </Link>
@@ -255,7 +260,7 @@ export default async function DashboardPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-700">
-              <thead className="bg-slate-100 text-slate-700 uppercase text-[11px] font-bold border-b border-slate-200">
+              <thead className="bg-[#00488e] text-white uppercase text-[11px] font-bold border-b border-blue-900/40">
                 <tr>
                   <th className="py-3 px-4">QTN No.</th>
                   <th className="py-3 px-4">Project & Client</th>
@@ -270,7 +275,7 @@ export default async function DashboardPage() {
               <tbody className="divide-y divide-slate-100 font-medium">
                 {quotes.map((q) => (
                   <tr key={q.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-[#002060]">
+                    <td className="py-3 px-4 font-mono font-bold text-[#00488e]">
                       <Link href={`/quotes/${q.id}`} className="hover:underline">
                         {q.quoteNumber}
                       </Link>
@@ -280,7 +285,7 @@ export default async function DashboardPage() {
                       <div className="text-[11px] text-slate-500">{q.clientName}</div>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="font-mono text-xs font-semibold text-slate-800">
+                      <span className="font-mono text-xs font-bold text-slate-800">
                         {q.system?.code || 'Custom'}
                       </span>
                       <div className="text-[11px] text-slate-500 truncate max-w-[180px]">
@@ -293,7 +298,7 @@ export default async function DashboardPage() {
                     <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">
                       AED {q.grandTotalAed.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
-                    <td className="py-3 px-4 text-right font-mono text-slate-600">
+                    <td className="py-3 px-4 text-right font-mono text-[#f86c29] font-bold">
                       AED {q.grandRatePerM2.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 text-center">
@@ -302,9 +307,9 @@ export default async function DashboardPage() {
                           q.status === 'APPROVED'
                             ? 'bg-emerald-100 text-emerald-800'
                             : q.status === 'ISSUED'
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'bg-blue-100 text-[#00488e]'
                             : q.status === 'REVISED'
-                            ? 'bg-amber-100 text-amber-800'
+                            ? 'bg-[#fff3ec] text-[#f86c29]'
                             : 'bg-slate-100 text-slate-700'
                         }`}
                       >
@@ -315,14 +320,14 @@ export default async function DashboardPage() {
                       <div className="flex items-center justify-center gap-1.5">
                         <Link
                           href={`/quotes/${q.id}`}
-                          className="px-2.5 py-1 text-xs font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700"
+                          className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                         >
                           View
                         </Link>
                         <a
                           href={`/api/quotes/${q.id}/export`}
                           download
-                          className="px-2.5 py-1 text-xs font-semibold rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1"
+                          className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#fff3ec] hover:bg-[#fed7aa] text-[#f86c29] border border-[#fed7aa] flex items-center gap-1 transition-colors"
                           title="Download Excel"
                         >
                           <FileSpreadsheet className="w-3.5 h-3.5" />

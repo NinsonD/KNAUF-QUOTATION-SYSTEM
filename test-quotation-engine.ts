@@ -33,7 +33,7 @@ async function runVerification() {
   console.assert(calcWithDef.deflectionItems.length === 5, 'Should have 5 deflection items');
   console.assert(calcWithDef.grandTotalAed > calcWithDef.baseTotalAed, 'Grand total should include deflection');
 
-  // 3. Test Excel Export Generation
+  // 3. Test Excel Export Generation (with embedded official logo)
   const meta: QuoteMetaData = {
     quoteNumber: 'ANM-TEST-001',
     projectName: 'Dubai Marina Luxury Tower Partitions',
@@ -42,10 +42,13 @@ async function runVerification() {
     date: '11/09/2026',
   };
 
-  const excelBuffer = await generateAlNamariqExcel(meta, kw111, calcWithDef);
-  console.log(`\n[TEST 3] Excel Generation:`);
+  const fs = await import('fs');
+  const path = await import('path');
+  const logoBuf = fs.readFileSync(path.join(process.cwd(), 'public', 'logo', 'logo.png'));
+  const excelBuffer = await generateAlNamariqExcel(meta, kw111, calcWithDef, logoBuf);
+  console.log(`\n[TEST 3] Excel Generation with Embedded Company Logo:`);
   console.log(`  - Buffer Size: ${excelBuffer.length} bytes`);
-  console.assert(excelBuffer.length > 5000, 'Excel buffer should be valid size');
+  console.assert(excelBuffer.length > 50000, 'Excel buffer with embedded logo should be > 50KB');
 
   // 4. Test Database Connection & Seeded Quotes
   const quotesCount = await prisma.quotation.count();

@@ -26,12 +26,12 @@ export default function ExportButtons({
     <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-5 flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         {saveSuccess ? (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
-            <CheckCircle className="w-4 h-4" /> Quotation saved successfully!
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+            <CheckCircle className="w-4 h-4 text-emerald-600" /> Quotation saved to repository!
           </span>
         ) : (
           <span className="text-xs text-slate-500 font-medium">
-            Save progress or generate official branded exports
+            Save changes to repository or generate corporate branded exports
           </span>
         )}
       </div>
@@ -42,7 +42,7 @@ export default function ExportButtons({
           type="button"
           onClick={onSaveQuote}
           disabled={isSaving}
-          className="px-4 py-2 text-xs font-bold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center gap-2 transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-xs font-bold rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center gap-2 transition-all disabled:opacity-50"
         >
           {isSaving ? (
             <Loader2 className="w-4 h-4 animate-spin text-slate-600" />
@@ -56,18 +56,18 @@ export default function ExportButtons({
         <button
           type="button"
           onClick={onPrintPdf}
-          className="px-4 py-2 text-xs font-bold rounded-lg text-[#002060] bg-blue-50 hover:bg-blue-100 border border-blue-200 flex items-center gap-2 transition-colors"
+          className="px-4 py-2 text-xs font-bold rounded-xl text-[#00488e] bg-blue-50 hover:bg-blue-100 border border-blue-200 flex items-center gap-2 transition-all"
         >
-          <Printer className="w-4 h-4 text-[#002060]" />
+          <Printer className="w-4 h-4 text-[#00488e]" />
           Print / PDF View
         </button>
 
-        {/* Excel Export button */}
+        {/* Excel Export button in Brand Orange */}
         <button
           type="button"
           onClick={onExportExcel}
           disabled={isExporting}
-          className="px-5 py-2 text-xs font-bold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm flex items-center gap-2 transition-all hover:shadow disabled:opacity-50"
+          className="px-5 py-2 text-xs font-black uppercase tracking-wide rounded-xl text-white bg-[#f86c29] hover:bg-[#e05615] shadow-sm flex items-center gap-2 transition-all hover:shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
         >
           {isExporting ? (
             <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -80,4 +80,3 @@ export default function ExportButtons({
     </div>
   );
 }
-

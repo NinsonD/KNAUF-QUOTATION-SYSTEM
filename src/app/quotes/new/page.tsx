@@ -239,7 +239,17 @@ function NewQuoteContent() {
   const handleExportExcel = async () => {
     setIsExporting(true);
     try {
-      const buffer = await generateAlNamariqExcel(meta, selectedSystem, calculation);
+      let logoBuf: ArrayBuffer | undefined;
+      try {
+        const resp = await fetch('/logo/logo.png');
+        if (resp.ok) {
+          logoBuf = await resp.arrayBuffer();
+        }
+      } catch (e) {
+        console.warn('Could not fetch logo in browser:', e);
+      }
+
+      const buffer = await generateAlNamariqExcel(meta, selectedSystem, calculation, logoBuf);
       const blob = new Blob([buffer as any], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
@@ -260,20 +270,25 @@ function NewQuoteContent() {
 
   return (
     <div className="space-y-6">
-      {/* Studio Header */}
+      {/* Studio Header with Company Logo */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              Interactive Quotation Studio
-            </h1>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-              Live Calc
-            </span>
+        <div className="flex items-center gap-3.5">
+          <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
+            <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Build and calculate compliant Knauf assemblies with custom m² consumption factors, commercial rates, and deflection options.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                Interactive Quotation Studio
+              </h1>
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#fff3ec] text-[#f86c29] border border-[#fed7aa]">
+                Live Calc
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Build and calculate compliant Knauf assemblies with custom m² consumption factors, commercial rates, and deflection options.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -363,7 +378,7 @@ function NewQuoteContent() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#002060] text-white hover:bg-[#002060]/90"
+                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#00488e] text-white hover:bg-[#00488e]/90"
                 >
                   Print to PDF
                 </button>
@@ -396,7 +411,7 @@ export default function NewQuotePage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-6 h-6 animate-spin text-[#002060]" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#00488e]" />
         </div>
       }
     >

@@ -39,7 +39,7 @@ export default function MaterialGrid({
   return (
     <div className="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
       {/* Header Bar */}
-      <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50">
+      <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70">
         <div>
           <h3 className="text-base font-bold text-slate-900">
             3. Bill of Materials & Pricing Engine
@@ -55,12 +55,12 @@ export default function MaterialGrid({
             className="px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Reset to Defaults
+            Reset Defaults
           </button>
           <button
             type="button"
             onClick={onAddBaseItem}
-            className="px-3 py-1.5 text-xs font-semibold text-white bg-[#002060] hover:bg-[#002060]/90 rounded-lg flex items-center gap-1.5 transition-colors shadow-2xs"
+            className="px-3 py-1.5 text-xs font-bold text-white bg-[#00488e] hover:bg-[#003c77] rounded-lg flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Material Row
@@ -70,8 +70,8 @@ export default function MaterialGrid({
 
       {/* Warning if scale is 0 */}
       {scaleM2 <= 0 && (
-        <div className="mx-5 mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-2 text-xs text-amber-800">
-          <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+        <div className="mx-5 mt-4 p-3 bg-[#fff3ec] border border-[#fed7aa] rounded-lg flex items-center gap-2 text-xs text-[#e05615]">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#f86c29]" />
           <span>Please set a valid project scale (M² &gt; 0) in Step 2 to compute total project quantities.</span>
         </div>
       )}
@@ -79,7 +79,7 @@ export default function MaterialGrid({
       {/* Main Base Items Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs text-slate-700">
-          <thead className="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold border-b border-slate-200">
+          <thead className="bg-[#00488e] text-white uppercase text-[11px] font-bold border-b border-blue-900/40">
             <tr>
               <th className="py-3 px-3 w-10 text-center">#</th>
               <th className="py-3 px-4 min-w-[280px]">Product Name / Specification</th>
@@ -93,7 +93,7 @@ export default function MaterialGrid({
           </thead>
           <tbody className="divide-y divide-slate-100 font-medium">
             {baseItems.map((item, idx) => (
-              <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+              <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
                 <td className="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">
                   {idx + 1}
                 </td>
@@ -102,7 +102,7 @@ export default function MaterialGrid({
                     type="text"
                     value={item.productName}
                     onChange={(e) => onUpdateBaseItem(idx, { productName: e.target.value })}
-                    className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-[#002060] focus:bg-white focus:outline-none transition-colors"
+                    className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-[#00488e] focus:bg-white focus:outline-none transition-colors"
                   />
                 </td>
                 <td className="py-2.5 px-3 text-right">
@@ -117,7 +117,7 @@ export default function MaterialGrid({
                       const totalPriceAed = Number((totalQuantity * item.unitPriceAed).toFixed(2));
                       onUpdateBaseItem(idx, { factorPerM2: factor, totalQuantity, totalPriceAed });
                     }}
-                    className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-slate-200 focus:border-[#002060] focus:outline-none"
+                    className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-slate-200 focus:border-[#00488e] focus:outline-none"
                   />
                 </td>
                 <td className="py-2.5 px-2 text-center">
@@ -148,7 +148,7 @@ export default function MaterialGrid({
                       const totalPriceAed = Number((item.totalQuantity * price).toFixed(2));
                       onUpdateBaseItem(idx, { unitPriceAed: price, totalPriceAed });
                     }}
-                    className="w-24 px-2 py-1 text-right font-mono text-xs font-semibold rounded border border-amber-200 bg-amber-50/20 focus:border-amber-500 focus:outline-none"
+                    className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#fed7aa] bg-[#fff3ec]/60 focus:border-[#f86c29] focus:outline-none text-[#e05615]"
                   />
                 </td>
                 <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-900">
@@ -168,23 +168,23 @@ export default function MaterialGrid({
             ))}
 
             {/* Base Subtotal Row */}
-            <tr className="bg-slate-100/80 font-bold border-t-2 border-slate-300">
-              <td colSpan={5} className="py-3 px-4 text-right uppercase tracking-wide text-xs text-slate-700">
+            <tr className="bg-slate-100/90 font-bold border-t-2 border-slate-300">
+              <td colSpan={5} className="py-3 px-4 text-right uppercase tracking-wide text-xs text-[#00488e]">
                 Base Assembly Subtotal (AED):
               </td>
               <td className="py-3 px-3 text-right text-xs text-slate-500 font-mono">
                 RATE / m²:
               </td>
-              <td className="py-3 px-4 text-right font-mono text-sm text-[#002060]">
+              <td className="py-3 px-4 text-right font-mono text-sm text-[#00488e]">
                 AED {baseSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </td>
               <td></td>
             </tr>
-            <tr className="bg-blue-50/50 font-bold border-b border-slate-200">
+            <tr className="bg-blue-50/40 font-bold border-b border-slate-200">
               <td colSpan={5} className="py-2 px-4 text-right text-xs text-slate-600">
                 Base Rate Per M²:
               </td>
-              <td colSpan={2} className="py-2 px-4 text-right font-mono text-xs text-[#002060]">
+              <td colSpan={2} className="py-2 px-4 text-right font-mono text-xs text-[#00488e]">
                 AED {baseRate.toFixed(2)} / M²
               </td>
               <td></td>
@@ -194,7 +194,7 @@ export default function MaterialGrid({
           {/* Head Deflection Section if present */}
           {deflectionItems.length > 0 && (
             <>
-              <thead className="bg-emerald-100/70 text-emerald-900 uppercase text-[11px] font-bold border-t-4 border-emerald-300">
+              <thead className="bg-emerald-100/80 text-emerald-950 uppercase text-[11px] font-bold border-t-4 border-emerald-400">
                 <tr>
                   <th colSpan={8} className="py-2 px-4">
                     Head Deflection Components (Structural Slab Movement Accommodation)
@@ -204,7 +204,7 @@ export default function MaterialGrid({
               <tbody className="divide-y divide-emerald-100 font-medium bg-emerald-50/20">
                 {deflectionItems.map((item, idx) => (
                   <tr key={`def-${idx}`} className="hover:bg-emerald-50/50 transition-colors">
-                    <td className="py-2.5 px-3 text-center text-emerald-600 font-mono text-[11px]">
+                    <td className="py-2.5 px-3 text-center text-emerald-700 font-mono text-[11px]">
                       D{idx + 1}
                     </td>
                     <td className="py-2.5 px-4">
@@ -247,7 +247,7 @@ export default function MaterialGrid({
                           const totalPriceAed = Number((item.totalQuantity * price).toFixed(2));
                           onUpdateDeflectionItem(idx, { unitPriceAed: price, totalPriceAed });
                         }}
-                        className="w-24 px-2 py-1 text-right font-mono text-xs font-semibold rounded border border-emerald-300 bg-emerald-50 focus:border-emerald-600 focus:outline-none"
+                        className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-emerald-300 bg-emerald-50 focus:border-emerald-600 focus:outline-none text-emerald-900"
                       />
                     </td>
                     <td className="py-2.5 px-4 text-right font-mono font-bold text-emerald-950">
@@ -266,7 +266,7 @@ export default function MaterialGrid({
                 ))}
 
                 {/* Deflection Subtotal */}
-                <tr className="bg-emerald-100/80 font-bold border-t border-emerald-300">
+                <tr className="bg-emerald-100 font-bold border-t border-emerald-300">
                   <td colSpan={5} className="py-2.5 px-4 text-right uppercase tracking-wide text-xs text-emerald-950">
                     Deflection Total (AED):
                   </td>
@@ -291,25 +291,25 @@ export default function MaterialGrid({
             </>
           )}
 
-          {/* Grand Totals Footer */}
+          {/* Grand Totals Footer with Brand Blue & Orange */}
           <tfoot>
-            <tr className="bg-[#002060] text-white font-bold text-sm">
-              <td colSpan={5} className="py-3.5 px-4 text-right uppercase tracking-wider text-amber-400">
-                Grand Total (AED):
+            <tr className="bg-[#002d5a] text-white font-bold text-sm">
+              <td colSpan={5} className="py-4 px-4 text-right uppercase tracking-wider text-white">
+                Commercial Grand Total (AED):
               </td>
-              <td className="py-3.5 px-3 text-right text-xs text-blue-200 uppercase font-mono">
+              <td className="py-4 px-3 text-right text-xs text-blue-200 uppercase font-mono">
                 Grand Rate:
               </td>
-              <td className="py-3.5 px-4 text-right font-mono text-base text-amber-300">
+              <td className="py-4 px-4 text-right font-mono text-lg text-[#f86c29]">
                 AED {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </td>
               <td></td>
             </tr>
-            <tr className="bg-[#001540] text-blue-200 font-medium text-xs">
-              <td colSpan={5} className="py-2 px-4 text-right">
+            <tr className="bg-[#001f3f] text-blue-200 font-medium text-xs">
+              <td colSpan={5} className="py-2.5 px-4 text-right">
                 Grand Rate Per M² (Base + Deflection):
               </td>
-              <td colSpan={2} className="py-2 px-4 text-right font-mono text-white font-bold">
+              <td colSpan={2} className="py-2.5 px-4 text-right font-mono text-[#f86c29] font-black text-sm">
                 AED {grandRate.toFixed(2)} / M²
               </td>
               <td></td>
@@ -320,4 +320,3 @@ export default function MaterialGrid({
     </div>
   );
 }
-

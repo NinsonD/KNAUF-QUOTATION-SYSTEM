@@ -139,7 +139,7 @@ export default function CatalogPage() {
             }}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
               activeTab === 'SYSTEMS'
-                ? 'bg-[#002060] text-white shadow-xs'
+                ? 'bg-[#00488e] text-white shadow-xs'
                 : 'text-slate-700 hover:text-slate-900'
             }`}
           >
@@ -154,7 +154,7 @@ export default function CatalogPage() {
             }}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
               activeTab === 'PRICES'
-                ? 'bg-[#002060] text-white shadow-xs'
+                ? 'bg-[#00488e] text-white shadow-xs'
                 : 'text-slate-700 hover:text-slate-900'
             }`}
           >
@@ -183,7 +183,7 @@ export default function CatalogPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search systems (KW111, D127, Ceiling...)"
-                className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#002060] bg-slate-50/50"
+                className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
               />
             </div>
 
@@ -195,7 +195,7 @@ export default function CatalogPage() {
                   onClick={() => setCategoryFilter(cat)}
                   className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                     categoryFilter === cat
-                      ? 'bg-[#002060] text-white'
+                      ? 'bg-[#00488e] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -216,7 +216,7 @@ export default function CatalogPage() {
               >
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-blue-50 text-[#002060] border border-blue-200">
+                    <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-blue-50 text-[#00488e] border border-blue-200">
                       {sys.code}
                     </span>
                     <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -268,7 +268,7 @@ export default function CatalogPage() {
                   </span>
                   <Link
                     href={`/quotes/new?category=${sys.category}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#002060] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00488e] hover:underline"
                   >
                     Generate Quotation <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -301,7 +301,7 @@ export default function CatalogPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Filter material names..."
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#002060] bg-slate-50/50"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
                 />
               </div>
             </div>
@@ -313,7 +313,7 @@ export default function CatalogPage() {
                 value={newProductName}
                 onChange={(e) => setNewProductName(e.target.value)}
                 placeholder="Add new material name..."
-                className="sm:col-span-6 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#002060]"
+                className="sm:col-span-6 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e]"
               />
               <select
                 value={newProductUnit}
@@ -336,7 +336,7 @@ export default function CatalogPage() {
               />
               <button
                 type="submit"
-                className="sm:col-span-2 px-4 py-2 bg-[#002060] text-white text-xs font-bold rounded-lg hover:bg-[#002060]/90 transition-colors"
+                className="sm:col-span-2 px-4 py-2 bg-[#f86c29] hover:bg-[#e05615] text-white text-xs font-bold rounded-lg transition-colors"
               >
                 Add Material
               </button>
@@ -372,7 +372,7 @@ export default function CatalogPage() {
                             step="0.001"
                             value={editPriceVal}
                             onChange={(e) => setEditPriceVal(parseFloat(e.target.value) || 0)}
-                            className="w-28 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#002060] bg-blue-50 focus:outline-none"
+                            className="w-28 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#00488e] bg-blue-50 focus:outline-none"
                             autoFocus
                           />
                         ) : (
@@ -409,7 +409,7 @@ export default function CatalogPage() {
                           <button
                             type="button"
                             onClick={() => handleStartEdit(productName, price)}
-                            className="px-2.5 py-1 text-xs font-semibold rounded hover:bg-slate-100 text-slate-600 hover:text-[#002060] flex items-center gap-1 mx-auto transition-colors"
+                            className="px-2.5 py-1 text-xs font-semibold rounded hover:bg-slate-100 text-slate-600 hover:text-[#00488e] flex items-center gap-1 mx-auto transition-colors"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                             Edit

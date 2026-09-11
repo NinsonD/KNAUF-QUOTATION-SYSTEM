@@ -202,7 +202,7 @@ export default function QuoteDetailPage() {
     return (
       <div className="p-12 text-center">
         <p className="text-sm font-bold text-slate-700">Quotation not found</p>
-        <Link href="/quotes" className="mt-2 inline-block text-xs text-[#002060] underline">
+        <Link href="/quotes" className="mt-2 inline-block text-xs text-[#00488e] underline">
           &larr; Back to all quotations
         </Link>
       </div>
@@ -258,22 +258,25 @@ export default function QuoteDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Navigation & Status Bar */}
+      {/* Top Navigation & Status Bar with Company Logo */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           <Link
             href="/quotes"
-            className="p-2 rounded-lg hover:bg-slate-200 text-slate-600 transition-colors"
+            className="p-2 rounded-xl hover:bg-slate-200 text-slate-600 transition-colors"
             title="Back to quotes"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
+          <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
+            <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
+          </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-mono">
                 {quote.quoteNumber}
               </h1>
-              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#00488e] border border-blue-200">
                 {quote.system?.code}
               </span>
             </div>
@@ -289,7 +292,7 @@ export default function QuoteDetailPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as QuoteStatus)}
-            className="px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#002060]"
+            className="px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e] text-[#00488e]"
           >
             <option value="DRAFT">DRAFT</option>
             <option value="ISSUED">ISSUED</option>
@@ -301,7 +304,7 @@ export default function QuoteDetailPage() {
           <button
             type="button"
             onClick={() => setShowPrintModal(!showPrintModal)}
-            className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
           >
             {showPrintModal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-slate-600" />}
             {showPrintModal ? 'Hide Print' : 'Preview Official'}
@@ -310,7 +313,7 @@ export default function QuoteDetailPage() {
           <a
             href={`/api/quotes/${quote.id}/export`}
             download
-            className="px-4 py-1.5 text-xs font-bold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm flex items-center gap-1.5 transition-all"
+            className="px-4 py-1.5 text-xs font-bold rounded-xl text-white bg-[#f86c29] hover:bg-[#e05615] shadow-sm flex items-center gap-1.5 transition-all hover:shadow-md"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Download Excel (.xlsx)
@@ -320,7 +323,7 @@ export default function QuoteDetailPage() {
             type="button"
             onClick={handleSaveChanges}
             disabled={isSaving}
-            className="px-4 py-1.5 text-xs font-bold rounded-lg text-white bg-[#002060] hover:bg-[#002060]/90 shadow-sm flex items-center gap-1.5 transition-all disabled:opacity-50"
+            className="px-4 py-1.5 text-xs font-bold rounded-xl text-white bg-[#00488e] hover:bg-[#003c77] shadow-sm flex items-center gap-1.5 transition-all disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             {isSaving ? 'Saving...' : 'Save Changes'}
@@ -414,7 +417,7 @@ export default function QuoteDetailPage() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#002060] text-white hover:bg-[#002060]/90"
+                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#00488e] text-white hover:bg-[#00488e]/90"
                 >
                   Print to PDF
                 </button>

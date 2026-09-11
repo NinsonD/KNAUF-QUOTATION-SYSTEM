@@ -14,7 +14,8 @@ export const AL_NAMARIQ_TERMS = [
 export async function generateAlNamariqExcel(
   meta: QuoteMetaData,
   system: KnaufSystemDefinition,
-  calc: CalculationResult
+  calc: CalculationResult,
+  logoSource?: Buffer | ArrayBuffer | string
 ): Promise<Buffer> {
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet(meta.quoteNumber || 'Quotation');
@@ -34,10 +35,36 @@ export async function generateAlNamariqExcel(
     { width: 20 }, // J: Total Price (AED)
   ];
 
-  // Company Header
+  // Try to embed official company logo if supplied
+  if (logoSource) {
+    try {
+      let imageId: number | undefined;
+      if (typeof logoSource === 'string') {
+        imageId = wb.addImage({
+          base64: logoSource,
+          extension: 'png',
+        });
+      } else {
+        imageId = wb.addImage({
+          buffer: logoSource as any,
+          extension: 'png',
+        });
+      }
+      if (imageId !== undefined) {
+        ws.addImage(imageId, {
+          tl: { col: 0.1, row: 0.4 },
+          ext: { width: 140, height: 70 },
+        });
+      }
+    } catch (e) {
+      console.warn('Could not embed logo in Excel:', e);
+    }
+  }
+
+  // Company Header (rows 5 & 6)
   ws.mergeCells('A5:J5');
   ws.getCell('A5').value = 'Al Namariq Building Material Trading Co. LLC';
-  ws.getCell('A5').font = { size: 14, bold: true, color: { argb: 'FF002060' } };
+  ws.getCell('A5').font = { size: 14, bold: true, color: { argb: 'FF00488E' } };
 
   ws.mergeCells('A6:J6');
   ws.getCell('A6').value = 'P.O. 25569, Sharjah. Ph:(06) 5328033, Fax:(06) 5328302';
@@ -45,8 +72,8 @@ export async function generateAlNamariqExcel(
 
   ws.mergeCells('A8:J8');
   const qCell = ws.getCell('A8');
-  qCell.value = 'QUOTATION';
-  qCell.font = { size: 13, bold: true };
+  qCell.value = 'OFFICIAL COMMERCIAL QUOTATION';
+  qCell.font = { size: 13, bold: true, color: { argb: 'FF00488E' } };
   qCell.alignment = { horizontal: 'center' };
 
   // Project Info Metadata Grid
@@ -70,7 +97,7 @@ export async function generateAlNamariqExcel(
     ws.getCell(coord).font = { bold: true };
   });
 
-  // Table Headers
+  // Table Headers styled in Al Namariq Corporate Blue
   const headerRow = 13;
   ws.getCell(`A${headerRow}`).value = 'PRODUCT NAME';
   ws.getCell(`F${headerRow}`).value = 'MATERIAL REQUIREMENT FOR 1 m²';
@@ -81,9 +108,10 @@ export async function generateAlNamariqExcel(
 
   ['A', 'F', 'G', 'H', 'I', 'J'].forEach((col) => {
     const c = ws.getCell(`${col}${headerRow}`);
-    c.font = { bold: true };
-    c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } };
-    c.border = { bottom: { style: 'thin' }, top: { style: 'thin' } };
+    c.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF00488E' } };
+    c.border = { bottom: { style: 'medium' }, top: { style: 'thin' } };
+    c.alignment = { vertical: 'middle' };
   });
 
   let currentRow = 14;
@@ -110,9 +138,9 @@ export async function generateAlNamariqExcel(
   currentRow++;
   const baseTotalRow = currentRow;
   ws.getCell(`I${baseTotalRow}`).value = 'TOTAL (AED)';
-  ws.getCell(`I${baseTotalRow}`).font = { bold: true };
+  ws.getCell(`I${baseTotalRow}`).font = { bold: true, color: { argb: 'FF00488E' } };
   ws.getCell(`J${baseTotalRow}`).value = { formula: `SUM(J${startRowBase}:J${endRowBase})`, result: calc.baseTotalAed };
-  ws.getCell(`J${baseTotalRow}`).font = { bold: true };
+  ws.getCell(`J${baseTotalRow}`).font = { bold: true, color: { argb: 'FF00488E' } };
   ws.getCell(`J${baseTotalRow}`).numFmt = '#,##0.00';
 
   currentRow++;
@@ -126,8 +154,8 @@ export async function generateAlNamariqExcel(
   // Render Deflection Section if included
   if (calc.deflectionItems.length > 0) {
     currentRow += 2;
-    ws.getCell(`A${currentRow}`).value = 'Head Deflection Components';
-    ws.getCell(`A${currentRow}`).font = { bold: true, italic: true };
+    ws.getCell(`A${currentRow}`).value = 'Head Deflection Components (Structural Movement Accommodation)';
+    ws.getCell(`A${currentRow}`).font = { bold: true, italic: true, color: { argb: 'FF047857' } };
     currentRow++;
     const startDefRow = currentRow;
 
@@ -149,17 +177,19 @@ export async function generateAlNamariqExcel(
     currentRow++;
     const defTotalRow = currentRow;
     ws.getCell(`I${defTotalRow}`).value = 'DEFLECTION TOTAL (AED)';
-    ws.getCell(`I${defTotalRow}`).font = { bold: true };
+    ws.getCell(`I${defTotalRow}`).font = { bold: true, color: { argb: 'FF047857' } };
     ws.getCell(`J${defTotalRow}`).value = { formula: `SUM(J${startDefRow}:J${endDefRow})`, result: calc.deflectionTotalAed };
-    ws.getCell(`J${defTotalRow}`).font = { bold: true };
+    ws.getCell(`J${defTotalRow}`).font = { bold: true, color: { argb: 'FF047857' } };
     ws.getCell(`J${defTotalRow}`).numFmt = '#,##0.00';
 
     currentRow++;
     const grandRow = currentRow;
     ws.getCell(`I${grandRow}`).value = 'GRAND TOTAL (AED)';
-    ws.getCell(`I${grandRow}`).font = { bold: true, size: 12 };
+    ws.getCell(`I${grandRow}`).font = { bold: true, size: 12, color: { argb: 'FFFFFFFF' } };
+    ws.getCell(`I${grandRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF002D5A' } };
     ws.getCell(`J${grandRow}`).value = { formula: `J${baseTotalRow}+J${defTotalRow}`, result: calc.grandTotalAed };
-    ws.getCell(`J${grandRow}`).font = { bold: true, size: 12 };
+    ws.getCell(`J${grandRow}`).font = { bold: true, size: 12, color: { argb: 'FFF86C29' } };
+    ws.getCell(`J${grandRow}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF002D5A' } };
     ws.getCell(`J${grandRow}`).numFmt = '#,##0.00';
 
     currentRow++;
@@ -167,14 +197,14 @@ export async function generateAlNamariqExcel(
     ws.getCell(`I${grandRateRow}`).value = 'GRAND RATE / m²';
     ws.getCell(`I${grandRateRow}`).font = { bold: true };
     ws.getCell(`J${grandRateRow}`).value = { formula: `J${grandRow}/H10`, result: calc.grandRatePerM2 };
-    ws.getCell(`J${grandRateRow}`).font = { bold: true };
+    ws.getCell(`J${grandRateRow}`).font = { bold: true, color: { argb: 'FFF86C29' } };
     ws.getCell(`J${grandRateRow}`).numFmt = '#,##0.00';
   }
 
   // Terms & Conditions
   currentRow += 2;
   ws.getCell(`A${currentRow}`).value = 'Term & Conditions:';
-  ws.getCell(`A${currentRow}`).font = { bold: true };
+  ws.getCell(`A${currentRow}`).font = { bold: true, color: { argb: 'FF00488E' } };
   currentRow++;
 
   AL_NAMARIQ_TERMS.forEach((term) => {
@@ -193,4 +223,3 @@ export async function generateAlNamariqExcel(
   const buffer = await wb.xlsx.writeBuffer();
   return Buffer.from(buffer);
 }
-
