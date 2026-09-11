@@ -31,7 +31,7 @@ export default function SystemSelector({
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+    <div className="bento-card p-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
         <div>
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">

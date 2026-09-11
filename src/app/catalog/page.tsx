@@ -119,10 +119,13 @@ export default function CatalogPage() {
   return (
     <div className="space-y-6">
       {/* Catalog Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Knauf Systems Catalog & Master Prices
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00488e]/10 text-[#00488e] text-[11px] font-bold tracking-wider uppercase mb-2">
+            Technical Specification
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            Knauf Systems & Master Prices
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             Browse official Knauf system consumption factor templates and manage Al Namariq baseline pricing (AED).
@@ -130,17 +133,17 @@ export default function CatalogPage() {
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex rounded-xl bg-slate-200 p-1 border border-slate-300 self-start sm:self-auto">
+        <div className="flex rounded-full bg-slate-200/80 p-1 border border-slate-300/80 self-start sm:self-auto shadow-inner">
           <button
             type="button"
             onClick={() => {
               setActiveTab('SYSTEMS');
               setSearch('');
             }}
-            className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-4 py-2 text-xs font-bold rounded-full transition-all flex items-center gap-2 ${
               activeTab === 'SYSTEMS'
-                ? 'bg-[#00488e] text-white shadow-xs'
-                : 'text-slate-700 hover:text-slate-900'
+                ? 'bg-[#00488e] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -152,10 +155,10 @@ export default function CatalogPage() {
               setActiveTab('PRICES');
               setSearch('');
             }}
-            className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-4 py-2 text-xs font-bold rounded-full transition-all flex items-center gap-2 ${
               activeTab === 'PRICES'
-                ? 'bg-[#00488e] text-white shadow-xs'
-                : 'text-slate-700 hover:text-slate-900'
+                ? 'bg-[#00488e] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Tag className="w-3.5 h-3.5" />
@@ -165,7 +168,7 @@ export default function CatalogPage() {
       </div>
 
       {saveSuccessMsg && (
-        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-semibold flex items-center gap-2">
+        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-800 text-xs font-semibold flex items-center gap-2 shadow-xs">
           <CheckCircle className="w-4 h-4 text-emerald-600" />
           {saveSuccessMsg}
         </div>
@@ -175,15 +178,15 @@ export default function CatalogPage() {
       {activeTab === 'SYSTEMS' && (
         <div className="space-y-6">
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-white rounded-xl p-4 border border-slate-200 shadow-xs">
+          <div className="bento-card p-4 flex flex-col sm:flex-row gap-3 items-center justify-between">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search systems (KW111, D127, Ceiling...)"
-                className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
+                className="w-full pl-9 pr-4 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/80 transition-all"
               />
             </div>
 
@@ -193,9 +196,9 @@ export default function CatalogPage() {
                   key={cat}
                   type="button"
                   onClick={() => setCategoryFilter(cat)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                  className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all ${
                     categoryFilter === cat
-                      ? 'bg-[#00488e] text-white'
+                      ? 'bg-[#00488e] text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -212,36 +215,36 @@ export default function CatalogPage() {
             {filteredSystems.map((sys) => (
               <div
                 key={sys.code}
-                className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between"
+                className="bento-card overflow-hidden flex flex-col justify-between"
               >
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-blue-50 text-[#00488e] border border-blue-200">
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-[#00488e]/10 text-[#00488e] border border-[#00488e]/20">
                       {sys.code}
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                       {sys.category.replace('_', ' ')}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-900 mb-1.5">
+                  <h3 className="text-base font-extrabold text-slate-900 mb-1.5">
                     {sys.name}
                   </h3>
-                  <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                  <p className="text-xs text-slate-500 mb-4 leading-relaxed font-medium">
                     {sys.description}
                   </p>
 
                   {/* Components summary list */}
-                  <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                    <div className="text-[11px] font-bold uppercase text-slate-600 mb-2 flex items-center justify-between">
+                  <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-100">
+                    <div className="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider mb-2 flex items-center justify-between">
                       <span>Base Material Requirements ({sys.baseMaterials.length})</span>
                       <span>Factor / m²</span>
                     </div>
-                    <ul className="space-y-1 text-xs text-slate-700 font-medium">
+                    <ul className="space-y-1.5 text-xs text-slate-700 font-medium">
                       {sys.baseMaterials.slice(0, 5).map((mat, i) => (
                         <li key={i} className="flex items-center justify-between">
                           <span className="truncate max-w-[280px]">{mat.productName}</span>
-                          <span className="font-mono text-slate-500 font-semibold text-[11px]">
+                          <span className="font-mono text-slate-500 font-semibold text-[11px] bg-white px-2 py-0.5 rounded-full border border-slate-200/60">
                             {mat.factorPerM2} {mat.unit}
                           </span>
                         </li>
@@ -255,20 +258,20 @@ export default function CatalogPage() {
                   </div>
 
                   {sys.supportsDeflection && (
-                    <div className="mt-3 flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200 font-medium">
+                    <div className="mt-3 flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50/80 px-3 py-1.5 rounded-full border border-emerald-200/80 font-semibold">
                       <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>Supports Head Deflection movement joints</span>
                     </div>
                   )}
                 </div>
 
-                <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">
+                <div className="p-4 bg-slate-50/80 border-t border-slate-100/80 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-medium">
                     Standard Knauf Analysis
                   </span>
                   <Link
                     href={`/quotes/new?category=${sys.category}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00488e] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00488e] hover:text-[#002d5a] px-3 py-1 rounded-full hover:bg-slate-100 transition-colors"
                   >
                     Generate Quotation <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -283,42 +286,42 @@ export default function CatalogPage() {
       {activeTab === 'PRICES' && (
         <div className="space-y-6">
           {/* Search and Add Form */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs space-y-4">
+          <div className="bento-card p-6 space-y-4">
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-slate-900">
+                <h3 className="text-sm font-extrabold text-slate-900">
                   Master Material Price List (AED)
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 mt-0.5 font-medium">
                   Unit prices configured here automatically populate new quotations for Al Namariq.
                 </p>
               </div>
 
               <div className="relative w-full sm:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Filter material names..."
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
+                  className="w-full pl-9 pr-4 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/80"
                 />
               </div>
             </div>
 
             {/* Quick Add Product Bar */}
-            <form onSubmit={handleAddNewProduct} className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <form onSubmit={handleAddNewProduct} className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-12 gap-2">
               <input
                 type="text"
                 value={newProductName}
                 onChange={(e) => setNewProductName(e.target.value)}
                 placeholder="Add new material name..."
-                className="sm:col-span-6 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e]"
+                className="sm:col-span-6 px-3.5 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
               />
               <select
                 value={newProductUnit}
                 onChange={(e) => setNewProductUnit(e.target.value)}
-                className="sm:col-span-2 px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white"
+                className="sm:col-span-2 px-3 py-2 text-xs rounded-full border border-slate-200 bg-white font-medium"
               >
                 <option value="pcs">pcs</option>
                 <option value="m²">m²</option>
@@ -332,11 +335,11 @@ export default function CatalogPage() {
                 value={newProductPrice}
                 onChange={(e) => setNewProductPrice(parseFloat(e.target.value) || 0)}
                 placeholder="AED Price"
-                className="sm:col-span-2 px-3 py-2 text-xs font-mono rounded-lg border border-slate-300"
+                className="sm:col-span-2 px-3.5 py-2 text-xs font-mono rounded-full border border-slate-200 text-right"
               />
               <button
                 type="submit"
-                className="sm:col-span-2 px-4 py-2 bg-[#f86c29] hover:bg-[#e05615] text-white text-xs font-bold rounded-lg transition-colors"
+                className="sm:col-span-2 px-4 py-2 bg-[#f86c29] hover:bg-[#e05615] text-white text-xs font-bold rounded-full transition-all shadow-sm hover:shadow"
               >
                 Add Material
               </button>
@@ -344,51 +347,51 @@ export default function CatalogPage() {
           </div>
 
           {/* Prices Table */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="bento-card overflow-hidden">
             <table className="w-full text-left text-xs text-slate-700">
-              <thead className="bg-slate-100 text-slate-700 uppercase text-[11px] font-bold border-b border-slate-200">
+              <thead className="bg-slate-50/80 text-slate-500 uppercase text-[10px] font-extrabold tracking-wider border-b border-slate-100">
                 <tr>
-                  <th className="py-3 px-4 w-12 text-center">#</th>
-                  <th className="py-3 px-4">Material Specification / Product Name</th>
-                  <th className="py-3 px-4 w-40 text-right">Standard Price (AED)</th>
-                  <th className="py-3 px-4 w-32 text-center">Action</th>
+                  <th className="py-3.5 px-5 w-12 text-center">#</th>
+                  <th className="py-3.5 px-4">Material Specification / Product Name</th>
+                  <th className="py-3.5 px-4 w-44 text-right">Standard Price</th>
+                  <th className="py-3.5 px-5 w-32 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium">
+              <tbody className="divide-y divide-slate-100/80 font-medium">
                 {filteredPrices.map(([productName, price], idx) => {
                   const isEditing = editingProduct === productName;
                   return (
-                    <tr key={productName} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-2.5 px-4 text-center font-mono text-slate-400 text-[11px]">
+                    <tr key={productName} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-3 px-5 text-center font-mono text-slate-400 text-[11px]">
                         {idx + 1}
                       </td>
-                      <td className="py-2.5 px-4 font-semibold text-slate-900">
+                      <td className="py-3 px-4 font-bold text-slate-900">
                         {productName}
                       </td>
-                      <td className="py-2.5 px-4 text-right">
+                      <td className="py-3 px-4 text-right">
                         {isEditing ? (
                           <input
                             type="number"
                             step="0.001"
                             value={editPriceVal}
                             onChange={(e) => setEditPriceVal(parseFloat(e.target.value) || 0)}
-                            className="w-28 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#00488e] bg-blue-50 focus:outline-none"
+                            className="w-28 px-2 py-1 text-right font-mono text-xs font-bold rounded-full border border-[#00488e] bg-blue-50/80 focus:outline-none"
                             autoFocus
                           />
                         ) : (
-                          <span className="font-mono font-bold text-slate-900">
+                          <span className="font-mono font-bold text-slate-900 bg-slate-100/70 px-2.5 py-1 rounded-full">
                             AED {price.toFixed(3)}
                           </span>
                         )}
                       </td>
-                      <td className="py-2.5 px-4 text-center">
+                      <td className="py-3 px-5 text-center">
                         {isEditing ? (
                           <div className="flex items-center justify-center gap-1.5">
                             <button
                               type="button"
                               onClick={() => handleSavePrice(productName)}
                               disabled={isSavingPrice}
-                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold flex items-center gap-1"
+                              className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-xs font-bold flex items-center gap-1 shadow-xs"
                             >
                               {isSavingPrice ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -400,7 +403,7 @@ export default function CatalogPage() {
                             <button
                               type="button"
                               onClick={() => setEditingProduct(null)}
-                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full text-xs font-medium"
                             >
                               Cancel
                             </button>
@@ -409,9 +412,9 @@ export default function CatalogPage() {
                           <button
                             type="button"
                             onClick={() => handleStartEdit(productName, price)}
-                            className="px-2.5 py-1 text-xs font-semibold rounded hover:bg-slate-100 text-slate-600 hover:text-[#00488e] flex items-center gap-1 mx-auto transition-colors"
+                            className="px-3 py-1 text-xs font-bold rounded-full hover:bg-slate-100 text-slate-600 hover:text-[#00488e] flex items-center gap-1 mx-auto transition-colors"
                           >
-                            <Edit2 className="w-3.5 h-3.5" />
+                            <Edit2 className="w-3 h-3" />
                             Edit
                           </button>
                         )}

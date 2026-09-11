@@ -3,7 +3,7 @@ import Navbar from '@/components/layout/Navbar';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Al Namariq | Knauf Quotation Calculator SaaS',
+  title: 'Al Namariq | Knauf Quotation Engine',
   description: 'B2B SaaS Quotation Engine for Al Namariq Building Material Trading Co. LLC (Sharjah, UAE) utilizing official Knauf systems.',
 };
 
@@ -13,22 +13,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full bg-slate-50">
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
-        <Navbar />
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {children}
-        </main>
-        <footer className="no-print bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-          <div className="max-w-7xl mx-auto px-4">
-            <p className="font-semibold text-slate-700">
+    <html lang="en" className="h-full antialiased">
+      <body className="min-h-full bg-[#cfd9e5] text-slate-800 p-2 sm:p-4 lg:p-6 flex flex-col items-center justify-start">
+        {/* Main Floating Bento Canvas matching Reference UI */}
+        <div className="w-full max-w-[1520px] bg-[#fbfbfa] rounded-[36px] sm:rounded-[44px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] border border-white/80 overflow-hidden flex flex-col relative min-h-[92vh]">
+          {/* Subtle Ambient Glow Meshes (Matching Reference UI top right warm glow & soft blue glow) */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#f86c29]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/3 -right-20 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#00488e]/8 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Navigation Bar inside the Canvas */}
+          <Navbar />
+
+          {/* Main App Content Area */}
+          <main className="flex-1 w-full px-4 sm:px-8 lg:px-10 py-6 relative z-10">
+            {children}
+          </main>
+
+          {/* Canvas Footer */}
+          <footer className="no-print border-t border-slate-900/[0.04] py-5 px-8 text-center text-xs text-slate-400 bg-white/40 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2 font-medium text-slate-600">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
               Al Namariq Building Material Trading Co. LLC • P.O. 25569, Sharjah, UAE
-            </p>
-            <p className="mt-1 text-slate-400">
-              Official Knauf Drywall & Suspended Ceiling Quotation Calculator Engine
-            </p>
-          </div>
-        </footer>
+            </div>
+            <div className="text-slate-400 text-[11px]">
+              Certified Knauf Systems Engine • Ph: (06) 5328033
+            </div>
+          </footer>
+        </div>
       </body>
     </html>
   );

@@ -29,10 +29,10 @@ export default function DeflectionToggle({
 
   return (
     <div
-      className={`rounded-xl border p-4 transition-all ${
+      className={`bento-card p-6 transition-all ${
         includeDeflection
-          ? 'bg-emerald-50/60 border-emerald-300 ring-1 ring-emerald-300/50 shadow-xs'
-          : 'bg-white border-slate-200'
+          ? 'ring-2 ring-emerald-500/30 border-emerald-300 bg-emerald-50/40'
+          : ''
       }`}
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

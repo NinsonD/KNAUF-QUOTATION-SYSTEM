@@ -37,7 +37,7 @@ export default function MaterialGrid({
   const grandRate = scaleM2 > 0 ? grandTotal / scaleM2 : 0;
 
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
+    <div className="bento-card overflow-hidden">
       {/* Header Bar */}
       <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70">
         <div>

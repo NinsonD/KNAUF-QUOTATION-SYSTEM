@@ -23,7 +23,7 @@ export default function ExportButtons({
   saveSuccess,
 }: ExportButtonsProps) {
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-5 flex flex-wrap items-center justify-between gap-3">
+    <div className="bento-card p-6 flex flex-wrap items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         {saveSuccess ? (
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">

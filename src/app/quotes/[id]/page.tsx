@@ -259,16 +259,16 @@ export default function QuoteDetailPage() {
   return (
     <div className="space-y-6">
       {/* Top Navigation & Status Bar with Company Logo */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3.5">
           <Link
             href="/quotes"
-            className="p-2 rounded-xl hover:bg-slate-200 text-slate-600 transition-colors"
+            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all"
             title="Back to quotes"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
+          <div className="p-2 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
             <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
           </div>
           <div>
@@ -276,11 +276,11 @@ export default function QuoteDetailPage() {
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-mono">
                 {quote.quoteNumber}
               </h1>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#00488e] border border-blue-200">
+              <span className="text-xs font-bold px-3 py-0.5 rounded-full bg-[#00488e]/10 text-[#00488e] border border-[#00488e]/20 font-mono">
                 {quote.system?.code}
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5 font-medium">
               {quote.projectName} • {quote.clientName}
             </p>
           </div>
@@ -292,7 +292,7 @@ export default function QuoteDetailPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as QuoteStatus)}
-            className="px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e] text-[#00488e]"
+            className="px-3.5 py-2 text-xs font-bold rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e] text-[#00488e] shadow-2xs"
           >
             <option value="DRAFT">DRAFT</option>
             <option value="ISSUED">ISSUED</option>
@@ -304,7 +304,7 @@ export default function QuoteDetailPage() {
           <button
             type="button"
             onClick={() => setShowPrintModal(!showPrintModal)}
-            className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 text-xs font-bold rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700 flex items-center gap-2 transition-all shadow-2xs"
           >
             {showPrintModal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-slate-600" />}
             {showPrintModal ? 'Hide Print' : 'Preview Official'}
@@ -313,7 +313,7 @@ export default function QuoteDetailPage() {
           <a
             href={`/api/quotes/${quote.id}/export`}
             download
-            className="px-4 py-1.5 text-xs font-bold rounded-xl text-white bg-[#f86c29] hover:bg-[#e05615] shadow-sm flex items-center gap-1.5 transition-all hover:shadow-md"
+            className="px-4 py-2 text-xs font-bold rounded-full text-white bg-[#f86c29] hover:bg-[#e05615] shadow-sm flex items-center gap-2 transition-all hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Download Excel (.xlsx)
@@ -323,7 +323,7 @@ export default function QuoteDetailPage() {
             type="button"
             onClick={handleSaveChanges}
             disabled={isSaving}
-            className="px-4 py-1.5 text-xs font-bold rounded-xl text-white bg-[#00488e] hover:bg-[#003c77] shadow-sm flex items-center gap-1.5 transition-all disabled:opacity-50"
+            className="px-4 py-2 text-xs font-bold rounded-full text-white bg-[#00488e] hover:bg-[#002d5a] shadow-sm flex items-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]"
           >
             <Save className="w-4 h-4" />
             {isSaving ? 'Saving...' : 'Save Changes'}
@@ -332,7 +332,7 @@ export default function QuoteDetailPage() {
       </div>
 
       {saveSuccess && (
-        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-semibold flex items-center gap-2">
+        <div className="p-3.5 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-800 text-xs font-bold flex items-center gap-2 shadow-xs">
           <CheckCircle className="w-4 h-4 text-emerald-600" />
           Quotation updated successfully!
         </div>
@@ -342,9 +342,9 @@ export default function QuoteDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-8 space-y-6">
           {/* Quick Project Scale modifier */}
-          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="text-xs text-slate-600">
-              <span className="font-bold text-slate-900 block sm:inline">Project Scale: </span>
+          <div className="bento-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="text-xs text-slate-600 font-medium">
+              <span className="font-extrabold text-slate-900 block sm:inline">Project Scale: </span>
               Modify m² scale to recalculate entire bill of quantities instantly
             </div>
             <div className="flex items-center gap-2">
@@ -358,9 +358,9 @@ export default function QuoteDetailPage() {
                   setScaleM2(s);
                   recalculate(baseItems, deflectionItems, s);
                 }}
-                className="w-32 px-3 py-1.5 text-xs font-bold font-mono rounded-lg border border-amber-300 bg-amber-50/40 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 text-right"
+                className="w-32 px-3.5 py-1.5 text-xs font-bold font-mono rounded-full border border-orange-200 bg-orange-50/50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#f86c29] text-right"
               />
-              <span className="text-xs font-bold text-amber-800">M²</span>
+              <span className="text-xs font-extrabold text-[#f86c29]">M²</span>
             </div>
           </div>
 
@@ -378,11 +378,11 @@ export default function QuoteDetailPage() {
           />
 
           {/* Official Terms Preview */}
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-            <h3 className="text-sm font-bold text-slate-900 mb-2">
+          <div className="bento-card p-6">
+            <h3 className="text-sm font-extrabold text-slate-900 mb-3">
               Al Namariq Standard Terms & Conditions
             </h3>
-            <ol className="list-decimal list-inside text-xs text-slate-600 space-y-1 leading-relaxed">
+            <ol className="list-decimal list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed font-medium">
               <li>Above consumption is based on theoretical calculation. The material requirement is based on the standard Knauf system proposed and does not include wastage or overlaps. It is the responsibility of the customer to verify actual quantity against BOQ, final drawings and site conditions before placing orders. Al Namariq will not be liable for any variations required for the project.</li>
               <li>Material will be supplied as per bundle/packaging multiple in full trailer load only.</li>
               <li>Non standard materials leadtime is approx 3-4 weeks upon receipt of confirmed order.</li>

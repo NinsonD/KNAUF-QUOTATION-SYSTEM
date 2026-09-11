@@ -18,7 +18,7 @@ export default function ProjectMetaForm({
   onChangeScale,
 }: ProjectMetaFormProps) {
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+    <div className="bento-card p-6">
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
         <div>
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">

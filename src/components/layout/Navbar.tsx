@@ -3,82 +3,75 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Calculator, FileSpreadsheet, Layers, PlusCircle } from 'lucide-react';
+import { Plus, Bell, Settings, User } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: '/', label: 'Dashboard', icon: Calculator },
-    { href: '/quotes', label: 'All Quotations', icon: FileSpreadsheet },
-    { href: '/quotes/new', label: 'Create Quotation', icon: PlusCircle, highlight: true },
-    { href: '/catalog', label: 'Knauf Catalog & Prices', icon: Layers },
+    { href: '/', label: 'Dashboard' },
+    { href: '/quotes', label: 'Quotations' },
+    { href: '/quotes/new', label: 'Studio' },
+    { href: '/catalog', label: 'Knauf Catalog' },
   ];
 
   return (
-    <header className="no-print bg-gradient-to-r from-[#00488e] via-[#003c77] to-[#002d5a] text-white sticky top-0 z-50 shadow-md border-b border-blue-900/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18">
-          {/* Brand & Logo */}
-          <Link href="/" className="flex items-center space-x-3.5 group py-1">
-            <div className="h-11 px-2.5 py-1 bg-white rounded-xl shadow-xs border border-white/40 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-              <img
-                src="/logo/logo.png"
-                alt="Al Namariq Building Material Trading Co. LLC"
-                className="h-8 w-auto object-contain max-w-[150px]"
-              />
-            </div>
-            <div>
-              <div className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
-                AL NAMARIQ <span className="text-[#f86c29] text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#f86c29]/15 border border-[#f86c29]/30 tracking-wider uppercase">Knauf Engine</span>
-              </div>
-              <div className="text-xs text-blue-100/80 font-medium hidden sm:block">
-                Building Material Trading Co. LLC • Sharjah, UAE
-              </div>
-            </div>
-          </Link>
+    <header className="no-print w-full pt-6 pb-2 px-6 sm:px-10 flex flex-col md:flex-row items-center justify-between gap-4 z-30">
+      {/* Brand Logo Pill (Matching "Crextio" pill in reference image) */}
+      <Link
+        href="/"
+        className="group bg-white/90 hover:bg-white transition-all px-4 py-2 rounded-full border border-slate-900/[0.06] shadow-xs flex items-center gap-2.5"
+      >
+        <img
+          src="/logo/logo.png"
+          alt="Al Namariq Logo"
+          className="h-6 w-auto object-contain group-hover:scale-105 transition-transform"
+        />
+        <span className="font-extrabold text-sm tracking-tight text-[#00488e]">
+          Al Namariq
+        </span>
+      </Link>
 
-          {/* Nav items */}
-          <nav className="hidden md:flex items-center space-x-1.5">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
+      {/* Center Floating Pill Menu (Matching exact pill bar in reference image) */}
+      <nav className="bg-white/80 backdrop-blur-md p-1.5 rounded-full border border-slate-900/[0.06] shadow-xs flex items-center gap-1">
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all ${
+                isActive
+                  ? 'bg-[#18181b] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/60'
+              }`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+      </nav>
 
-              if (link.highlight) {
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="ml-2 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wide bg-[#f86c29] hover:bg-[#e05615] text-white shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <Icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                );
-              }
+      {/* Right Controls: New Quote CTA + Settings + Avatar (Matching reference right side) */}
+      <div className="flex items-center gap-2">
+        <Link
+          href="/quotes/new"
+          className="px-4 py-2 text-xs font-black uppercase tracking-wider rounded-full text-white bg-[#f86c29] hover:bg-[#e05615] shadow-xs flex items-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <Plus className="w-3.5 h-3.5 stroke-[3]" />
+          New Quote
+        </Link>
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
-                    isActive
-                      ? 'bg-white/20 text-white shadow-xs font-bold'
-                      : 'text-blue-100/90 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+        <Link
+          href="/catalog"
+          className="w-9 h-9 rounded-full bg-white/90 hover:bg-white border border-slate-900/[0.06] text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors shadow-2xs"
+          title="Catalog & Settings"
+        >
+          <Settings className="w-4 h-4" />
+        </Link>
 
-          {/* Quick contact / branch info */}
-          <div className="hidden lg:flex flex-col items-end text-right text-xs text-blue-200">
-            <span className="font-medium text-slate-200">P.O. 25569, Sharjah</span>
-            <span className="font-mono text-[#f86c29] font-bold text-[11px]">Ph: (06) 5328033</span>
-          </div>
+        <div className="w-9 h-9 rounded-full bg-[#00488e]/10 border border-[#00488e]/20 text-[#00488e] flex items-center justify-center font-bold text-xs shadow-2xs">
+          <User className="w-4 h-4" />
         </div>
       </div>
     </header>

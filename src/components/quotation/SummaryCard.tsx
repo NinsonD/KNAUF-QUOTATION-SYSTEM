@@ -28,7 +28,7 @@ export default function SummaryCard({
   } = calculation;
 
   return (
-    <div className="bg-gradient-to-br from-[#00488e] via-[#003c77] to-[#002d5a] rounded-2xl text-white p-6 shadow-xl border border-blue-800/60 sticky top-22">
+    <div className="bg-gradient-to-br from-[#00488e] via-[#003c77] to-[#002d5a] rounded-[32px] text-white p-7 shadow-2xl border border-blue-800/60 sticky top-22">
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/15">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-[#f86c29]/20 border border-[#f86c29]/40 flex items-center justify-center text-[#f86c29]">
