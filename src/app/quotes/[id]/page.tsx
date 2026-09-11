@@ -262,8 +262,10 @@ export default function QuoteDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Navigation & Status Bar with Company Logo */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+      {/* Interactive Editor & Navigation (Hidden during Print) */}
+      <div className="no-print space-y-6">
+        {/* Top Navigation & Status Bar with Company Logo */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div className="flex items-center gap-3.5">
           <Link
             href="/quotes"
@@ -423,6 +425,7 @@ export default function QuoteDetailPage() {
             hasDeflection={deflectionItems.length > 0}
           />
         </div>
+      </div>
       </div>
 
       {/* Official Print Modal */}

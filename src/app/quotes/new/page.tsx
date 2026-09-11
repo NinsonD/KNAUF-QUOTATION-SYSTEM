@@ -307,100 +307,103 @@ function NewQuoteContent() {
 
   return (
     <div className="space-y-6">
-      {/* Studio Header with Company Logo */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
-        <div className="flex items-center gap-3.5">
-          <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
-            <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Interactive Quotation Studio
-              </h1>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#fff3ec] text-[#f86c29] border border-[#fed7aa]">
-                Live Calc
-              </span>
+      {/* Interactive Builder & Studio Header (Hidden during Print) */}
+      <div className="no-print space-y-6">
+        {/* Studio Header with Company Logo */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+          <div className="flex items-center gap-3.5">
+            <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
+              <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Build and calculate compliant Knauf assemblies with custom m² consumption factors, commercial rates, and deflection options.
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  Interactive Quotation Studio
+                </h1>
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#fff3ec] text-[#f86c29] border border-[#fed7aa]">
+                  Live Calc
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Build and calculate compliant Knauf assemblies with custom m² consumption factors, commercial rates, and deflection options.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowPrintModal(!showPrintModal)}
+              className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
+            >
+              {showPrintModal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showPrintModal ? 'Hide Print View' : 'Preview Official Sheet'}
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setShowPrintModal(!showPrintModal)}
-            className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
-          >
-            {showPrintModal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            {showPrintModal ? 'Hide Print View' : 'Preview Official Sheet'}
-          </button>
-        </div>
-      </div>
+        {/* Main Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Interactive Builder (8 cols) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Step 1: System Selector */}
+            <SystemSelector
+              systems={systems}
+              selectedSystemCode={selectedSystem.code}
+              onSelectSystem={handleSystemChange}
+            />
 
-      {/* Main Two-Column Layout (Hidden in print when modal is active) */}
-      <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 ${showPrintModal ? 'no-print' : ''}`}>
-        {/* Left Interactive Builder (8 cols) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Step 1: System Selector */}
-          <SystemSelector
-            systems={systems}
-            selectedSystemCode={selectedSystem.code}
-            onSelectSystem={handleSystemChange}
-          />
+            {/* Step 2: Project Metadata */}
+            <ProjectMetaForm
+              meta={meta}
+              scaleM2={scaleM2}
+              onChangeMeta={(m) => setMeta((prev) => ({ ...prev, ...m }))}
+              onChangeScale={handleScaleChange}
+            />
 
-          {/* Step 2: Project Metadata */}
-          <ProjectMetaForm
-            meta={meta}
-            scaleM2={scaleM2}
-            onChangeMeta={(m) => setMeta((prev) => ({ ...prev, ...m }))}
-            onChangeScale={handleScaleChange}
-          />
+            {/* Head Deflection Switch */}
+            <DeflectionToggle
+              supportsDeflection={selectedSystem.supportsDeflection}
+              includeDeflection={includeDeflection}
+              onToggle={handleDeflectionToggle}
+              systemName={selectedSystem.name}
+            />
 
-          {/* Head Deflection Switch */}
-          <DeflectionToggle
-            supportsDeflection={selectedSystem.supportsDeflection}
-            includeDeflection={includeDeflection}
-            onToggle={handleDeflectionToggle}
-            systemName={selectedSystem.name}
-          />
+            {/* Step 3: Material Grid Matrix */}
+            <MaterialGrid
+              baseItems={baseItems}
+              deflectionItems={deflectionItems}
+              scaleM2={scaleM2}
+              onUpdateBaseItem={handleUpdateBaseItem}
+              onUpdateDeflectionItem={handleUpdateDeflectionItem}
+              onAddBaseItem={handleAddBaseItem}
+              onRemoveBaseItem={handleRemoveBaseItem}
+              onRemoveDeflectionItem={handleRemoveDeflectionItem}
+              onResetItems={handleResetToDefaults}
+            />
 
-          {/* Step 3: Material Grid Matrix */}
-          <MaterialGrid
-            baseItems={baseItems}
-            deflectionItems={deflectionItems}
-            scaleM2={scaleM2}
-            onUpdateBaseItem={handleUpdateBaseItem}
-            onUpdateDeflectionItem={handleUpdateDeflectionItem}
-            onAddBaseItem={handleAddBaseItem}
-            onRemoveBaseItem={handleRemoveBaseItem}
-            onRemoveDeflectionItem={handleRemoveDeflectionItem}
-            onResetItems={handleResetToDefaults}
-          />
+            {/* Bottom Export & Save Action Bar */}
+            <ExportButtons
+              onSaveQuote={handleSaveQuotation}
+              onExportExcel={handleExportExcel}
+              onExportPdf={handleExportPdf}
+              onPrintPdf={() => setShowPrintModal(true)}
+              isSaving={isSaving}
+              isExporting={isExporting}
+              isExportingPdf={isExportingPdf}
+              saveSuccess={saveSuccess}
+            />
+          </div>
 
-          {/* Bottom Export & Save Action Bar */}
-          <ExportButtons
-            onSaveQuote={handleSaveQuotation}
-            onExportExcel={handleExportExcel}
-            onExportPdf={handleExportPdf}
-            onPrintPdf={() => setShowPrintModal(true)}
-            isSaving={isSaving}
-            isExporting={isExporting}
-            isExportingPdf={isExportingPdf}
-            saveSuccess={saveSuccess}
-          />
-        </div>
-
-        {/* Right Sticky Summary (4 cols) */}
-        <div className="lg:col-span-4">
-          <SummaryCard
-            calculation={calculation}
-            systemName={selectedSystem.name}
-            projectName={meta.projectName}
-            hasDeflection={includeDeflection}
-          />
+          {/* Right Sticky Summary (4 cols) */}
+          <div className="lg:col-span-4">
+            <SummaryCard
+              calculation={calculation}
+              systemName={selectedSystem.name}
+              projectName={meta.projectName}
+              hasDeflection={includeDeflection}
+            />
+          </div>
         </div>
       </div>
 

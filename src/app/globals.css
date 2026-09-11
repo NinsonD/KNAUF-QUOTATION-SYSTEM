@@ -89,10 +89,17 @@ body {
 
   /* Universal hide for all screen-only chrome */
   .no-print,
+  .print\:hidden,
   header,
   nav,
   footer,
   aside {
+    display: none !important;
+  }
+
+  /* When a print modal is active, completely hide all non-modal sibling content */
+  body:has(.print-modal-overlay) main > *:not(:has(.print-modal-overlay)),
+  body:has(.print-modal-overlay) .app-bento-canvas > *:not(:has(.print-modal-overlay)) {
     display: none !important;
   }
 

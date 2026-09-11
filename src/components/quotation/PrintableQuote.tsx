@@ -28,30 +28,30 @@ export default function PrintableQuote({
   } = calculation;
 
   return (
-    <div className="printable-document bg-white text-slate-900 w-full max-w-[210mm] mx-auto p-6 sm:p-8 font-sans text-xs shadow-md print:shadow-none print:p-0 print:max-w-none print:w-full print:m-0">
+    <div className="printable-document bg-white text-slate-900 w-full max-w-[210mm] mx-auto p-4 sm:p-6 font-sans text-xs shadow-md print:shadow-none print:p-0 print:max-w-none print:w-full print:m-0">
       {/* 1. Official Corporate Letterhead Header */}
-      <div className="border-b-2 border-[#00488e] pb-4 mb-4">
+      <div className="border-b-2 border-[#00488e] pb-3 mb-3">
         <div className="flex items-start justify-between gap-4">
           {/* Logo & Company Details */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3.5">
             <div className="shrink-0">
               <img
                 src="/logo/logo.png"
                 alt="Al Namariq Logo"
-                className="h-16 w-auto object-contain"
+                className="h-14 w-auto object-contain"
               />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-black tracking-tight text-[#00488e] uppercase leading-tight">
+              <h1 className="text-base sm:text-lg font-black tracking-tight text-[#00488e] uppercase leading-tight">
                 Al Namariq Building Material Trading Co. LLC
               </h1>
-              <p className="text-[11px] font-semibold text-slate-700 mt-0.5">
+              <p className="text-[10.5px] font-semibold text-slate-700 mt-0.5">
                 Certified Knauf Drywall & Ceiling Construction Systems Distributor
               </p>
-              <p className="text-[10px] text-slate-500 mt-0.5">
+              <p className="text-[9.5px] text-slate-500 mt-0.5">
                 P.O. Box 25569, Industrial Area, Sharjah, United Arab Emirates
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[9.5px] text-slate-500">
                 Tel: +971 6 5328033 &nbsp;|&nbsp; Fax: +971 6 5328302 &nbsp;|&nbsp; Email: sales@alnamariq.ae
               </p>
             </div>
@@ -59,13 +59,13 @@ export default function PrintableQuote({
 
           {/* Quotation Title Badge */}
           <div className="text-right shrink-0">
-            <div className="inline-block px-4 py-1.5 bg-[#00488e] text-white font-black text-xs tracking-wider uppercase rounded">
+            <div className="inline-block px-3.5 py-1 bg-[#00488e] text-white font-black text-[11px] tracking-wider uppercase rounded">
               Commercial Quotation
             </div>
-            <div className="text-xs font-mono font-bold text-[#f86c29] mt-1.5">
+            <div className="text-xs font-mono font-bold text-[#f86c29] mt-1">
               Ref: {meta.quoteNumber || 'ANM-2026'}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium">
+            <div className="text-[9.5px] text-slate-500 font-medium">
               Date: {meta.date || new Date().toLocaleDateString('en-GB')}
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function PrintableQuote({
       </div>
 
       {/* 2. Metadata Grid (Project, Client, System, Scale, Sales) */}
-      <div className="border border-slate-300 rounded bg-slate-50/70 p-3.5 mb-4 text-xs">
+      <div className="border border-slate-300 rounded bg-slate-50/70 p-2.5 mb-3 text-xs">
         <div className="grid grid-cols-12 gap-x-4 gap-y-2">
           {/* Left Column */}
           <div className="col-span-7 space-y-1.5">
@@ -258,7 +258,7 @@ export default function PrintableQuote({
       </div>
 
       {/* 4. Terms & Conditions */}
-      <div className="border border-slate-300 p-3 bg-slate-50 text-[10px] leading-relaxed rounded mb-6 break-inside-avoid">
+      <div className="border border-slate-300 p-2.5 bg-slate-50 text-[9.5px] leading-relaxed rounded mb-4 break-inside-avoid">
         <div className="font-extrabold text-[#00488e] mb-1 uppercase tracking-wide">
           Official Al Namariq Commercial Terms & Conditions:
         </div>
@@ -270,37 +270,37 @@ export default function PrintableQuote({
       </div>
 
       {/* 5. Dual Signatures & Acceptance Block */}
-      <div className="grid grid-cols-3 gap-6 pt-4 border-t-2 border-slate-300 text-xs break-inside-avoid">
+      <div className="grid grid-cols-3 gap-6 pt-3 border-t-2 border-slate-300 text-xs break-inside-avoid">
         {/* Prepared by */}
         <div>
-          <div className="text-[11px] font-bold text-[#00488e] uppercase tracking-wider mb-8">
+          <div className="text-[10.5px] font-bold text-[#00488e] uppercase tracking-wider mb-6">
             Prepared By:
           </div>
           <div className="border-t border-slate-400 pt-1.5">
             <div className="font-bold text-slate-900">{meta.salesman || 'Technical Sales Engineer'}</div>
-            <div className="text-[10px] text-slate-500">Al Namariq Estimating Dept.</div>
+            <div className="text-[9.5px] text-slate-500">Al Namariq Estimating Dept.</div>
           </div>
         </div>
 
         {/* Authorized by */}
         <div>
-          <div className="text-[11px] font-bold text-[#00488e] uppercase tracking-wider mb-8">
+          <div className="text-[10.5px] font-bold text-[#00488e] uppercase tracking-wider mb-6">
             Authorized By:
           </div>
           <div className="border-t border-slate-400 pt-1.5">
             <div className="font-bold text-slate-900">Commercial Directorate</div>
-            <div className="text-[10px] text-slate-500">Al Namariq Sharjah Branch</div>
+            <div className="text-[9.5px] text-slate-500">Al Namariq Sharjah Branch</div>
           </div>
         </div>
 
         {/* Customer Acceptance */}
         <div>
-          <div className="text-[11px] font-bold text-slate-800 uppercase tracking-wider mb-8">
+          <div className="text-[10.5px] font-bold text-slate-800 uppercase tracking-wider mb-6">
             Customer Acceptance:
           </div>
           <div className="border-t border-slate-400 pt-1.5">
             <div className="font-bold text-slate-900">Authorized Signatory & Stamp</div>
-            <div className="text-[10px] text-slate-500">Date: ____ / ____ / 2026</div>
+            <div className="text-[9.5px] text-slate-500">Date: ____ / ____ / 2026</div>
           </div>
         </div>
       </div>
