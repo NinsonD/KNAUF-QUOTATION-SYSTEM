@@ -15,6 +15,7 @@ import {
   Clock,
   ShieldCheck,
   Trash2,
+  ExternalLink,
 } from 'lucide-react';
 import PrintableQuote from '@/components/quotation/PrintableQuote';
 import SummaryCard from '@/components/quotation/SummaryCard';
@@ -344,8 +345,8 @@ export default function QuoteDetailPage() {
         </div>
       )}
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Main Grid & Editor (Hidden in print when modal is active) */}
+      <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 ${showPrintModal ? 'no-print' : ''}`}>
         <div className="lg:col-span-8 space-y-6">
           {/* Quick Project Scale modifier */}
           <div className="bento-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -416,31 +417,54 @@ export default function QuoteDetailPage() {
 
       {/* Official Print Modal */}
       {showPrintModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
-            <div className="no-print p-4 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-20">
-              <div className="font-bold text-sm text-slate-800">
-                Al Namariq Official Print Preview • {quote.quoteNumber}
+        <div className="print-modal-overlay fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4">
+          <div className="print-modal-container bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative border border-slate-200">
+            {/* Modal Controls Toolbar (Hidden during print) */}
+            <div className="no-print p-4 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-0 bg-white/95 backdrop-blur-md z-20">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-[#00488e]/10 text-[#00488e] flex items-center justify-center font-bold">
+                  <Printer className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="font-extrabold text-xs sm:text-sm text-slate-900">
+                    Al Namariq Official Print Preview
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-mono">
+                    Ref: {quote.quoteNumber} • {systemDef.code}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                <Link
+                  href={`/quotes/${quote.id}/print`}
+                  target="_blank"
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all"
+                  title="Open in dedicated full-page print tab"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Full Page</span>
+                </Link>
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#00488e] text-white hover:bg-[#00488e]/90"
+                  className="px-4 py-1.5 text-xs font-bold rounded-full bg-[#00488e] hover:bg-[#003c77] text-white flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  Print to PDF
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print to PDF / Paper</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowPrintModal(false)}
-                  className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
                 >
                   Close
                 </button>
               </div>
             </div>
 
-            <div className="p-6">
+            {/* Document Surface */}
+            <div className="p-4 sm:p-8 print:p-0">
               <PrintableQuote
                 meta={meta}
                 system={systemDef}

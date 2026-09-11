@@ -18,11 +18,11 @@ export default function RootLayout({
       <body className="min-h-full bg-[#cfd9e5] text-slate-800 p-2 sm:p-4 lg:p-6 flex flex-col items-center justify-start">
         <AuthProvider>
           {/* Main Floating Bento Canvas matching Reference UI */}
-          <div className="w-full max-w-[1520px] bg-[#fbfbfa] rounded-[36px] sm:rounded-[44px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] border border-white/80 overflow-hidden flex flex-col relative min-h-[92vh]">
-            {/* Subtle Ambient Glow Meshes (Matching Reference UI top right warm glow & soft blue glow) */}
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#f86c29]/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute top-1/3 -right-20 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#00488e]/8 rounded-full blur-3xl pointer-events-none" />
+          <div className="app-bento-canvas w-full max-w-[1520px] bg-[#fbfbfa] rounded-[36px] sm:rounded-[44px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] border border-white/80 overflow-hidden flex flex-col relative min-h-[92vh] print:min-h-0 print:bg-white print:border-none print:shadow-none print:rounded-none print:p-0 print:m-0 print:max-w-none">
+            {/* Subtle Ambient Glow Meshes (Hidden in print) */}
+            <div className="no-print absolute -top-24 -right-24 w-96 h-96 bg-[#f86c29]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="no-print absolute top-1/3 -right-20 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="no-print absolute -bottom-20 -left-20 w-96 h-96 bg-[#00488e]/8 rounded-full blur-3xl pointer-events-none" />
 
             {/* Navigation Bar inside the Canvas */}
             <Navbar />
