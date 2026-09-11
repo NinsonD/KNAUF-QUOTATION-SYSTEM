@@ -65,6 +65,7 @@ function NewQuoteContent() {
   const [showPrintModal, setShowPrintModal] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
 
   // Initialize calculation when system or initial params change
@@ -268,6 +269,42 @@ function NewQuoteContent() {
     }
   };
 
+  const handleExportPdf = async () => {
+    setIsExportingPdf(true);
+    try {
+      const payload = {
+        meta,
+        system: selectedSystem,
+        calculation,
+        download: true,
+      };
+      const res = await fetch('/api/quotes/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to generate PDF');
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${meta.quoteNumber.replace(/[^a-zA-Z0-9-_]/g, '_')}_Knauf_Quotation.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      alert(`Error generating PDF: ${err.message}`);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Studio Header with Company Logo */}
@@ -347,9 +384,11 @@ function NewQuoteContent() {
           <ExportButtons
             onSaveQuote={handleSaveQuotation}
             onExportExcel={handleExportExcel}
+            onExportPdf={handleExportPdf}
             onPrintPdf={() => setShowPrintModal(true)}
             isSaving={isSaving}
             isExporting={isExporting}
+            isExportingPdf={isExportingPdf}
             saveSuccess={saveSuccess}
           />
         </div>
@@ -385,6 +424,16 @@ function NewQuoteContent() {
               </div>
 
               <div className="flex items-center gap-2 self-end sm:self-auto">
+                <button
+                  type="button"
+                  onClick={handleExportPdf}
+                  disabled={isExportingPdf}
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1.5 transition-all disabled:opacity-50"
+                  title="Download vector PDF document"
+                >
+                  <Printer className="w-3.5 h-3.5 text-rose-600" />
+                  <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => window.print()}

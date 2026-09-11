@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   FileSpreadsheet,
+  FileText,
   PlusCircle,
   Search,
   Filter,
@@ -227,6 +228,15 @@ export default function QuotesListPage() {
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
+                        <a
+                          href={`/api/quotes/${q.id}/pdf?download=true`}
+                          download
+                          className="px-3 py-1 text-xs font-bold rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1 transition-all"
+                          title="Download Official Vector PDF"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-rose-600" />
+                          .pdf
+                        </a>
                         <a
                           href={`/api/quotes/${q.id}/export`}
                           download

@@ -316,6 +316,16 @@ export default function QuoteDetailPage() {
           </button>
 
           <a
+            href={`/api/quotes/${quote.id}/pdf?download=true`}
+            download
+            className="px-4 py-2 text-xs font-bold rounded-full text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 flex items-center gap-2 transition-all shadow-2xs hover:shadow"
+            title="Download high-resolution vector PDF"
+          >
+            <Printer className="w-4 h-4 text-rose-600" />
+            Download PDF (.pdf)
+          </a>
+
+          <a
             href={`/api/quotes/${quote.id}/export`}
             download
             className="px-4 py-2 text-xs font-bold rounded-full text-white bg-[#f86c29] hover:bg-[#e05615] shadow-sm flex items-center gap-2 transition-all hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
@@ -445,6 +455,15 @@ export default function QuoteDetailPage() {
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Full Page</span>
                 </Link>
+                <a
+                  href={`/api/quotes/${quote.id}/pdf?download=true`}
+                  download
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1.5 transition-all shadow-2xs"
+                  title="Download vector PDF document"
+                >
+                  <Printer className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Download PDF</span>
+                </a>
                 <button
                   type="button"
                   onClick={() => window.print()}
