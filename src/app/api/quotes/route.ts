@@ -42,6 +42,17 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const { getCurrentUser } = await import('@/lib/auth/session');
+    const { canCreateQuote } = await import('@/lib/auth/permissions');
+    const user = await getCurrentUser();
+
+    if (user && !canCreateQuote(user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Read-only viewers cannot create new quotations.' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const {
       quoteNumber,

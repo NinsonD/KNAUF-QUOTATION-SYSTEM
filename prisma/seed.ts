@@ -3,10 +3,66 @@ import knaufSystemsData from '../src/data/knauf-systems.json';
 import defaultPricesData from '../src/data/default-prices.json';
 import { calculateQuotation } from '../src/lib/engine/calculator';
 import { KnaufSystemDefinition } from '../src/lib/engine/types';
+import { hashPassword } from '../src/lib/auth/password';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log('--- Seeding Al Namariq Users & Roles ---');
+  const defaultUsers = [
+    {
+      email: 'admin@alnamariq.ae',
+      name: 'Corporate Admin',
+      role: 'ADMIN',
+      password: 'Admin@1234',
+      avatarUrl: '/avatars/admin.png',
+    },
+    {
+      email: 'estimator@alnamariq.ae',
+      name: 'Lora Piterson (Senior Estimator)',
+      role: 'ESTIMATOR',
+      password: 'Estimator@1234',
+      avatarUrl: '/avatars/estimator.png',
+    },
+    {
+      email: 'sales@alnamariq.ae',
+      name: 'Ram (Commercial Sales)',
+      role: 'SALES',
+      password: 'Sales@1234',
+      avatarUrl: '/avatars/sales.png',
+    },
+    {
+      email: 'viewer@alnamariq.ae',
+      name: 'Audit Viewer',
+      role: 'VIEWER',
+      password: 'Viewer@1234',
+      avatarUrl: '/avatars/viewer.png',
+    },
+  ];
+
+  const seededUserMap: Record<string, string> = {};
+
+  for (const u of defaultUsers) {
+    const passwordHash = hashPassword(u.password);
+    const user = await prisma.user.upsert({
+      where: { email: u.email },
+      update: {
+        name: u.name,
+        role: u.role,
+        passwordHash,
+      },
+      create: {
+        email: u.email,
+        name: u.name,
+        role: u.role,
+        passwordHash,
+        avatarUrl: u.avatarUrl,
+      },
+    });
+    seededUserMap[u.role] = user.id;
+    console.log(`✓ User seeded: ${u.email} [${u.role}]`);
+  }
+
   console.log('--- Seeding Al Namariq Master Price List ---');
   for (const [productName, price] of Object.entries(defaultPricesData)) {
     // determine unit

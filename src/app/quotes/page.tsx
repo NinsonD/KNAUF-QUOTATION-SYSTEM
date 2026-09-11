@@ -12,8 +12,10 @@ import {
   Building,
   RefreshCw,
 } from 'lucide-react';
+import { useAuth } from '@/lib/auth/AuthContext';
 
 export default function QuotesListPage() {
+  const { permissions } = useAuth();
   const [quotes, setQuotes] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -75,13 +77,15 @@ export default function QuotesListPage() {
           </p>
         </div>
 
-        <Link
-          href="/quotes/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f86c29] hover:bg-[#e05615] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto"
-        >
-          <PlusCircle className="w-4 h-4" />
-          Create New Quotation
-        </Link>
+        {permissions?.canCreateQuote !== false && (
+          <Link
+            href="/quotes/new"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f86c29] hover:bg-[#e05615] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Create New Quotation
+          </Link>
+        )}
       </div>
 
       {/* Search & Filter Bar */}
@@ -232,14 +236,16 @@ export default function QuotesListPage() {
                           <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
                           .xlsx
                         </a>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(q.id, q.quoteNumber)}
-                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        {permissions?.canDeleteQuote && (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(q.id, q.quoteNumber)}
+                            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

@@ -38,6 +38,17 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const { getCurrentUser } = await import('@/lib/auth/session');
+    const { canEditQuoteItems, canEditQuoteMeta } = await import('@/lib/auth/permissions');
+    const user = await getCurrentUser();
+
+    if (user && !canEditQuoteMeta(user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Read-only viewers cannot update quotations.' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const {
       quoteNumber,
@@ -50,6 +61,14 @@ export async function PUT(
       status,
       termsAndConditions,
     } = body;
+
+    // Check if non-estimator/admin tries to edit items
+    if (calculation?.baseItems && user && !canEditQuoteItems(user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Only Estimators and Administrators can modify calculated material items.' },
+        { status: 403 }
+      );
+    }
 
     const existing = await prisma.quotation.findUnique({ where: { id } });
     if (!existing) {
@@ -127,6 +146,17 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { getCurrentUser } = await import('@/lib/auth/session');
+    const { canDeleteQuote } = await import('@/lib/auth/permissions');
+    const user = await getCurrentUser();
+
+    if (user && !canDeleteQuote(user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Only Administrator can delete commercial quotations.' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     await prisma.quotation.delete({
       where: { id },
@@ -137,4 +167,5 @@ export async function DELETE(
     return NextResponse.json({ error: 'Failed to delete quotation' }, { status: 500 });
   }
 }
+
 

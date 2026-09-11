@@ -20,8 +20,11 @@ import PrintableQuote from '@/components/quotation/PrintableQuote';
 import SummaryCard from '@/components/quotation/SummaryCard';
 import MaterialGrid from '@/components/quotation/MaterialGrid';
 import { CalculatedItem, CalculationResult, KnaufSystemDefinition, QuoteMetaData, QuoteStatus } from '@/lib/engine/types';
+import { useAuth } from '@/lib/auth/AuthContext';
+import { Lock } from 'lucide-react';
 
 export default function QuoteDetailPage() {
+  const { permissions } = useAuth();
   const params = useParams();
   const router = useRouter();
   const id = params?.id as string;
@@ -291,8 +294,9 @@ export default function QuoteDetailPage() {
           {/* Status selector */}
           <select
             value={status}
+            disabled={permissions?.canEditQuoteMeta === false}
             onChange={(e) => setStatus(e.target.value as QuoteStatus)}
-            className="px-3.5 py-2 text-xs font-bold rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e] text-[#00488e] shadow-2xs"
+            className="px-3.5 py-2 text-xs font-bold rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#00488e] text-[#00488e] shadow-2xs disabled:opacity-60 disabled:bg-slate-50"
           >
             <option value="DRAFT">DRAFT</option>
             <option value="ISSUED">ISSUED</option>
@@ -319,15 +323,17 @@ export default function QuoteDetailPage() {
             Download Excel (.xlsx)
           </a>
 
-          <button
-            type="button"
-            onClick={handleSaveChanges}
-            disabled={isSaving}
-            className="px-4 py-2 text-xs font-bold rounded-full text-white bg-[#00488e] hover:bg-[#002d5a] shadow-sm flex items-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Save className="w-4 h-4" />
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
+          {permissions?.canEditQuoteMeta !== false && (
+            <button
+              type="button"
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+              className="px-4 py-2 text-xs font-bold rounded-full text-white bg-[#00488e] hover:bg-[#002d5a] shadow-sm flex items-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Save className="w-4 h-4" />
+              {isSaving ? 'Saving...' : 'Save Changes'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -345,20 +351,23 @@ export default function QuoteDetailPage() {
           <div className="bento-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="text-xs text-slate-600 font-medium">
               <span className="font-extrabold text-slate-900 block sm:inline">Project Scale: </span>
-              Modify m² scale to recalculate entire bill of quantities instantly
+              {permissions?.canEditQuoteItems !== false
+                ? 'Modify m² scale to recalculate entire bill of quantities instantly'
+                : 'Project scale locked by system specifications'}
             </div>
             <div className="flex items-center gap-2">
               <input
                 type="number"
                 min="0.1"
                 step="any"
+                disabled={permissions?.canEditQuoteItems === false}
                 value={scaleM2}
                 onChange={(e) => {
                   const s = parseFloat(e.target.value) || 0;
                   setScaleM2(s);
                   recalculate(baseItems, deflectionItems, s);
                 }}
-                className="w-32 px-3.5 py-1.5 text-xs font-bold font-mono rounded-full border border-orange-200 bg-orange-50/50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#f86c29] text-right"
+                className="w-32 px-3.5 py-1.5 text-xs font-bold font-mono rounded-full border border-orange-200 bg-orange-50/50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#f86c29] text-right disabled:opacity-60 disabled:bg-slate-100"
               />
               <span className="text-xs font-extrabold text-[#f86c29]">M²</span>
             </div>

@@ -17,8 +17,11 @@ import {
   Loader2,
 } from 'lucide-react';
 import { KnaufSystemDefinition } from '@/lib/engine/types';
+import { useAuth } from '@/lib/auth/AuthContext';
+import { Lock } from 'lucide-react';
 
 export default function CatalogPage() {
+  const { permissions, user } = useAuth();
   const [activeTab, setActiveTab] = useState<'SYSTEMS' | 'PRICES'>('SYSTEMS');
   const [systems, setSystems] = useState<KnaufSystemDefinition[]>(
     knaufSystemsData as unknown as KnaufSystemDefinition[]
@@ -289,11 +292,24 @@ export default function CatalogPage() {
           <div className="bento-card p-6 space-y-4">
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
               <div>
-                <h3 className="text-sm font-extrabold text-slate-900">
-                  Master Material Price List (AED)
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-extrabold text-slate-900">
+                    Master Material Price List (AED)
+                  </h3>
+                  {permissions?.canManagePrices ? (
+                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      Editable (Admin)
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                      <Lock className="w-2.5 h-2.5" /> Read-Only
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-slate-500 mt-0.5 font-medium">
-                  Unit prices configured here automatically populate new quotations for Al Namariq.
+                  {permissions?.canManagePrices
+                    ? 'Unit prices configured here automatically populate new quotations for Al Namariq.'
+                    : 'Standard unit baseline rates for Al Namariq. Contact Administrator to adjust master rates.'}
                 </p>
               </div>
 
@@ -309,41 +325,43 @@ export default function CatalogPage() {
               </div>
             </div>
 
-            {/* Quick Add Product Bar */}
-            <form onSubmit={handleAddNewProduct} className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-12 gap-2">
-              <input
-                type="text"
-                value={newProductName}
-                onChange={(e) => setNewProductName(e.target.value)}
-                placeholder="Add new material name..."
-                className="sm:col-span-6 px-3.5 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
-              />
-              <select
-                value={newProductUnit}
-                onChange={(e) => setNewProductUnit(e.target.value)}
-                className="sm:col-span-2 px-3 py-2 text-xs rounded-full border border-slate-200 bg-white font-medium"
-              >
-                <option value="pcs">pcs</option>
-                <option value="m²">m²</option>
-                <option value="m">m</option>
-                <option value="kg">kg</option>
-                <option value="bags">bags</option>
-              </select>
-              <input
-                type="number"
-                step="0.001"
-                value={newProductPrice}
-                onChange={(e) => setNewProductPrice(parseFloat(e.target.value) || 0)}
-                placeholder="AED Price"
-                className="sm:col-span-2 px-3.5 py-2 text-xs font-mono rounded-full border border-slate-200 text-right"
-              />
-              <button
-                type="submit"
-                className="sm:col-span-2 px-4 py-2 bg-[#f86c29] hover:bg-[#e05615] text-white text-xs font-bold rounded-full transition-all shadow-sm hover:shadow"
-              >
-                Add Material
-              </button>
-            </form>
+            {/* Quick Add Product Bar (ADMIN ONLY) */}
+            {permissions?.canManagePrices ? (
+              <form onSubmit={handleAddNewProduct} className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                <input
+                  type="text"
+                  value={newProductName}
+                  onChange={(e) => setNewProductName(e.target.value)}
+                  placeholder="Add new material name..."
+                  className="sm:col-span-6 px-3.5 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/50"
+                />
+                <select
+                  value={newProductUnit}
+                  onChange={(e) => setNewProductUnit(e.target.value)}
+                  className="sm:col-span-2 px-3 py-2 text-xs rounded-full border border-slate-200 bg-white font-medium"
+                >
+                  <option value="pcs">pcs</option>
+                  <option value="m²">m²</option>
+                  <option value="m">m</option>
+                  <option value="kg">kg</option>
+                  <option value="bags">bags</option>
+                </select>
+                <input
+                  type="number"
+                  step="0.001"
+                  value={newProductPrice}
+                  onChange={(e) => setNewProductPrice(parseFloat(e.target.value) || 0)}
+                  placeholder="AED Price"
+                  className="sm:col-span-2 px-3.5 py-2 text-xs font-mono rounded-full border border-slate-200 text-right"
+                />
+                <button
+                  type="submit"
+                  className="sm:col-span-2 px-4 py-2 bg-[#f86c29] hover:bg-[#e05615] text-white text-xs font-bold rounded-full transition-all shadow-sm hover:shadow"
+                >
+                  Add Material
+                </button>
+              </form>
+            ) : null}
           </div>
 
           {/* Prices Table */}
@@ -408,7 +426,7 @@ export default function CatalogPage() {
                               Cancel
                             </button>
                           </div>
-                        ) : (
+                        ) : permissions?.canManagePrices ? (
                           <button
                             type="button"
                             onClick={() => handleStartEdit(productName, price)}
@@ -417,6 +435,11 @@ export default function CatalogPage() {
                             <Edit2 className="w-3 h-3" />
                             Edit
                           </button>
+                        ) : (
+                          <span className="text-[10px] font-semibold text-slate-400 inline-flex items-center gap-1">
+                            <Lock className="w-3 h-3 text-slate-300" />
+                            Locked
+                          </span>
                         )}
                       </td>
                     </tr>

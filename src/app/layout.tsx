@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/layout/Navbar';
+import { AuthProvider } from '@/lib/auth/AuthContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -15,20 +16,21 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full bg-[#cfd9e5] text-slate-800 p-2 sm:p-4 lg:p-6 flex flex-col items-center justify-start">
-        {/* Main Floating Bento Canvas matching Reference UI */}
-        <div className="w-full max-w-[1520px] bg-[#fbfbfa] rounded-[36px] sm:rounded-[44px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] border border-white/80 overflow-hidden flex flex-col relative min-h-[92vh]">
-          {/* Subtle Ambient Glow Meshes (Matching Reference UI top right warm glow & soft blue glow) */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#f86c29]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 -right-20 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#00488e]/8 rounded-full blur-3xl pointer-events-none" />
+        <AuthProvider>
+          {/* Main Floating Bento Canvas matching Reference UI */}
+          <div className="w-full max-w-[1520px] bg-[#fbfbfa] rounded-[36px] sm:rounded-[44px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] border border-white/80 overflow-hidden flex flex-col relative min-h-[92vh]">
+            {/* Subtle Ambient Glow Meshes (Matching Reference UI top right warm glow & soft blue glow) */}
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#f86c29]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/3 -right-20 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#00488e]/8 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Navigation Bar inside the Canvas */}
-          <Navbar />
+            {/* Navigation Bar inside the Canvas */}
+            <Navbar />
 
-          {/* Main App Content Area */}
-          <main className="flex-1 w-full px-4 sm:px-8 lg:px-10 py-6 relative z-10">
-            {children}
-          </main>
+            {/* Main App Content Area */}
+            <main className="flex-1 w-full px-4 sm:px-8 lg:px-10 py-6 relative z-10">
+              {children}
+            </main>
 
           {/* Canvas Footer */}
           <footer className="no-print border-t border-slate-900/[0.04] py-5 px-8 text-center text-xs text-slate-400 bg-white/40 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -41,7 +43,9 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+        </AuthProvider>
       </body>
     </html>
   );
 }
+

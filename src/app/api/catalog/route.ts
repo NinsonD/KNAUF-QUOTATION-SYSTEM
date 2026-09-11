@@ -49,6 +49,17 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const { getCurrentUser } = await import('@/lib/auth/session');
+    const { canManagePrices } = await import('@/lib/auth/permissions');
+    const user = await getCurrentUser();
+
+    if (!user || !canManagePrices(user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Only Administrator can modify master material prices.' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { productName, unit, priceAed } = body;
 
@@ -59,12 +70,12 @@ export async function POST(req: NextRequest) {
     const updated = await prisma.masterProductPrice.upsert({
       where: { productName },
       update: {
-        defaultPriceAed: Number(priceAed),
+        defaultPriceAed: parseFloat(priceAed),
         ...(unit ? { unit } : {}),
       },
       create: {
         productName,
-        defaultPriceAed: Number(priceAed),
+        defaultPriceAed: parseFloat(priceAed),
         unit: unit || 'pcs',
       },
     });
@@ -72,7 +83,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(updated);
   } catch (error: any) {
     console.error('Failed to update price:', error);
-    return NextResponse.json({ error: error.message || 'Failed to update price' }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
