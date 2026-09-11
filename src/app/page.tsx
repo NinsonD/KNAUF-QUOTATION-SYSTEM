@@ -125,8 +125,12 @@ export default async function DashboardPage() {
           </div>
 
           <div className="my-2">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#00488e] to-[#002d5a] p-1 shadow-md mb-3 flex items-center justify-center text-white">
-              <Building2 className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 rounded-2xl bg-white p-2.5 shadow-md border border-slate-200/80 mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <img
+                src="/logo/logo.png"
+                alt="Al Namariq Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <h3 className="text-lg font-black text-slate-900 tracking-tight">
               Al Namariq Team
