@@ -1,0 +1,84 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model KnaufSystem {
+  id                  String           @id @default(cuid())
+  code                String           @unique
+  name                String
+  category            String           // "CEILING", "PARTITION", "SHAFT_WALL", "WALL_LINING"
+  description         String?
+  supportsDeflection  Boolean          @default(false)
+  materials           SystemMaterial[]
+  quotations          Quotation[]
+  createdAt           DateTime         @default(now())
+}
+
+model SystemMaterial {
+  id               String       @id @default(cuid())
+  systemId         String
+  system           KnaufSystem  @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  productName      String
+  factorPerM2      Float
+  unit             String       // "m²", "m", "pcs", "kg"
+  isHeadDeflection Boolean      @default(false)
+  sortOrder        Int          @default(0)
+
+  @@index([systemId])
+}
+
+model MasterProductPrice {
+  id               String       @id @default(cuid())
+  productName      String       @unique
+  unit             String
+  defaultPriceAed  Float
+  updatedAt        DateTime     @updatedAt
+}
+
+model Quotation {
+  id                  String          @id @default(cuid())
+  quoteNumber         String          @unique // e.g. "ANM-2026-001"
+  projectName         String
+  clientName          String
+  salesman            String          @default("Ram")
+  scaleM2             Float
+  systemId            String
+  system              KnaufSystem     @relation(fields: [systemId], references: [id])
+  includeDeflection   Boolean         @default(false)
+  
+  // Computed financial snapshots
+  baseTotalAed        Float
+  baseRatePerM2       Float
+  deflectionTotalAed  Float?
+  deflectionRatePerM2 Float?
+  grandTotalAed       Float
+  grandRatePerM2      Float
+  
+  status              String          @default("DRAFT") // DRAFT, ISSUED, APPROVED, REVISED, CANCELLED
+  items               QuotationItem[]
+  termsAndConditions  String          @default("[]") // JSON stringified array of terms
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+}
+
+model QuotationItem {
+  id               String       @id @default(cuid())
+  quotationId      String
+  quotation        Quotation    @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productName      String
+  factorPerM2      Float
+  unit             String
+  totalQuantity    Float
+  unitPriceAed     Float
+  totalPriceAed    Float
+  isHeadDeflection Boolean      @default(false)
+  sortOrder        Int          @default(0)
+
+  @@index([quotationId])
+}
+

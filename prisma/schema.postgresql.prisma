@@ -1,0 +1,100 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Recommended for Supabase/Neon connection pooling
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum SystemCategory {
+  CEILING
+  PARTITION
+  SHAFT_WALL
+  WALL_LINING
+}
+
+enum QuoteStatus {
+  DRAFT
+  ISSUED
+  APPROVED
+  REVISED
+  CANCELLED
+}
+
+model KnaufSystem {
+  id                  String           @id @default(cuid())
+  code                String           @unique // e.g. "KW111", "D127", "KC_A001"
+  name                String           // e.g. "KNAUF SYSTEM KW 111"
+  category            SystemCategory
+  description         String?
+  supportsDeflection  Boolean          @default(false)
+  materials           SystemMaterial[]
+  quotations          Quotation[]
+  createdAt           DateTime         @default(now())
+}
+
+model SystemMaterial {
+  id               String       @id @default(cuid())
+  systemId         String
+  system           KnaufSystem  @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  productName      String
+  factorPerM2      Decimal      @db.Decimal(10, 4)
+  unit             String       // "m²", "m", "pcs", "kg"
+  isHeadDeflection Boolean      @default(false)
+  sortOrder        Int          @default(0)
+
+  @@index([systemId])
+}
+
+model MasterProductPrice {
+  id               String       @id @default(cuid())
+  productName      String       @unique
+  unit             String
+  defaultPriceAed  Decimal      @db.Decimal(10, 3)
+  updatedAt        DateTime     @updatedAt
+}
+
+model Quotation {
+  id                  String          @id @default(cuid())
+  quoteNumber         String          @unique // e.g. "ANM-2026-001"
+  projectName         String
+  clientName          String
+  salesman            String          @default("Ram")
+  scaleM2             Decimal         @db.Decimal(12, 2)
+  systemId            String
+  system              KnaufSystem     @relation(fields: [systemId], references: [id])
+  includeDeflection   Boolean         @default(false)
+  
+  // Computed financial snapshots
+  baseTotalAed        Decimal         @db.Decimal(12, 2)
+  baseRatePerM2       Decimal         @db.Decimal(10, 2)
+  deflectionTotalAed  Decimal?        @db.Decimal(12, 2)
+  deflectionRatePerM2 Decimal?        @db.Decimal(10, 2)
+  grandTotalAed       Decimal         @db.Decimal(12, 2)
+  grandRatePerM2      Decimal         @db.Decimal(10, 2)
+  
+  status              QuoteStatus     @default(DRAFT)
+  items               QuotationItem[]
+  termsAndConditions  String[]
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+}
+
+model QuotationItem {
+  id               String       @id @default(cuid())
+  quotationId      String
+  quotation        Quotation    @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productName      String
+  factorPerM2      Decimal      @db.Decimal(10, 4)
+  unit             String
+  totalQuantity    Decimal      @db.Decimal(12, 3)
+  unitPriceAed     Decimal      @db.Decimal(10, 3)
+  totalPriceAed    Decimal      @db.Decimal(12, 2)
+  isHeadDeflection Boolean      @default(false)
+  sortOrder        Int          @default(0)
+
+  @@index([quotationId])
+}
+
