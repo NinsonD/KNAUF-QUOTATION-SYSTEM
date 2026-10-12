@@ -63,7 +63,7 @@ export async function generateAlNamariqPDF(
   let { page, startY: y } = createPage();
 
   // 1. HEADER SECTION
-  const headerHeight = 65;
+  const headerHeight = 87;
   // Logo
   if (logoImage) {
     const logoDims = logoImage.scale(0.35);
@@ -108,11 +108,11 @@ export async function generateAlNamariqPDF(
     color: COLOR_TEXT_MUTED,
   });
 
-  // Quotation Badge (Top Right)
+  // Keep quotation details in their own row below the company letterhead.
   const badgeWidth = 145;
   const badgeHeight = 24;
-  const badgeX = PAGE_WIDTH - MARGIN_X - badgeWidth;
-  const badgeY = y - 24;
+  const badgeX = MARGIN_X;
+  const badgeY = y - 80;
 
   page.drawRectangle({
     x: badgeX,
@@ -129,16 +129,19 @@ export async function generateAlNamariqPDF(
     color: COLOR_WHITE,
   });
 
-  page.drawText(`Ref: ${meta.quoteNumber || 'ANM-2026'}`, {
-    x: badgeX + 8,
-    y: badgeY - 12,
-    size: 8.5,
+  const reference = `Ref: ${meta.quoteNumber || 'ANM-2026'}`;
+  const referenceSize = Math.min(8.5, 8.5 * (CONTENT_WIDTH - badgeWidth - 20) / fontBold.widthOfTextAtSize(reference, 8.5));
+  page.drawText(reference, {
+    x: PAGE_WIDTH - MARGIN_X - fontBold.widthOfTextAtSize(reference, referenceSize),
+    y: badgeY + 13,
+    size: referenceSize,
     font: fontBold,
     color: COLOR_ORANGE,
   });
-  page.drawText(`Date: ${meta.date || new Date().toLocaleDateString('en-GB')}`, {
-    x: badgeX + 8,
-    y: badgeY - 22,
+  const quotationDate = `Date: ${meta.date || new Date().toLocaleDateString('en-GB')}`;
+  page.drawText(quotationDate, {
+    x: PAGE_WIDTH - MARGIN_X - fontRegular.widthOfTextAtSize(quotationDate, 7.5),
+    y: badgeY + 2,
     size: 7.5,
     font: fontRegular,
     color: COLOR_TEXT_MUTED,

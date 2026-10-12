@@ -1,0 +1,100 @@
+[
+  {
+    "code": "KC_B001",
+    "baseRate": 24.28,
+    "deflectionRate": 0,
+    "grandRate": 24.28,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KC_A001",
+    "baseRate": 25.55,
+    "deflectionRate": 0,
+    "grandRate": 25.55,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KC_A001_FR",
+    "baseRate": 30.44,
+    "deflectionRate": 0,
+    "grandRate": 30.44,
+    "allLinesFinite": true
+  },
+  {
+    "code": "D127",
+    "baseRate": 76.79,
+    "deflectionRate": 0,
+    "grandRate": 76.79,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KW111",
+    "baseRate": 45.06,
+    "deflectionRate": 7.49,
+    "grandRate": 52.55,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KW112",
+    "baseRate": 63.36,
+    "deflectionRate": 9.52,
+    "grandRate": 72.88,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KW115",
+    "baseRate": 100.89,
+    "deflectionRate": 11.08,
+    "grandRate": 111.97,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KW116",
+    "baseRate": 95.17,
+    "deflectionRate": 14.86,
+    "grandRate": 110.03,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KSW120",
+    "baseRate": 100.44,
+    "deflectionRate": 10,
+    "grandRate": 110.43,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KW625",
+    "baseRate": 32.33,
+    "deflectionRate": 0,
+    "grandRate": 32.33,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KWB626",
+    "baseRate": 34.24,
+    "deflectionRate": 0,
+    "grandRate": 34.24,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KWA611",
+    "baseRate": 22.77,
+    "deflectionRate": 0,
+    "grandRate": 22.77,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KWD623",
+    "baseRate": 32.59,
+    "deflectionRate": 0,
+    "grandRate": 32.59,
+    "allLinesFinite": true
+  },
+  {
+    "code": "KWD611",
+    "baseRate": 16.25,
+    "deflectionRate": 0,
+    "grandRate": 16.25,
+    "allLinesFinite": true
+  }
+]

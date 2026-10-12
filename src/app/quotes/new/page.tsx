@@ -1,485 +1,143 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import knaufSystemsData from '@/data/knauf-systems.json';
-import defaultPricesData from '@/data/default-prices.json';
+import { ChevronDown, Download, Eye, FileSpreadsheet, Loader2 } from 'lucide-react';
+import systemsData from '@/data/knauf-systems.json';
+import defaultPrices from '@/data/default-prices.json';
 import { calculateQuotation } from '@/lib/engine/calculator';
-import {
-  KnaufSystemDefinition,
-  CalculationResult,
-  QuoteMetaData,
-  CalculatedItem,
-} from '@/lib/engine/types';
-import SystemSelector from '@/components/quotation/SystemSelector';
-import ProjectMetaForm from '@/components/quotation/ProjectMetaForm';
-import DeflectionToggle from '@/components/quotation/DeflectionToggle';
+import type { CalculatedItem, KnaufSystemDefinition, QuoteMetaData, QuoteStatus, SystemCategory } from '@/lib/engine/types';
+import { useAuth } from '@/lib/auth/AuthContext';
 import MaterialGrid from '@/components/quotation/MaterialGrid';
-import SummaryCard from '@/components/quotation/SummaryCard';
-import ExportButtons from '@/components/quotation/ExportButtons';
-import PrintableQuote from '@/components/quotation/PrintableQuote';
+import QuotePreview from '@/components/quotation/QuotePreview';
+import PageHeader from '@/components/layout/PageHeader';
 import { AL_NAMARIQ_TERMS, generateAlNamariqExcel } from '@/lib/exporters/excel-generator';
-import { Eye, EyeOff, Sparkles, Loader2, Printer } from 'lucide-react';
+
+const systems = systemsData as KnaufSystemDefinition[];
+const categories: Record<SystemCategory, string> = { CEILING: 'Ceilings', PARTITION: 'Partitions', SHAFT_WALL: 'Shaft walls', WALL_LINING: 'Wall linings' };
+const money = (value: number) => value.toLocaleString('en-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 function NewQuoteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get('category');
+  const { user, permissions, isLoading: authLoading } = useAuth();
+  const initialSystem = systems.find(system => system.code === searchParams.get('systemCode'))
+    ?? systems.find(system => searchParams.get('category') ? system.category === searchParams.get('category') : system.code === 'KW111') ?? systems[0];
+  const [system, setSystem] = useState(initialSystem);
+  const [scale, setScale] = useState(1000);
+  const [includeDeflection, setIncludeDeflection] = useState(initialSystem.supportsDeflection);
+  const [prices, setPrices] = useState<Record<string, number>>(defaultPrices);
+  const [customItems, setCustomItems] = useState<{ base?: CalculatedItem[]; deflection?: CalculatedItem[] }>({});
+  const [meta, setMeta] = useState<QuoteMetaData>({ quoteNumber: '', projectName: '', clientName: '', salesman: '', date: '', status: 'DRAFT' });
+  const [catalogLoading, setCatalogLoading] = useState(true);
+  const [preview, setPreview] = useState(false);
+  const [busy, setBusy] = useState<'save' | 'pdf' | 'excel' | null>(null);
+  const [error, setError] = useState('');
+  const [catalogNotice, setCatalogNotice] = useState('');
+  const calculation = useMemo(() => calculateQuotation(system, scale, prices, includeDeflection, customItems), [system, scale, prices, includeDeflection, customItems]);
+  const editableDeflection = calculateQuotation(system, scale, prices, true, customItems).deflectionItems;
+  const canEditMaterials = permissions?.canEditQuoteItems !== false;
+  const valid = meta.projectName.trim() && meta.clientName.trim() && meta.quoteNumber.trim() && Number.isFinite(scale) && scale > 0;
 
-  const systems = knaufSystemsData as unknown as KnaufSystemDefinition[];
-
-  // Find initial system based on query param or default to KW111 (Partition)
-  const defaultSys =
-    systems.find((s) => (initialCategory ? s.category === initialCategory : s.code === 'KW111')) ||
-    systems[0];
-
-  const [selectedSystem, setSelectedSystem] = useState<KnaufSystemDefinition>(defaultSys);
-  const [scaleM2, setScaleM2] = useState<number>(1000);
-  const [includeDeflection, setIncludeDeflection] = useState<boolean>(defaultSys.supportsDeflection);
-  const [prices, setPrices] = useState<Record<string, number>>(defaultPricesData);
-
-  const [meta, setMeta] = useState<QuoteMetaData>({
-    quoteNumber: `ANM-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
-    projectName: 'Commercial Office Fitout & Partitions',
-    clientName: 'Main Contracting LLC',
-    salesman: 'Ram Prasad',
-    date: new Date().toLocaleDateString('en-GB'),
-    status: 'DRAFT',
-  });
-
-  // Items state (can be overridden by user in table)
-  const [baseItems, setBaseItems] = useState<CalculatedItem[]>([]);
-  const [deflectionItems, setDeflectionItems] = useState<CalculatedItem[]>([]);
-  const [calculation, setCalculation] = useState<CalculationResult>({
-    scaleM2: 1000,
-    baseItems: [],
-    deflectionItems: [],
-    baseTotalAed: 0,
-    baseRatePerM2: 0,
-    deflectionTotalAed: 0,
-    deflectionRatePerM2: 0,
-    grandTotalAed: 0,
-    grandRatePerM2: 0,
-  });
-
-  const [showPrintModal, setShowPrintModal] = useState<boolean>(false);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [isExporting, setIsExporting] = useState<boolean>(false);
-  const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
-  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
-
-  // Initialize calculation when system or initial params change
   useEffect(() => {
-    const res = calculateQuotation(selectedSystem, scaleM2, prices, includeDeflection);
-    setBaseItems(res.baseItems);
-    setDeflectionItems(res.deflectionItems);
-    setCalculation(res);
-  }, [selectedSystem]);
-
-  // Recalculate when scaleM2, includeDeflection, or items change
-  const recalculate = (
-    currentBase: CalculatedItem[],
-    currentDef: CalculatedItem[],
-    currentScale: number,
-    currentDeflectionActive: boolean
-  ) => {
-    const safeScale = currentScale > 0 ? currentScale : 1;
-
-    const updatedBase = currentBase.map((it) => {
-      const totalQuantity = Number((safeScale * it.factorPerM2).toFixed(3));
-      const totalPriceAed = Number((totalQuantity * it.unitPriceAed).toFixed(2));
-      return { ...it, totalQuantity, totalPriceAed };
-    });
-
-    const baseTotalAed = Number(
-      updatedBase.reduce((acc, it) => acc + it.totalPriceAed, 0).toFixed(2)
-    );
-    const baseRatePerM2 = Number((baseTotalAed / safeScale).toFixed(2));
-
-    let updatedDef: CalculatedItem[] = [];
-    let deflectionTotalAed = 0;
-    let deflectionRatePerM2 = 0;
-
-    if (currentDeflectionActive && selectedSystem.supportsDeflection) {
-      updatedDef = currentDef.map((it) => {
-        const totalQuantity = Number((safeScale * it.factorPerM2).toFixed(3));
-        const totalPriceAed = Number((totalQuantity * it.unitPriceAed).toFixed(2));
-        return { ...it, totalQuantity, totalPriceAed, isHeadDeflection: true };
-      });
-      deflectionTotalAed = Number(
-        updatedDef.reduce((acc, it) => acc + it.totalPriceAed, 0).toFixed(2)
-      );
-      deflectionRatePerM2 = Number((deflectionTotalAed / safeScale).toFixed(2));
-    }
-
-    const grandTotalAed = Number((baseTotalAed + deflectionTotalAed).toFixed(2));
-    const grandRatePerM2 = Number((grandTotalAed / safeScale).toFixed(2));
-
-    setBaseItems(updatedBase);
-    setDeflectionItems(updatedDef);
-    setCalculation({
-      scaleM2: safeScale,
-      baseItems: updatedBase,
-      deflectionItems: updatedDef,
-      baseTotalAed,
-      baseRatePerM2,
-      deflectionTotalAed,
-      deflectionRatePerM2,
-      grandTotalAed,
-      grandRatePerM2,
-    });
-  };
-
-  const handleSystemChange = (sys: KnaufSystemDefinition) => {
-    setSelectedSystem(sys);
-    setIncludeDeflection(sys.supportsDeflection);
-    const res = calculateQuotation(sys, scaleM2, prices, sys.supportsDeflection);
-    setBaseItems(res.baseItems);
-    setDeflectionItems(res.deflectionItems);
-    setCalculation(res);
-  };
-
-  const handleScaleChange = (newScale: number) => {
-    setScaleM2(newScale);
-    recalculate(baseItems, deflectionItems, newScale, includeDeflection);
-  };
-
-  const handleDeflectionToggle = (active: boolean) => {
-    setIncludeDeflection(active);
-    if (active && deflectionItems.length === 0 && selectedSystem.deflectionMaterials) {
-      const res = calculateQuotation(selectedSystem, scaleM2, prices, true);
-      recalculate(baseItems, res.deflectionItems, scaleM2, true);
-    } else {
-      recalculate(baseItems, deflectionItems, scaleM2, active);
-    }
-  };
-
-  const handleUpdateBaseItem = (idx: number, updated: Partial<CalculatedItem>) => {
-    const next = [...baseItems];
-    next[idx] = { ...next[idx], ...updated };
-    recalculate(next, deflectionItems, scaleM2, includeDeflection);
-  };
-
-  const handleUpdateDeflectionItem = (idx: number, updated: Partial<CalculatedItem>) => {
-    const next = [...deflectionItems];
-    next[idx] = { ...next[idx], ...updated };
-    recalculate(baseItems, next, scaleM2, includeDeflection);
-  };
-
-  const handleAddBaseItem = () => {
-    const newItem: CalculatedItem = {
-      productName: 'Custom Accessory / Fixing Item',
-      factorPerM2: 1.0,
-      unit: 'pcs',
-      totalQuantity: scaleM2,
-      unitPriceAed: 5.0,
-      totalPriceAed: scaleM2 * 5.0,
-      isHeadDeflection: false,
-    };
-    const next = [...baseItems, newItem];
-    recalculate(next, deflectionItems, scaleM2, includeDeflection);
-  };
-
-  const handleRemoveBaseItem = (idx: number) => {
-    const next = baseItems.filter((_, i) => i !== idx);
-    recalculate(next, deflectionItems, scaleM2, includeDeflection);
-  };
-
-  const handleRemoveDeflectionItem = (idx: number) => {
-    const next = deflectionItems.filter((_, i) => i !== idx);
-    recalculate(baseItems, next, scaleM2, includeDeflection);
-  };
-
-  const handleResetToDefaults = () => {
-    const res = calculateQuotation(selectedSystem, scaleM2, prices, includeDeflection);
-    setBaseItems(res.baseItems);
-    setDeflectionItems(res.deflectionItems);
-    setCalculation(res);
-  };
-
-  const handleSaveQuotation = async () => {
-    setIsSaving(true);
-    setSaveSuccess(false);
-    try {
-      const payload = {
-        quoteNumber: meta.quoteNumber,
-        projectName: meta.projectName,
-        clientName: meta.clientName,
-        salesman: meta.salesman,
-        scaleM2,
-        systemCode: selectedSystem.code,
-        includeDeflection,
-        calculation,
-        status: meta.status || 'DRAFT',
-        termsAndConditions: AL_NAMARIQ_TERMS,
-      };
-
-      const res = await fetch('/api/quotes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to save quotation');
-      }
-
-      const created = await res.json();
-      setSaveSuccess(true);
-      setTimeout(() => {
-        router.push(`/quotes/${created.id}`);
-      }, 800);
-    } catch (err: any) {
-      alert(`Error saving quotation: ${err.message}`);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleExportExcel = async () => {
-    setIsExporting(true);
-    try {
-      let logoBuf: ArrayBuffer | undefined;
+    let cancelled = false;
+    async function load() {
+      let notice = '';
       try {
-        const resp = await fetch('/logo/logo.png');
-        if (resp.ok) {
-          logoBuf = await resp.arrayBuffer();
+        const response = await fetch('/api/catalog');
+        if (!response.ok) throw new Error('Catalog unavailable');
+        const catalog = await response.json();
+        if (!cancelled) {
+          if (catalog.prices) setPrices(catalog.prices);
+          if (catalog.error) notice = 'Live prices are unavailable. Default prices are shown; check them before sending.';
         }
-      } catch (e) {
-        console.warn('Could not fetch logo in browser:', e);
+      } catch { notice = 'Live prices are unavailable. Default prices are shown; check them before sending.'; }
+      if (!cancelled) {
+        setMeta(previous => ({ ...previous, quoteNumber: `ANM-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`, date: new Date().toLocaleDateString('en-GB') }));
+        setCatalogNotice(notice); setCatalogLoading(false);
       }
-
-      const buffer = await generateAlNamariqExcel(meta, selectedSystem, calculation, logoBuf);
-      const blob = new Blob([buffer as any], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${meta.quoteNumber.replace(/[^a-zA-Z0-9-_]/g, '_')}_Knauf_Quotation.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      alert(`Error generating Excel: ${err.message}`);
-    } finally {
-      setIsExporting(false);
     }
-  };
+    void load();
+    return () => { cancelled = true; };
+  }, []);
 
-  const handleExportPdf = async () => {
-    setIsExportingPdf(true);
+  const documentMeta = { ...meta, projectName: meta.projectName.trim(), clientName: meta.clientName.trim(), salesman: meta.salesman || user?.name || 'Sales team' };
+  const updateItem = (section: 'base' | 'deflection', index: number, changes: Partial<CalculatedItem>) => {
+    const items = section === 'base' ? calculation.baseItems : editableDeflection;
+    setCustomItems(previous => ({ ...previous, [section]: items.map((item, itemIndex) => itemIndex === index ? { ...item, ...changes } : item) }));
+  };
+  const removeItem = (section: 'base' | 'deflection', index: number) => {
+    const items = section === 'base' ? calculation.baseItems : editableDeflection;
+    setCustomItems(previous => ({ ...previous, [section]: items.filter((_, itemIndex) => itemIndex !== index) }));
+  };
+  const download = (blob: Blob, extension: string) => {
+    const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
+    anchor.href = url; anchor.download = `${meta.quoteNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}.${extension}`; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  async function perform(action: 'save' | 'pdf' | 'excel') {
+    if (!valid) { setError('Enter the project, client, and an area greater than zero.'); return; }
+    setBusy(action); setError('');
     try {
-      const payload = {
-        meta,
-        system: selectedSystem,
-        calculation,
-        download: true,
-      };
-      const res = await fetch('/api/quotes/pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to generate PDF');
+      if (action === 'save') {
+        const response = await fetch('/api/quotes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...documentMeta, scaleM2: scale, systemCode: system.code, includeDeflection, calculation, termsAndConditions: AL_NAMARIQ_TERMS }) });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Could not save this quote. Try again.');
+        router.push(`/quotes/${result.id}`);
+      } else if (action === 'pdf') {
+        const response = await fetch('/api/quotes/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ meta: documentMeta, system, calculation, download: true }) });
+        if (!response.ok) throw new Error('Could not download the PDF. Try again.');
+        download(await response.blob(), 'pdf');
+      } else {
+        const logoResponse = await fetch('/logo/logo.png'); const logo = logoResponse.ok ? await logoResponse.arrayBuffer() : undefined;
+        const buffer = await generateAlNamariqExcel(documentMeta, system, calculation, logo);
+        download(new Blob([new Uint8Array(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'xlsx');
       }
+    } catch (failure) { setError(failure instanceof Error ? failure.message : 'Something went wrong. Try again.'); }
+    finally { setBusy(null); }
+  }
 
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${meta.quoteNumber.replace(/[^a-zA-Z0-9-_]/g, '_')}_Knauf_Quotation.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      alert(`Error generating PDF: ${err.message}`);
-    } finally {
-      setIsExportingPdf(false);
-    }
-  };
+  if (!authLoading && permissions?.canCreateQuote === false) return <div className="quote-panel p-8"><h1 className="text-2xl font-semibold">New quote</h1><p className="mt-3 text-slate-600">Your account can view saved quotes. Ask your estimator to create a new quote.</p></div>;
 
   return (
-    <div className="space-y-6">
-      {/* Interactive Builder & Studio Header (Hidden during Print) */}
-      <div className="no-print space-y-6">
-        {/* Studio Header with Company Logo */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
-          <div className="flex items-center gap-3.5">
-            <div className="p-1.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
-              <img src="/logo/logo.png" alt="Al Namariq Logo" className="h-9 w-auto object-contain" />
+    <div className="space-y-5">
+      <PageHeader title="New Quotation" status="Not saved" actions={<button form="quotation-form" className="quote-button-primary" type="submit" disabled={!valid || catalogLoading || authLoading || busy !== null}>{busy === 'save' ? 'Saving…' : 'Save'}</button>} />
+      <form id="quotation-form" className="no-print desk-form-grid" onSubmit={event => { event.preventDefault(); void perform('save'); }}>
+        <fieldset disabled={catalogLoading || authLoading || busy !== null} className="min-w-0 space-y-5">
+          <div className="quote-panel overflow-hidden"><div className="desk-tabs"><span className="active">Details</span></div><div className="space-y-5 p-5 sm:p-6"><h2 className="desk-section-heading">Customer and Project</h2>
+            <div><label className="quote-label" htmlFor="quote-system">Knauf System</label><select id="quote-system" className="quote-input" value={system.code} onChange={event => { const next = systems.find(item => item.code === event.target.value)!; setSystem(next); setIncludeDeflection(next.supportsDeflection); setCustomItems({}); }}>
+              {Object.entries(categories).map(([category, label]) => <optgroup key={category} label={label}>{systems.filter(item => item.category === category).map(item => <option key={item.code} value={item.code}>{item.code} — {item.name.replace(/^KNAUF SYSTEM\s*/i, '')}</option>)}</optgroup>)}
+            </select><p className="mt-2 text-sm leading-relaxed text-slate-500">{system.description}</p></div>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div><label className="quote-label" htmlFor="project-name">Project <span className="text-red-500">*</span></label><input id="project-name" className="quote-input" placeholder="e.g. Dubai office fitout" required value={meta.projectName} onChange={event => setMeta(previous => ({ ...previous, projectName: event.target.value }))} /></div>
+              <div><label className="quote-label" htmlFor="client-name">Customer <span className="text-red-500">*</span></label><input id="client-name" className="quote-input" placeholder="Company or customer name" required value={meta.clientName} onChange={event => setMeta(previous => ({ ...previous, clientName: event.target.value }))} /></div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  Interactive Quotation Studio
-                </h1>
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#fff3ec] text-[#f86c29] border border-[#fed7aa]">
-                  Live Calc
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Build and calculate compliant Knauf assemblies with custom m² consumption factors, commercial rates, and deflection options.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setShowPrintModal(!showPrintModal)}
-              className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5 transition-colors"
-            >
-              {showPrintModal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              {showPrintModal ? 'Hide Print View' : 'Preview Official Sheet'}
-            </button>
-          </div>
-        </div>
-
-        {/* Main Two-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Interactive Builder (8 cols) */}
-          <div className="lg:col-span-8 space-y-6">
-            {/* Step 1: System Selector */}
-            <SystemSelector
-              systems={systems}
-              selectedSystemCode={selectedSystem.code}
-              onSelectSystem={handleSystemChange}
-            />
-
-            {/* Step 2: Project Metadata */}
-            <ProjectMetaForm
-              meta={meta}
-              scaleM2={scaleM2}
-              onChangeMeta={(m) => setMeta((prev) => ({ ...prev, ...m }))}
-              onChangeScale={handleScaleChange}
-            />
-
-            {/* Head Deflection Switch */}
-            <DeflectionToggle
-              supportsDeflection={selectedSystem.supportsDeflection}
-              includeDeflection={includeDeflection}
-              onToggle={handleDeflectionToggle}
-              systemName={selectedSystem.name}
-            />
-
-            {/* Step 3: Material Grid Matrix */}
-            <MaterialGrid
-              baseItems={baseItems}
-              deflectionItems={deflectionItems}
-              scaleM2={scaleM2}
-              onUpdateBaseItem={handleUpdateBaseItem}
-              onUpdateDeflectionItem={handleUpdateDeflectionItem}
-              onAddBaseItem={handleAddBaseItem}
-              onRemoveBaseItem={handleRemoveBaseItem}
-              onRemoveDeflectionItem={handleRemoveDeflectionItem}
-              onResetItems={handleResetToDefaults}
-            />
-
-            {/* Bottom Export & Save Action Bar */}
-            <ExportButtons
-              onSaveQuote={handleSaveQuotation}
-              onExportExcel={handleExportExcel}
-              onExportPdf={handleExportPdf}
-              onPrintPdf={() => setShowPrintModal(true)}
-              isSaving={isSaving}
-              isExporting={isExporting}
-              isExportingPdf={isExportingPdf}
-              saveSuccess={saveSuccess}
-            />
-          </div>
-
-          {/* Right Sticky Summary (4 cols) */}
-          <div className="lg:col-span-4">
-            <SummaryCard
-              calculation={calculation}
-              systemName={selectedSystem.name}
-              projectName={meta.projectName}
-              hasDeflection={includeDeflection}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Print / Official Preview Modal */}
-      {showPrintModal && (
-        <div className="print-modal-overlay fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4">
-          <div className="print-modal-container bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative border border-slate-200">
-            <div className="no-print p-4 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 sticky top-0 bg-white/95 backdrop-blur-md z-20">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#00488e]/10 text-[#00488e] flex items-center justify-center font-bold">
-                  <Printer className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="font-extrabold text-xs sm:text-sm text-slate-900">
-                    Al Namariq Official Print Preview
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-mono">
-                    Ref: {meta.quoteNumber || 'ANM-DRAFT'} • {selectedSystem.code}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 self-end sm:self-auto">
-                <button
-                  type="button"
-                  onClick={handleExportPdf}
-                  disabled={isExportingPdf}
-                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1.5 transition-all disabled:opacity-50"
-                  title="Download vector PDF document"
-                >
-                  <Printer className="w-3.5 h-3.5 text-rose-600" />
-                  <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  className="px-4 py-1.5 text-xs font-bold rounded-full bg-[#00488e] hover:bg-[#003c77] text-white flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Print to PDF / Paper</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowPrintModal(false)}
-                  className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-
-            <div className="p-4 sm:p-8 print:p-0">
-              <PrintableQuote
-                meta={meta}
-                system={selectedSystem}
-                calculation={calculation}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+            <div className="max-w-xs"><label className="quote-label" htmlFor="project-area">Area (m²) <span className="text-red-500">*</span></label><input id="project-area" className="quote-input" type="number" min="0.001" step="any" required value={scale || ''} onChange={event => setScale(Number(event.target.value))} /><p className="mt-2 text-sm text-slate-500">Total wall or ceiling area.</p></div>
+            {system.supportsDeflection && <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-slate-50 p-4"><input className="mt-1 h-4 w-4 accent-[#00488e]" type="checkbox" checked={includeDeflection} onChange={event => setIncludeDeflection(event.target.checked)} /><span><span className="block text-sm font-medium">Include head deflection</span><span className="text-sm text-slate-500">Additional materials for movement at the top of the wall.</span></span></label>}
+          </div></div>
+          <details className="quote-panel desk-form-details group"><summary className="flex cursor-pointer list-none items-center justify-between p-5 text-sm font-medium">Additional Details <ChevronDown size={16} className="transition-transform group-open:rotate-180" /></summary><div className="grid gap-4 border-t border-slate-100 p-5 sm:grid-cols-2">
+            <div><label htmlFor="quote-reference" className="quote-label">Quotation ID</label><input id="quote-reference" className="quote-input" value={meta.quoteNumber} onChange={event => setMeta(previous => ({ ...previous, quoteNumber: event.target.value }))} /></div>
+            <div><label htmlFor="salesperson" className="quote-label">Sales Person</label><input id="salesperson" className="quote-input" value={meta.salesman} placeholder={user?.name || 'Sales team'} onChange={event => setMeta(previous => ({ ...previous, salesman: event.target.value }))} /></div>
+            <div><label htmlFor="quote-status" className="quote-label">Status</label><select id="quote-status" className="quote-input" value={meta.status} onChange={event => setMeta(previous => ({ ...previous, status: event.target.value as QuoteStatus }))}>{['DRAFT', 'ISSUED', 'APPROVED', 'REVISED', 'CANCELLED'].map(status => <option value={status} key={status}>{status.charAt(0) + status.slice(1).toLowerCase()}</option>)}</select></div>
+          </div></details>
+          <details className="quote-panel desk-form-details group"><summary className="flex cursor-pointer list-none items-center justify-between p-5 text-sm font-medium">{canEditMaterials ? 'Items · Edit quantities and rates' : 'Items'} <ChevronDown size={16} className="transition-transform group-open:rotate-180" /></summary><div className="border-t border-slate-100 p-3"><MaterialGrid baseItems={calculation.baseItems} deflectionItems={calculation.deflectionItems} scaleM2={scale} readOnly={!canEditMaterials} onUpdateBaseItem={(index, changes) => updateItem('base', index, changes)} onUpdateDeflectionItem={(index, changes) => updateItem('deflection', index, changes)} onAddBaseItem={() => setCustomItems(previous => ({ ...previous, base: [...calculation.baseItems, { productName: 'Additional material', factorPerM2: 1, unit: 'pcs', totalQuantity: scale, unitPriceAed: 0, totalPriceAed: 0, isHeadDeflection: false }] }))} onRemoveBaseItem={index => removeItem('base', index)} onRemoveDeflectionItem={index => removeItem('deflection', index)} onResetItems={() => setCustomItems({})} /></div></details>
+        </fieldset>
+        <aside className="quote-panel space-y-5 p-5">
+          <h2 className="desk-section-heading">Totals</h2>
+          <dl className="space-y-3 text-sm"><div className="flex justify-between gap-3"><dt className="text-slate-500">Area</dt><dd>{scale > 0 ? scale.toLocaleString() : '—'} m²</dd></div><div className="flex justify-between gap-3"><dt className="text-slate-500">System</dt><dd className="font-medium">{system.code}</dd></div><div className="flex justify-between gap-3"><dt className="text-slate-500">Base materials</dt><dd>AED {money(calculation.baseTotalAed)}</dd></div>{includeDeflection && <div className="flex justify-between gap-3"><dt className="text-slate-500">Head deflection</dt><dd>AED {money(calculation.deflectionTotalAed)}</dd></div>}</dl>
+          <div className="border-y border-slate-200 py-5"><p className="text-sm text-slate-500">Total · excluding VAT</p><p className="mt-1 desk-total-value">AED {money(calculation.grandTotalAed)}</p><p className="mt-2 text-sm text-slate-500">AED {money(calculation.grandRatePerM2)} / m²</p></div>
+          {catalogLoading && <p role="status" className="flex items-center gap-2 text-sm text-slate-500"><Loader2 size={16} className="animate-spin" /> Loading prices…</p>}
+          {catalogNotice && <p role="status" className="text-sm text-amber-800">{catalogNotice}</p>}
+          {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+          <div className="space-y-2"><button className="quote-button-secondary w-full" type="button" onClick={() => void perform('pdf')} disabled={!valid || catalogLoading || authLoading || busy !== null}>{busy === 'pdf' ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />} Download PDF</button></div>
+          <div className="flex flex-wrap items-center justify-between gap-3"><button className="quote-text-button" type="button" onClick={() => setPreview(true)} disabled={catalogLoading || authLoading || busy !== null}><Eye size={15} /> Print</button><button className="quote-text-button" type="button" onClick={() => void perform('excel')} disabled={!valid || catalogLoading || authLoading || busy !== null}>{busy === 'excel' ? <Loader2 size={15} className="animate-spin" /> : <FileSpreadsheet size={15} />} Excel</button></div>
+        </aside>
+      </form>
+      {preview && <QuotePreview meta={documentMeta} system={system} calculation={calculation} onClose={() => setPreview(false)} />}
     </div>
   );
 }
 
 export default function NewQuotePage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-6 h-6 animate-spin text-[#00488e]" />
-        </div>
-      }
-    >
-      <NewQuoteContent />
-    </Suspense>
-  );
+  return <Suspense fallback={<p className="p-8 text-slate-500">Loading quote…</p>}><NewQuoteContent /></Suspense>;
 }
-

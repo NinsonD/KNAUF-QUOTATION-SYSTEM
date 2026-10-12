@@ -4,6 +4,7 @@ import defaultPricesData from './src/data/default-prices.json';
 import { generateAlNamariqExcel } from './src/lib/exporters/excel-generator';
 import { KnaufSystemDefinition, QuoteMetaData } from './src/lib/engine/types';
 import prisma from './src/lib/db';
+import assert from 'node:assert/strict';
 
 async function runVerification() {
   console.log('=== STARTING AUTOMATED ENGINE VERIFICATION ===\n');
@@ -32,6 +33,17 @@ async function runVerification() {
   console.log(`  - Grand Rate/m²: AED ${calcWithDef.grandRatePerM2}`);
   console.assert(calcWithDef.deflectionItems.length === 5, 'Should have 5 deflection items');
   console.assert(calcWithDef.grandTotalAed > calcWithDef.baseTotalAed, 'Grand total should include deflection');
+
+  // Removing every row must leave an empty section, rather than restoring defaults.
+  const emptyQuote = calculateQuotation(kw111, scaleM2, defaultPricesData, true, { base: [], deflection: [] });
+  assert.equal(emptyQuote.baseItems.length, 0);
+  assert.equal(emptyQuote.deflectionItems.length, 0);
+  assert.equal(emptyQuote.grandTotalAed, 0);
+  const customDeflection = calcWithDef.deflectionItems.map(item => ({ ...item, unitPriceAed: 7 }));
+  const disabledDeflection = calculateQuotation(kw111, scaleM2, defaultPricesData, false, { deflection: customDeflection });
+  assert.equal(disabledDeflection.deflectionItems.length, 0);
+  const restoredDeflection = calculateQuotation(kw111, scaleM2, defaultPricesData, true, { deflection: customDeflection });
+  assert.equal(restoredDeflection.deflectionItems[0].unitPriceAed, 7);
 
   // 3. Test Excel Export Generation (with embedded official logo)
   const meta: QuoteMetaData = {

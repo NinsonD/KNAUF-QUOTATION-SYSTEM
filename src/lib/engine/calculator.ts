@@ -11,7 +11,7 @@ export function calculateQuotation(
 
   // If custom items are provided from the interactive grid, recalculate based on their factors/quantities & prices
   let baseItems: CalculatedItem[];
-  if (customItems?.base && customItems.base.length > 0) {
+  if (customItems?.base !== undefined) {
     baseItems = customItems.base.map((item) => {
       const totalQuantity = Number((safeScale * item.factorPerM2).toFixed(3));
       const unitPriceAed = item.unitPriceAed ?? unitPrices[item.productName] ?? 0;
@@ -49,7 +49,7 @@ export function calculateQuotation(
   // Head Deflection Items
   let deflectionItems: CalculatedItem[] = [];
   if (includeDeflection && system.supportsDeflection) {
-    if (customItems?.deflection && customItems.deflection.length > 0) {
+    if (customItems?.deflection !== undefined) {
       deflectionItems = customItems.deflection.map((item) => {
         const totalQuantity = Number((safeScale * item.factorPerM2).toFixed(3));
         const unitPriceAed = item.unitPriceAed ?? unitPrices[item.productName] ?? 0;

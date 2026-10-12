@@ -5,6 +5,7 @@ import { CalculatedItem } from '@/lib/engine/types';
 import { Plus, Trash2, RotateCcw, AlertCircle } from 'lucide-react';
 
 interface MaterialGridProps {
+  readOnly?: boolean;
   baseItems: CalculatedItem[];
   deflectionItems: CalculatedItem[];
   scaleM2: number;
@@ -17,6 +18,7 @@ interface MaterialGridProps {
 }
 
 export default function MaterialGrid({
+  readOnly = false,
   baseItems,
   deflectionItems,
   scaleM2,
@@ -37,25 +39,25 @@ export default function MaterialGrid({
   const grandRate = scaleM2 > 0 ? grandTotal / scaleM2 : 0;
 
   return (
-    <div className="bento-card overflow-hidden">
+    <fieldset disabled={readOnly} className="bento-card desk-material-grid min-w-0 overflow-hidden">
       {/* Header Bar */}
       <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70">
         <div>
           <h3 className="text-base font-bold text-slate-900">
-            3. Bill of Materials & Pricing Engine
+            Items
           </h3>
           <p className="text-xs text-slate-500">
-            Interactive consumption factor and unit price matrix with instant recalculations
+            Quantities and totals update automatically when you change a value.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        {!readOnly && <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onResetItems}
             className="px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Reset Defaults
+            Reset Items
           </button>
           <button
             type="button"
@@ -63,16 +65,16 @@ export default function MaterialGrid({
             className="px-3 py-1.5 text-xs font-bold text-white bg-[#00488e] hover:bg-[#003c77] rounded-lg flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
-            Add Material Row
+            Add Row
           </button>
-        </div>
+        </div>}
       </div>
 
       {/* Warning if scale is 0 */}
       {scaleM2 <= 0 && (
         <div className="mx-5 mt-4 p-3 bg-[#fff3ec] border border-[#fed7aa] rounded-lg flex items-center gap-2 text-xs text-[#e05615]">
           <AlertCircle className="w-4 h-4 shrink-0 text-[#f86c29]" />
-          <span>Please set a valid project scale (M² &gt; 0) in Step 2 to compute total project quantities.</span>
+          <span>Enter an area greater than zero to calculate material quantities.</span>
         </div>
       )}
 
@@ -317,6 +319,6 @@ export default function MaterialGrid({
           </tfoot>
         </table>
       </div>
-    </div>
+    </fieldset>
   );
 }

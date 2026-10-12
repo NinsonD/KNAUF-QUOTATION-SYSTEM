@@ -1,271 +1,62 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  FileSpreadsheet,
-  FileText,
-  PlusCircle,
-  Search,
-  Filter,
-  Trash2,
-  Eye,
-  Building,
-  RefreshCw,
-} from 'lucide-react';
+import { Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import PageHeader, { StatusIndicator } from '@/components/layout/PageHeader';
 import { useAuth } from '@/lib/auth/AuthContext';
 
-export default function QuotesListPage() {
-  const { permissions } = useAuth();
-  const [quotes, setQuotes] = useState<any[]>([]);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('ALL');
-  const [isLoading, setIsLoading] = useState(true);
+interface SavedQuote { id: string; quoteNumber: string; projectName: string; clientName: string; grandTotalAed: number; status: string; system: { code: string }; }
 
-  const fetchQuotes = async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      if (statusFilter !== 'ALL') params.append('status', statusFilter);
-
-      const res = await fetch(`/api/quotes?${params.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
-        setQuotes(data);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      fetchQuotes();
-    }, 250);
-    return () => clearTimeout(delayDebounce);
-  }, [search, statusFilter]);
-
-  const handleDelete = async (id: string, quoteNumber: string) => {
-    if (!confirm(`Are you sure you want to delete quotation "${quoteNumber}"?`)) {
-      return;
-    }
-    try {
-      const res = await fetch(`/api/quotes/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        setQuotes((prev) => prev.filter((q) => q.id !== id));
-      }
-    } catch (e) {
-      alert('Failed to delete quotation');
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00488e]/10 text-[#00488e] text-[11px] font-bold tracking-wider uppercase mb-2">
-            Commercial Quotes
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Quotations Repository
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Manage, review, export, and revise all Knauf dry construction quotations for Al Namariq clients.
-          </p>
-        </div>
-
-        {permissions?.canCreateQuote !== false && (
-          <Link
-            href="/quotes/new"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f86c29] hover:bg-[#e05615] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Create New Quotation
-          </Link>
-        )}
-      </div>
-
-      {/* Search & Filter Bar */}
-      <div className="bento-card p-4 flex flex-col sm:flex-row gap-3 items-center justify-between">
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search QTN, Project, Client..."
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00488e] bg-slate-50/80 transition-all"
-          />
-        </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <div className="flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-full border border-slate-200/80">
-            <Filter className="w-3.5 h-3.5 text-slate-400 ml-2" />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="text-xs font-bold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#00488e]"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="DRAFT">Draft</option>
-              <option value="ISSUED">Issued</option>
-              <option value="APPROVED">Approved</option>
-              <option value="REVISED">Revised</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
-            <button
-              type="button"
-              onClick={fetchQuotes}
-              title="Refresh list"
-              className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-white rounded-full transition-all"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Quotations Table */}
-      <div className="bento-card overflow-hidden">
-        {isLoading ? (
-          <div className="p-12 text-center text-xs text-slate-500 font-medium">
-            Loading quotations...
-          </div>
-        ) : quotes.length === 0 ? (
-          <div className="p-12 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
-              <Building className="w-6 h-6" />
-            </div>
-            <p className="text-sm font-bold text-slate-800">No quotations found</p>
-            <p className="text-xs text-slate-500 mt-1">
-              Try adjusting your search query or create a new quotation.
-            </p>
-            <Link
-              href="/quotes/new"
-              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00488e] text-white text-xs font-bold shadow-sm hover:shadow"
-            >
-              <PlusCircle className="w-3.5 h-3.5" /> Start New Quote
-            </Link>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-700">
-              <thead className="bg-slate-50/80 text-slate-500 uppercase text-[10px] font-extrabold tracking-wider border-b border-slate-100">
-                <tr>
-                  <th className="py-3.5 px-5">QTN No.</th>
-                  <th className="py-3.5 px-4">Project & Client</th>
-                  <th className="py-3.5 px-4">Knauf System</th>
-                  <th className="py-3.5 px-4 text-right">Scale</th>
-                  <th className="py-3.5 px-4 text-right">Grand Total</th>
-                  <th className="py-3.5 px-4 text-right">Rate / M²</th>
-                  <th className="py-3.5 px-4 text-center">Status</th>
-                  <th className="py-3.5 px-5 text-center">Export & Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100/80 font-medium">
-                {quotes.map((q) => (
-                  <tr key={q.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3.5 px-5 font-mono font-bold text-[#00488e]">
-                      <Link href={`/quotes/${q.id}`} className="hover:underline">
-                        {q.quoteNumber}
-                      </Link>
-                      <div className="text-[10px] text-slate-400 font-sans font-normal mt-0.5">
-                        {new Date(q.createdAt).toLocaleDateString('en-GB')}
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900">{q.projectName}</div>
-                      <div className="text-[11px] text-slate-500">{q.clientName}</div>
-                      <div className="text-[10px] text-slate-400">Salesman: {q.salesman}</div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="font-mono text-xs font-bold text-slate-800">
-                        {q.system?.code}
-                      </span>
-                      <div className="text-[11px] text-slate-500 truncate max-w-[180px]">
-                        {q.system?.name}
-                      </div>
-                      {q.includeDeflection && (
-                        <span className="text-[9px] text-[#00488e] font-bold bg-[#00488e]/10 px-2 py-0.5 rounded-full border border-[#00488e]/20 mt-1 inline-block">
-                          + Deflection Head
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono font-semibold text-slate-800">
-                      {q.scaleM2.toLocaleString()} M²
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900">
-                      AED {q.grandTotalAed.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-mono text-slate-600 font-semibold">
-                      AED {q.grandRatePerM2.toFixed(2)}
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <span
-                        className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full ${
-                          q.status === 'APPROVED'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : q.status === 'ISSUED'
-                            ? 'bg-blue-50 text-[#00488e] border border-blue-200'
-                            : q.status === 'REVISED'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                            : 'bg-slate-100 text-slate-600 border border-slate-200'
-                        }`}
-                      >
-                        {q.status}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-5 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <Link
-                          href={`/quotes/${q.id}`}
-                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
-                          title="View Details"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Link>
-                        <a
-                          href={`/api/quotes/${q.id}/pdf?download=true`}
-                          download
-                          className="px-3 py-1 text-xs font-bold rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1 transition-all"
-                          title="Download Official Vector PDF"
-                        >
-                          <FileText className="w-3.5 h-3.5 text-rose-600" />
-                          .pdf
-                        </a>
-                        <a
-                          href={`/api/quotes/${q.id}/export`}
-                          download
-                          className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1 transition-all"
-                          title="Download Official Al Namariq Excel Workbook"
-                        >
-                          <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                          .xlsx
-                        </a>
-                        {permissions?.canDeleteQuote && (
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(q.id, q.quoteNumber)}
-                            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+function QuotesListContent() {
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  return <QuotationList key={initialSearch} initialSearch={initialSearch} />;
 }
 
+function QuotationList({ initialSearch }: { initialSearch: string }) {
+  const { permissions } = useAuth();
+  const [quotes, setQuotes] = useState<SavedQuote[]>([]);
+  const [search, setSearch] = useState(initialSearch);
+  const [status, setStatus] = useState('ALL');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [revision, setRevision] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      setLoading(true); setError('');
+      try {
+        const params = new URLSearchParams({ search });
+        if (status !== 'ALL') params.set('status', status);
+        const response = await fetch(`/api/quotes?${params}`, { signal: controller.signal });
+        if (!response.ok) throw new Error('Your quotes could not be loaded. Please try again.');
+        const data: SavedQuote[] = await response.json();
+        if (!controller.signal.aborted) setQuotes(data);
+      } catch (failure) { if (!controller.signal.aborted) setError(failure instanceof Error ? failure.message : 'Could not load quotes.'); }
+      finally { if (!controller.signal.aborted) setLoading(false); }
+    }, 250);
+    return () => { clearTimeout(timer); controller.abort(); };
+  }, [search, status, revision]);
+  async function remove(quote: SavedQuote) {
+    if (!confirm(`Delete quote ${quote.quoteNumber}? This cannot be undone.`)) return;
+    try {
+      const response = await fetch(`/api/quotes/${quote.id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Could not delete this quote. Please try again.');
+      setQuotes(previous => previous.filter(item => item.id !== quote.id));
+    } catch (failure) { setError(failure instanceof Error ? failure.message : 'Could not delete quote.'); }
+  }
+  return <div><PageHeader title="Quotation" actions={permissions?.canCreateQuote !== false && <Link href="/quotes/new" className="quote-button-primary"><Plus size={14} /> Add Quotation</Link>} />
+    <div className="quote-panel overflow-hidden"><div className="desk-tabs"><span className="active">List View</span></div>
+      <div className="desk-list-toolbar"><div className="w-full sm:w-72"><label className="quote-label" htmlFor="quote-search">Customer, project or ID</label><input id="quote-search" className="quote-input" placeholder="Search quotations…" value={search} onChange={event => setSearch(event.target.value)} /></div><div className="w-40"><label className="quote-label" htmlFor="filter-status">Status</label><select id="filter-status" className="quote-input" value={status} onChange={event => setStatus(event.target.value)}>{['ALL', 'DRAFT', 'ISSUED', 'APPROVED', 'REVISED', 'CANCELLED'].map(value => <option key={value} value={value}>{value === 'ALL' ? 'All statuses' : value.charAt(0) + value.slice(1).toLowerCase()}</option>)}</select></div><button className="quote-button-secondary ml-auto" aria-label="Refresh quotations" onClick={() => setRevision(value => value + 1)}><RefreshCw size={14} /></button></div>
+      {error && <div role="alert" className="m-4 rounded bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+      {loading ? <p role="status" className="p-8 text-sm text-slate-500">Loading quotations…</p> : quotes.length === 0 ? <div className="p-10 text-center"><p className="font-medium">No quotations found</p><p className="mt-2 text-sm text-slate-500">{search || status !== 'ALL' ? 'Try another search or status.' : 'Add your first quotation to get started.'}</p></div> : <div className="desk-table-scroll"><table className="desk-table"><thead><tr><th>ID</th><th>Customer / Project</th><th>Status</th><th className="desk-hide-mobile">System</th><th className="text-right">Grand Total (AED)</th>{permissions?.canDeleteQuote && <th><span className="sr-only">Actions</span></th>}</tr></thead><tbody>{quotes.map(quote => <tr key={quote.id}><td className="whitespace-nowrap"><Link href={`/quotes/${quote.id}`}>{quote.quoteNumber}</Link></td><td className="min-w-44"><Link href={`/quotes/${quote.id}`}>{quote.clientName}</Link><p className="mt-1 text-xs text-slate-500">{quote.projectName}</p></td><td><StatusIndicator status={quote.status} /></td><td className="desk-hide-mobile text-slate-500">{quote.system?.code}</td><td className="whitespace-nowrap text-right tabular-nums">{quote.grandTotalAed.toLocaleString('en-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>{permissions?.canDeleteQuote && <td><button className="desk-icon-button" aria-label={`Delete ${quote.quoteNumber}`} onClick={() => void remove(quote)}><Trash2 size={14} /></button></td>}</tr>)}</tbody></table></div>}
+      {!loading && <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">{quotes.length} {quotes.length === 1 ? 'quotation' : 'quotations'}</p>}
+    </div>
+  </div>;
+}
+
+export default function QuotesListPage() {
+  return <Suspense fallback={<p className="p-8 text-slate-500">Loading quotations…</p>}><QuotesListContent /></Suspense>;
+}

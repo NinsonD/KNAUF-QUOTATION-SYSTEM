@@ -1,0 +1,159 @@
+{
+  "inventory": {
+    "systems": 14,
+    "categories": {
+      "CEILING": 4,
+      "PARTITION": 4,
+      "SHAFT_WALL": 1,
+      "WALL_LINING": 5
+    },
+    "deflectionSystems": 5,
+    "materialRows": 183,
+    "uniqueMaterials": 49,
+    "defaultPrices": 62,
+    "missingPrices": [],
+    "duplicateSystemCodes": [],
+    "dbPriceUnitMismatches": [
+      {
+        "name": "KNAUF CW 70/35/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF UW 70/32/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF CW 70/35/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF UW 70/32/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF CW 92/35/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF UW 92/32/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF CW 70/35/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF UW 70/32/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF CW 70/35/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      },
+      {
+        "name": "KNAUF UW 70/32/0.6mm 3000mm",
+        "materialUnit": "m",
+        "priceUnit": "pcs"
+      }
+    ],
+    "storedQuotes": 4,
+    "storedUsers": 4,
+    "quotesWithOwner": 0
+  },
+  "engine": {
+    "baseline": {
+      "base": 45057,
+      "deflection": 7494,
+      "grand": 52551
+    },
+    "zeroScale": 1,
+    "negativeScale": 1,
+    "negativePriceGrandTotal": -179418,
+    "emptyCustomBaseRestoredCount": 11
+  },
+  "publicQuoteRead": {
+    "status": 200,
+    "count": 4
+  },
+  "publicpdfExport": {
+    "status": 200,
+    "bytes": 109422,
+    "contentType": "application/pdf"
+  },
+  "publicexportExport": {
+    "status": 200,
+    "bytes": 106539,
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  },
+  "unauthenticatedCreateAndForgedTotal": {
+    "status": 201,
+    "savedGrandTotal": 1,
+    "sumOfSavedLines": 52551
+  },
+  "invalidScaleAndStatus": {
+    "status": 201,
+    "savedScale": -10,
+    "savedStatus": "ANY_STRING"
+  },
+  "missingCalculation": {
+    "status": 500,
+    "error": "Cannot read properties of undefined (reading 'baseTotalAed')"
+  },
+  "unauthenticatedUpdate": {
+    "status": 200,
+    "savedProjectName": "Anonymous update accepted"
+  },
+  "salesRole": {
+    "login": 200,
+    "approveStatusOnly": 200,
+    "saveDetailPagePayload": 403,
+    "modifyTotalsWithoutBaseItems": 200,
+    "savedTotal": 2
+  },
+  "failedUpdateIntegrity": {
+    "response": 500,
+    "remainingItems": 0,
+    "remainingHeaderGrandTotal": 2
+  },
+  "unauthenticatedDelete": {
+    "status": 200,
+    "success": true
+  },
+  "catalogPriceDrift": {
+    "updateStatus": 200,
+    "catalogPrice": 99,
+    "calculationPrice": 9.5,
+    "staticBuilderPrice": 9.5
+  },
+  "arabicPdf": {
+    "success": false,
+    "error": "WinAnsi cannot encode \"م\" (0x0645)"
+  },
+  "excelQuoteNumberSlash": {
+    "success": false,
+    "error": "Worksheet name ANM/2026/001 cannot include any of the following characters: * ? : \\ / [ ]"
+  },
+  "excelRounding": {
+    "quantity": 0.123,
+    "lineTotal": 1.23,
+    "quantityFormula": {
+      "formula": "H10*F14",
+      "result": 0.123
+    },
+    "lineFormula": {
+      "formula": "H14*I14",
+      "result": 1.23
+    },
+    "unroundedExcelQuantity": 0.1234,
+    "unroundedExcelLineTotal": 1.234
+  }
+}

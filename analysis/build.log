@@ -1,0 +1,44 @@
+
+> al-namariq-quote@0.1.0 build
+> next build
+
+▲ Next.js 16.3.4 (Turbopack)
+- Environments: .env
+✓ Running next.config.ts took 257ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.2s
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/14) ...
+  Generating static pages using 11 workers (3/14) 
+  Generating static pages using 11 workers (6/14) 
+  Generating static pages using 11 workers (10/14) 
+✓ Generating static pages using 11 workers (14/14) in 1027ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/calculate
+├ ƒ /api/catalog
+├ ƒ /api/quotes
+├ ƒ /api/quotes/[id]
+├ ƒ /api/quotes/[id]/export
+├ ƒ /api/quotes/[id]/pdf
+├ ƒ /api/quotes/pdf
+├ ○ /catalog
+├ ○ /login
+├ ○ /quotes
+├ ƒ /quotes/[id]
+├ ƒ /quotes/[id]/print
+└ ○ /quotes/new
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
