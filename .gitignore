@@ -45,3 +45,10 @@ next-env.d.ts
 *.db-journal
 dev.db
 
+
+.vercel
+.env*
+
+# Local audit and reader artifacts
+/tmp/
+/analysis/workbook-audit/

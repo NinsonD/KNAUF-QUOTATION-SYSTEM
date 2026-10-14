@@ -20,8 +20,8 @@ async function runVerification() {
   console.log(`  - Base Rate/m²: AED ${calcWithoutDef.baseRatePerM2}`);
   console.log(`  - Deflection Items: ${calcWithoutDef.deflectionItems.length}`);
   console.log(`  - Grand Total: AED ${calcWithoutDef.grandTotalAed}`);
-  console.assert(calcWithoutDef.deflectionItems.length === 0, 'Deflection items should be 0');
-  console.assert(calcWithoutDef.grandTotalAed === calcWithoutDef.baseTotalAed, 'Grand total matches base');
+  assert.ok(calcWithoutDef.deflectionItems.length === 0, 'Deflection items should be 0');
+  assert.ok(calcWithoutDef.grandTotalAed === calcWithoutDef.baseTotalAed, 'Grand total matches base');
 
   // 2. Test calculation engine with Head Deflection
   const calcWithDef = calculateQuotation(kw111, scaleM2, defaultPricesData, true);
@@ -31,8 +31,8 @@ async function runVerification() {
   console.log(`  - Deflection Rate/m²: AED ${calcWithDef.deflectionRatePerM2}`);
   console.log(`  - Grand Total: AED ${calcWithDef.grandTotalAed}`);
   console.log(`  - Grand Rate/m²: AED ${calcWithDef.grandRatePerM2}`);
-  console.assert(calcWithDef.deflectionItems.length === 5, 'Should have 5 deflection items');
-  console.assert(calcWithDef.grandTotalAed > calcWithDef.baseTotalAed, 'Grand total should include deflection');
+  assert.ok(calcWithDef.deflectionItems.length === 4, 'Workbook has 4 deflection items');
+  assert.ok(calcWithDef.grandTotalAed > calcWithDef.baseTotalAed, 'Grand total should include deflection');
 
   // Removing every row must leave an empty section, rather than restoring defaults.
   const emptyQuote = calculateQuotation(kw111, scaleM2, defaultPricesData, true, { base: [], deflection: [] });
@@ -60,7 +60,7 @@ async function runVerification() {
   const excelBuffer = await generateAlNamariqExcel(meta, kw111, calcWithDef, logoBuf);
   console.log(`\n[TEST 3] Excel Generation with Embedded Company Logo:`);
   console.log(`  - Buffer Size: ${excelBuffer.length} bytes`);
-  console.assert(excelBuffer.length > 50000, 'Excel buffer with embedded logo should be > 50KB');
+  assert.ok(excelBuffer.length > 50000, 'Excel buffer with embedded logo should be > 50KB');
 
   // 4. Test Database Connection & Seeded Quotes
   const quotesCount = await prisma.quotation.count();
@@ -70,8 +70,8 @@ async function runVerification() {
   console.log(`  - Systems in DB: ${systemsCount} (expected 14)`);
   console.log(`  - Master Products in DB: ${pricesCount}`);
   console.log(`  - Seeded Quotations: ${quotesCount}`);
-  console.assert(systemsCount === 14, 'Should have 14 Knauf systems');
-  console.assert(quotesCount >= 2, 'Should have at least 2 seeded quotations');
+  assert.ok(systemsCount === 14, 'Should have 14 Knauf systems');
+  assert.ok(quotesCount >= 2, 'Should have at least 2 seeded quotations');
 
   console.log('\n=== ALL ENGINE VERIFICATIONS PASSED SUCCESSFULLY ===');
 }

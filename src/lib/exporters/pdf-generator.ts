@@ -23,6 +23,16 @@ const PAGE_HEIGHT = 841.89;
 const MARGIN_X = 36;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_X * 2; // 523.28
 
+function wrapText(text: string, font: PDFFont, size: number, width: number): string[] {
+  const lines: string[] = []; let line = '';
+  for (const word of text.split(/\s+/)) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (line && font.widthOfTextAtSize(candidate, size) > width) { lines.push(line); line = word; }
+    else line = candidate;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
 export async function generateAlNamariqPDF(
   meta: QuoteMetaData,
   system: KnaufSystemDefinition,
@@ -177,13 +187,13 @@ export async function generateAlNamariqPDF(
 
   // Left column
   page.drawText('Project Name:', { x: col1X, y: metaY, size: 7.5, font: fontBold, color: COLOR_TEXT_MUTED });
-  page.drawText(meta.projectName || 'Commercial Project', { x: col1X + 68, y: metaY, size: 8, font: fontBold, color: COLOR_TEXT_DARK });
+  page.drawText(meta.projectName || 'Commercial Project', { x: col1X + 82, y: metaY, size: 8, font: fontBold, color: COLOR_TEXT_DARK });
 
   page.drawText('Client / Contractor:', { x: col1X, y: metaY - 12, size: 7.5, font: fontBold, color: COLOR_TEXT_MUTED });
-  page.drawText(meta.clientName || 'Valued Client', { x: col1X + 68, y: metaY - 12, size: 8, font: fontBold, color: COLOR_TEXT_DARK });
+  page.drawText(meta.clientName || 'Valued Client', { x: col1X + 82, y: metaY - 12, size: 8, font: fontBold, color: COLOR_TEXT_DARK });
 
   page.drawText('Product Specified:', { x: col1X, y: metaY - 24, size: 7.5, font: fontBold, color: COLOR_TEXT_MUTED });
-  page.drawText(`${system.code} - ${system.name}`.slice(0, 38), { x: col1X + 68, y: metaY - 24, size: 8, font: fontBold, color: COLOR_BLUE });
+  page.drawText(`${system.code} - ${system.name}`.slice(0, 38), { x: col1X + 82, y: metaY - 24, size: 8, font: fontBold, color: COLOR_BLUE });
 
   // Right column
   page.drawText('Quotation No:', { x: col2X, y: metaY, size: 7.5, font: fontBold, color: COLOR_TEXT_MUTED });
@@ -264,13 +274,13 @@ export async function generateAlNamariqPDF(
   y = drawTableHeader(page, y);
 
   // Check and handle page overflow
-  function ensureSpace(neededHeight: number): void {
+  function ensureSpace(neededHeight: number, tableHeader = true): void {
     if (y - neededHeight < 60) {
       // Add new page
       const next = createPage();
       page = next.page;
       y = next.startY;
-      y = drawTableHeader(page, y);
+      if (tableHeader) y = drawTableHeader(page, y);
     }
   }
 
@@ -296,8 +306,9 @@ export async function generateAlNamariqPDF(
 
   // Render Base Items
   calc.baseItems.forEach((item, index) => {
-    ensureSpace(14);
-    const rowHeight = 14;
+    const descriptionLines = wrapText(item.productName, fontBold, 7.2, colWidths[1] - 8);
+    const rowHeight = Math.max(14, descriptionLines.length * 9 + 5);
+    ensureSpace(rowHeight);
     const isZebra = index % 2 === 1;
 
     if (isZebra) {
@@ -329,15 +340,7 @@ export async function generateAlNamariqPDF(
     });
 
     // Description
-    const maxDescChars = 48;
-    const descText = item.productName.length > maxDescChars ? item.productName.slice(0, maxDescChars) + '...' : item.productName;
-    page.drawText(descText, {
-      x: colX[1] + 4,
-      y: y - 10,
-      size: 7.2,
-      font: fontBold,
-      color: COLOR_TEXT_DARK,
-    });
+    descriptionLines.forEach((line, index) => page.drawText(line, { x: colX[1] + 4, y: y - 10 - index * 9, size: 7.2, font: fontBold, color: COLOR_TEXT_DARK }));
 
     // Factor / m²
     const factorText = item.factorPerM2.toFixed(3);
@@ -453,8 +456,9 @@ export async function generateAlNamariqPDF(
     y -= 15;
 
     calc.deflectionItems.forEach((item, index) => {
-      ensureSpace(14);
-      const rowHeight = 14;
+      const descriptionLines = wrapText(item.productName, fontBold, 7.2, colWidths[1] - 8);
+      const rowHeight = Math.max(14, descriptionLines.length * 9 + 5);
+      ensureSpace(rowHeight);
       const isZebra = index % 2 === 1;
 
       if (isZebra) {
@@ -484,15 +488,7 @@ export async function generateAlNamariqPDF(
       });
 
       // Description
-      const maxDescChars = 48;
-      const descText = item.productName.length > maxDescChars ? item.productName.slice(0, maxDescChars) + '...' : item.productName;
-      page.drawText(descText, {
-        x: colX[1] + 4,
-        y: y - 10,
-        size: 7.2,
-        font: fontBold,
-        color: COLOR_TEXT_DARK,
-      });
+      descriptionLines.forEach((line, index) => page.drawText(line, { x: colX[1] + 4, y: y - 10 - index * 9, size: 7.2, font: fontBold, color: COLOR_TEXT_DARK }));
 
       // Factor
       const factorText = item.factorPerM2.toFixed(3);
@@ -647,44 +643,15 @@ export async function generateAlNamariqPDF(
   y -= rateRowH + 12;
 
   // 5. OFFICIAL TERMS & CONDITIONS BOX
-  ensureSpace(70);
-  const termsBoxH = 68;
-  page.drawRectangle({
-    x: MARGIN_X,
-    y: y - termsBoxH,
-    width: CONTENT_WIDTH,
-    height: termsBoxH,
-    color: COLOR_ZEBRA,
-    borderColor: COLOR_BORDER,
-    borderWidth: 0.6,
-  });
-
-  page.drawText('OFFICIAL COMMERCIAL TERMS & CONDITIONS:', {
-    x: MARGIN_X + 8,
-    y: y - 10,
-    size: 6.8,
-    font: fontBold,
-    color: COLOR_BLUE,
-  });
-
-  let termY = y - 18;
-  AL_NAMARIQ_TERMS.slice(0, 7).forEach((term, i) => {
-    const cleanTerm = term.replace(/^[0-9]+\)\s*/, '');
-    const termLine = `${i + 1}. ${cleanTerm.slice(0, 118)}`;
-    page.drawText(termLine, {
-      x: MARGIN_X + 8,
-      y: termY,
-      size: 5.6,
-      font: fontRegular,
-      color: COLOR_TEXT_MUTED,
-    });
-    termY -= 7.2;
-  });
-
+  const termLines = AL_NAMARIQ_TERMS.flatMap(term => wrapText(term, fontRegular, 6.2, CONTENT_WIDTH - 16));
+  const termsBoxH = 24 + termLines.length * 8;
+  ensureSpace(termsBoxH + 12, false);
+  page.drawRectangle({ x: MARGIN_X, y: y - termsBoxH, width: CONTENT_WIDTH, height: termsBoxH, color: COLOR_ZEBRA, borderColor: COLOR_BORDER, borderWidth: 0.6 });
+  page.drawText('OFFICIAL COMMERCIAL TERMS & CONDITIONS:', { x: MARGIN_X + 8, y: y - 12, size: 6.8, font: fontBold, color: COLOR_BLUE });
+  termLines.forEach((line, index) => page.drawText(line, { x: MARGIN_X + 8, y: y - 23 - index * 8, size: 6.2, font: fontRegular, color: COLOR_TEXT_MUTED }));
   y -= termsBoxH + 12;
-
   // 6. TRIPLE SIGNATURE & STAMP BLOCK
-  ensureSpace(54);
+  ensureSpace(54, false);
   const sigColW = (CONTENT_WIDTH - 20) / 3;
 
   // Prepared by

@@ -6,6 +6,7 @@ import { Plus, Trash2, RotateCcw, AlertCircle } from 'lucide-react';
 
 interface MaterialGridProps {
   readOnly?: boolean;
+  ratesOnly?: boolean;
   baseItems: CalculatedItem[];
   deflectionItems: CalculatedItem[];
   scaleM2: number;
@@ -19,6 +20,7 @@ interface MaterialGridProps {
 
 export default function MaterialGrid({
   readOnly = false,
+  ratesOnly = false,
   baseItems,
   deflectionItems,
   scaleM2,
@@ -50,7 +52,7 @@ export default function MaterialGrid({
             Quantities and totals update automatically when you change a value.
           </p>
         </div>
-        {!readOnly && <div className="flex items-center gap-2">
+        {!readOnly && !ratesOnly && <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onResetItems}
@@ -101,7 +103,7 @@ export default function MaterialGrid({
                 </td>
                 <td className="py-2.5 px-4">
                   <input
-                    type="text"
+                    type="text" disabled={ratesOnly}
                     value={item.productName}
                     onChange={(e) => onUpdateBaseItem(idx, { productName: e.target.value })}
                     className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-[#00488e] focus:bg-white focus:outline-none transition-colors"
@@ -112,11 +114,11 @@ export default function MaterialGrid({
                     type="number"
                     step="0.0001"
                     min="0"
-                    value={item.factorPerM2}
+                    disabled={ratesOnly} value={item.factorPerM2}
                     onChange={(e) => {
                       const factor = parseFloat(e.target.value) || 0;
-                      const totalQuantity = Number((scaleM2 * factor).toFixed(3));
-                      const totalPriceAed = Number((totalQuantity * item.unitPriceAed).toFixed(2));
+                      const totalQuantity = scaleM2 * factor;
+                      const totalPriceAed = totalQuantity * item.unitPriceAed;
                       onUpdateBaseItem(idx, { factorPerM2: factor, totalQuantity, totalPriceAed });
                     }}
                     className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-slate-200 focus:border-[#00488e] focus:outline-none"
@@ -124,7 +126,7 @@ export default function MaterialGrid({
                 </td>
                 <td className="py-2.5 px-2 text-center">
                   <select
-                    value={item.unit}
+                    disabled={ratesOnly} value={item.unit}
                     onChange={(e) => onUpdateBaseItem(idx, { unit: e.target.value })}
                     className="text-center font-mono text-xs px-1 py-1 rounded border border-slate-200 focus:outline-none"
                   >
@@ -144,10 +146,10 @@ export default function MaterialGrid({
                     type="number"
                     step="0.001"
                     min="0"
-                    value={item.unitPriceAed}
+                    aria-label={`Rate for ${item.productName}`} aria-invalid={item.unitPriceAed <= 0} placeholder="Rate required" value={item.unitPriceAed || ''}
                     onChange={(e) => {
                       const price = parseFloat(e.target.value) || 0;
-                      const totalPriceAed = Number((item.totalQuantity * price).toFixed(2));
+                      const totalPriceAed = item.totalQuantity * price;
                       onUpdateBaseItem(idx, { unitPriceAed: price, totalPriceAed });
                     }}
                     className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#fed7aa] bg-[#fff3ec]/60 focus:border-[#f86c29] focus:outline-none text-[#e05615]"
@@ -160,7 +162,7 @@ export default function MaterialGrid({
                   <button
                     type="button"
                     onClick={() => onRemoveBaseItem(idx)}
-                    title="Remove item"
+                    title="Remove item" disabled={ratesOnly}
                     className="text-slate-400 hover:text-rose-500 p-1 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -211,7 +213,7 @@ export default function MaterialGrid({
                     </td>
                     <td className="py-2.5 px-4">
                       <input
-                        type="text"
+                        type="text" disabled={ratesOnly}
                         value={item.productName}
                         onChange={(e) => onUpdateDeflectionItem(idx, { productName: e.target.value })}
                         className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-emerald-300 focus:border-emerald-600 focus:bg-white focus:outline-none"
@@ -222,11 +224,11 @@ export default function MaterialGrid({
                         type="number"
                         step="0.0001"
                         min="0"
-                        value={item.factorPerM2}
+                        disabled={ratesOnly} value={item.factorPerM2}
                         onChange={(e) => {
                           const factor = parseFloat(e.target.value) || 0;
-                          const totalQuantity = Number((scaleM2 * factor).toFixed(3));
-                          const totalPriceAed = Number((totalQuantity * item.unitPriceAed).toFixed(2));
+                          const totalQuantity = scaleM2 * factor;
+                          const totalPriceAed = totalQuantity * item.unitPriceAed;
                           onUpdateDeflectionItem(idx, { factorPerM2: factor, totalQuantity, totalPriceAed });
                         }}
                         className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-emerald-200 focus:border-emerald-600 focus:outline-none"
@@ -243,10 +245,10 @@ export default function MaterialGrid({
                         type="number"
                         step="0.001"
                         min="0"
-                        value={item.unitPriceAed}
+                        aria-label={`Rate for ${item.productName}`} aria-invalid={item.unitPriceAed <= 0} placeholder="Rate required" value={item.unitPriceAed || ''}
                         onChange={(e) => {
                           const price = parseFloat(e.target.value) || 0;
-                          const totalPriceAed = Number((item.totalQuantity * price).toFixed(2));
+                          const totalPriceAed = item.totalQuantity * price;
                           onUpdateDeflectionItem(idx, { unitPriceAed: price, totalPriceAed });
                         }}
                         className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-emerald-300 bg-emerald-50 focus:border-emerald-600 focus:outline-none text-emerald-900"

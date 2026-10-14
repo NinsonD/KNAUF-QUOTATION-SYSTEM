@@ -1,0 +1,4630 @@
+{
+  "KC_B001": {
+    "base": {
+      "sheet": "KCB001",
+      "areaCell": "D12",
+      "cells": {
+        "E8": 1.0,
+        "E9": 0.5,
+        "E6": 0.6,
+        "E7": 1.0,
+        "D12": 1.0
+      },
+      "inputs": [
+        {
+          "key": "E6",
+          "label": "Furring Channel Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "E7",
+          "label": "Main Channel Spacing (m)",
+          "defaultValue": 1.0
+        },
+        {
+          "key": "E8",
+          "label": "Suspension Spacing (m)",
+          "defaultValue": 1.0
+        },
+        {
+          "key": "E9",
+          "label": "Ceiling drop (m)",
+          "defaultValue": 0.5
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF regular H1 Gypsum Board 12.5x1200x2400mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B14"
+        },
+        {
+          "productName": "KNAUF Main Channel 38/12/0.5 3000mm",
+          "factorPerM2": 1.0,
+          "unit": "m",
+          "sourceCell": "B15",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E7"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hat Furring Channel 35/67/22/0.5 3000mm",
+          "factorPerM2": 1.666666666666667,
+          "unit": "m",
+          "sourceCell": "B16",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E6"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF L-Angle 25/23/0.5 3000mm",
+          "factorPerM2": 0.5,
+          "unit": "m",
+          "sourceCell": "B17",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          10.0,
+                          {
+                            "cell": "E8"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "E9"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UD Channel 23/22/0.5 3000mm",
+          "factorPerM2": 0.4,
+          "unit": "m",
+          "sourceCell": "B18"
+        },
+        {
+          "productName": "KNAUF Joint Tape 50mm/90m",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF Wedge Anchor (200)",
+          "factorPerM2": 1.0,
+          "unit": "pcs",
+          "sourceCell": "B20",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E8"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x45(200)",
+          "factorPerM2": 1.0,
+          "unit": "pcs",
+          "sourceCell": "B21"
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN 3.5x25 Screw (1000)",
+          "factorPerM2": 15.0,
+          "unit": "pcs",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF Wafer Head Screw LN 4.2x11mm (1000)",
+          "factorPerM2": 8.0,
+          "unit": "pcs",
+          "sourceCell": "B23"
+        },
+        {
+          "productName": "KNAUF Readyfix Joint compound 28Kg",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B24"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KC_A001": {
+    "base": {
+      "sheet": "KCA001",
+      "areaCell": "D12",
+      "cells": {
+        "E9": 0.5,
+        "E8": 1.22,
+        "E6": 0.406,
+        "E7": 1.0,
+        "D12": 100.0
+      },
+      "inputs": [
+        {
+          "key": "E6",
+          "label": "Furring Channel Spacing (m)",
+          "defaultValue": 0.406
+        },
+        {
+          "key": "E7",
+          "label": "Main Channel Spacing (m)",
+          "defaultValue": 1.0
+        },
+        {
+          "key": "E8",
+          "label": "Suspension Spacing (m)",
+          "defaultValue": 1.22
+        },
+        {
+          "key": "E9",
+          "label": "Ceiling drop (m)",
+          "defaultValue": 0.5
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board GW-R 12.7x1220x2400mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B14"
+        },
+        {
+          "productName": "KNAUF Main Channel 38/12/1.4 3000mm",
+          "factorPerM2": 1.0,
+          "unit": "m",
+          "sourceCell": "B15",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E7"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hat Furring Channel 35/67/22/0.5 3000mm",
+          "factorPerM2": 2.4630541871921183,
+          "unit": "m",
+          "sourceCell": "B16",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E6"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF L-Angle 25/35/0.5 3000mm",
+          "factorPerM2": 0.40983606557377045,
+          "unit": "m",
+          "sourceCell": "B17",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          10.0,
+                          {
+                            "cell": "E8"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "E9"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UD Channel 23/22/0.5 3000mm",
+          "factorPerM2": 0.4,
+          "unit": "m",
+          "sourceCell": "B18"
+        },
+        {
+          "productName": "KNAUF Joint Tape 50mm/90m",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF Wedge Anchor (200)",
+          "factorPerM2": 1.5,
+          "unit": "pcs",
+          "sourceCell": "B20"
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x45(200)",
+          "factorPerM2": 1.0,
+          "unit": "pcs",
+          "sourceCell": "B21"
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN 3.5x25 Screw (1000)",
+          "factorPerM2": 15.0,
+          "unit": "pcs",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF Wafer Head Screw LN 4.2x11mm (1000)",
+          "factorPerM2": 16.0,
+          "unit": "pcs",
+          "sourceCell": "B23"
+        },
+        {
+          "productName": "KNAUF Readyfix Joint compound 28Kg",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B24"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KC_A001_FR": {
+    "base": {
+      "sheet": "KCA001- FR",
+      "areaCell": "D12",
+      "cells": {
+        "E9": 0.5,
+        "E8": 1.22,
+        "E6": 0.406,
+        "E7": 1.0,
+        "D12": 100.0
+      },
+      "inputs": [
+        {
+          "key": "E6",
+          "label": "Furring Channel Spacing (m)",
+          "defaultValue": 0.406
+        },
+        {
+          "key": "E7",
+          "label": "Main Channel Spacing (m)",
+          "defaultValue": 1.0
+        },
+        {
+          "key": "E8",
+          "label": "Suspension Spacing (m)",
+          "defaultValue": 1.22
+        },
+        {
+          "key": "E9",
+          "label": "Ceiling drop (m)",
+          "defaultValue": 0.5
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Type X Fire Rated Gypsum WallBoard GW-TX (FR) 12.7x1220x2400mm (80sheets/pallet)",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B14"
+        },
+        {
+          "productName": "KNAUF Main Channel 38/12/1.4 3000mm",
+          "factorPerM2": 1.0,
+          "unit": "m",
+          "sourceCell": "B15",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E7"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hat Furring Channel 35/67/22/0.5 3000mm",
+          "factorPerM2": 2.4630541871921183,
+          "unit": "m",
+          "sourceCell": "B16",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      10.0,
+                      {
+                        "cell": "E6"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF L-Angle 25/35/0.5 3000mm",
+          "factorPerM2": 0.40983606557377045,
+          "unit": "m",
+          "sourceCell": "B17",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          10.0,
+                          {
+                            "cell": "E8"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "E9"
+                      }
+                    ]
+                  },
+                  10.0
+                ]
+              },
+              100.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UD Channel 23/22/0.5 3000mm",
+          "factorPerM2": 0.4,
+          "unit": "m",
+          "sourceCell": "B18"
+        },
+        {
+          "productName": "KNAUF Joint Tape 50mm/90m",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF Wedge Anchor (200)",
+          "factorPerM2": 1.5,
+          "unit": "pcs",
+          "sourceCell": "B20"
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x45(200)",
+          "factorPerM2": 1.0,
+          "unit": "pcs",
+          "sourceCell": "B21"
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN 3.5x25 Screw (1000)",
+          "factorPerM2": 15.0,
+          "unit": "pcs",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF Wafer Head Screw LN 4.2x11mm (1000)",
+          "factorPerM2": 16.0,
+          "unit": "pcs",
+          "sourceCell": "B23"
+        },
+        {
+          "productName": "KNAUF FR Sealant 280ml",
+          "factorPerM2": 0.3,
+          "unit": "pcs",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Readyfix Joint compound 28Kg",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B25"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "D127": {
+    "base": {
+      "sheet": "KCD127",
+      "areaCell": "E13",
+      "cells": {
+        "E13": 582.0
+      },
+      "inputs": [],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Cleaneo 8/18R 12.5x1188x1998mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B18"
+        },
+        {
+          "productName": "KNAUF CD Channel 60/27/0.6 3000mm",
+          "factorPerM2": 3.84,
+          "unit": "m",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF UD Channel 28/27/0.6 3000mm",
+          "factorPerM2": 0.4,
+          "unit": "m",
+          "sourceCell": "B20"
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200)",
+          "factorPerM2": 1.01,
+          "unit": "pcs",
+          "sourceCell": "B21"
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm (200)",
+          "factorPerM2": 1.01,
+          "unit": "pcs",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF Nonius Hanger Top 100cm (50)",
+          "factorPerM2": 1.01,
+          "unit": "pcs",
+          "sourceCell": "B23"
+        },
+        {
+          "productName": "KNAUF Nonius Stirrup (100)",
+          "factorPerM2": 1.01,
+          "unit": "pcs",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Nonius Pin (100)",
+          "factorPerM2": 1.01,
+          "unit": "pcs",
+          "sourceCell": "B25"
+        },
+        {
+          "productName": "KNAUF Clips for CD 60/27 (1000)",
+          "factorPerM2": 5.48,
+          "unit": "pcs",
+          "sourceCell": "B26"
+        },
+        {
+          "productName": "KNAUF CD Channel Connector 60/27",
+          "factorPerM2": 0.97,
+          "unit": "pcs",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF Uniflott Joint Compound 25kg",
+          "factorPerM2": 0.11,
+          "unit": "kg",
+          "sourceCell": "B28"
+        },
+        {
+          "productName": "KNAUF SN Cleaneo Screw 30x3.5 (1000 pcs)",
+          "factorPerM2": 15.0,
+          "unit": "pcs",
+          "sourceCell": "B29"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KW111": {
+    "base": {
+      "sheet": "KW( )111",
+      "areaCell": "D14",
+      "cells": {
+        "D16": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D14"
+            },
+            {
+              "cell": "D17"
+            }
+          ]
+        },
+        "D17": 3.0,
+        "D15": 0.6,
+        "D14": 500.0
+      },
+      "inputs": [
+        {
+          "key": "D15",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D17",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 15x1200x2400mm",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 1.6786666666666665,
+          "unit": "m",
+          "sourceCell": "B20",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D16"
+                          },
+                          {
+                            "cell": "D15"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.3333333333333333,
+          "unit": "m",
+          "sourceCell": "B21",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D16"
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.3333333333333333,
+          "unit": "m",
+          "sourceCell": "B22",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D16"
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 1.1111111111111112,
+          "unit": "pcs",
+          "sourceCell": "B23",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D16"
+                      },
+                      2.0
+                    ]
+                  },
+                  0.6
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.1333333333333333,
+          "unit": "pcs",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D16"
+                      },
+                      2.0
+                    ]
+                  },
+                  5.0
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B26"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B28"
+        }
+      ],
+      "deflectionMaterials": []
+    },
+    "head": {
+      "sheet": "KW( )111+HW",
+      "areaCell": "D14",
+      "cells": {
+        "D15": 0.6,
+        "D16": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D14"
+            },
+            {
+              "cell": "D17"
+            }
+          ]
+        },
+        "D17": 3.0,
+        "J15": 4.0,
+        "J14": 0.07,
+        "D14": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D15",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D17",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J14",
+          "label": "Width of GB(m)",
+          "defaultValue": 0.07
+        },
+        {
+          "key": "J15",
+          "label": "No. of strips",
+          "defaultValue": 4.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF FR Gypsum Board 12.5x1200x2400mm",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B19"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 1.7266666666666668,
+          "unit": "m",
+          "sourceCell": "B20",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D16"
+                          },
+                          {
+                            "cell": "D15"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B21",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D16"
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B22",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D16"
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 0.5555555555555557,
+          "unit": "pcs",
+          "sourceCell": "B23",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D16"
+                  },
+                  0.6
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.13333333333333333,
+          "unit": "pcs",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D16"
+                      },
+                      2.0
+                    ]
+                  },
+                  5.0
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B26"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B28"
+        }
+      ],
+      "deflectionMaterials": [
+        {
+          "productName": "KNAUF FR Gypsum Board 12.5x1200x2400mm) (board strip)",
+          "factorPerM2": 0.09333333333333335,
+          "unit": "m²",
+          "sourceCell": "B32",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "J14"
+                      },
+                      {
+                        "cell": "D16"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "J15"
+                  }
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Section Angle 60/25 0.5 x 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B33",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D16"
+                  },
+                  {
+                    "cell": "D14"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200 pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B34",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D16"
+                      },
+                      {
+                        "cell": "D15"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D14"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Concrete Screwbolt 7.5x100mm (100pcs)",
+          "factorPerM2": 0.5555555555555557,
+          "unit": "pcs",
+          "sourceCell": "B35",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D16"
+                  },
+                  {
+                    "cell": "D15"
+                  }
+                ]
+              },
+              {
+                "cell": "D14"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "KW112": {
+    "base": {
+      "sheet": "KW( )112",
+      "areaCell": "D17",
+      "cells": {
+        "D19": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D17"
+            },
+            {
+              "cell": "D20"
+            }
+          ]
+        },
+        "D20": 3.0,
+        "D18": 0.6,
+        "D17": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D18",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D20",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Fire Rated Gypsum Board 1200x2400x15mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 1.7266666666666668,
+          "unit": "m",
+          "sourceCell": "B23",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D19"
+                          },
+                          {
+                            "cell": "D18"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D20"
+                  }
+                ]
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B24",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D19"
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D19"
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm (200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D19"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF FR Sealant 280ml (5mm dia)",
+          "factorPerM2": 0.09523809523809523,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D19"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN25 (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN35 (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B30"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B32"
+        }
+      ],
+      "deflectionMaterials": []
+    },
+    "head": {
+      "sheet": "KW( )112+HW",
+      "areaCell": "D17",
+      "cells": {
+        "D18": 0.6,
+        "D19": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D17"
+            },
+            {
+              "cell": "D20"
+            }
+          ]
+        },
+        "D20": 3.0,
+        "J18": 4.0,
+        "J17": 0.07,
+        "D17": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D18",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D20",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J17",
+          "label": "Width of GB(m)",
+          "defaultValue": 0.07
+        },
+        {
+          "key": "J18",
+          "label": "No. of strips",
+          "defaultValue": 4.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Fire Rated Gypsum Board 1200x2400x15mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 1.7266666666666668,
+          "unit": "m",
+          "sourceCell": "B23",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D19"
+                          },
+                          {
+                            "cell": "D18"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D20"
+                  }
+                ]
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B24",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D19"
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D19"
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm (200pcs)",
+          "factorPerM2": 0.5555555555555557,
+          "unit": "pcs",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D19"
+                  },
+                  0.6
+                ]
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF FR Sealant 280ml (5mm dia)",
+          "factorPerM2": 0.09523809523809523,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D19"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN25 (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN45 (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B30"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B32"
+        }
+      ],
+      "deflectionMaterials": [
+        {
+          "productName": "KNAUF FR Gypsum Board 12.5x1200x2400mm) (board strip)",
+          "factorPerM2": 0.09333333333333335,
+          "unit": "m²",
+          "sourceCell": "B37",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "J17"
+                      },
+                      {
+                        "cell": "D19"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "J18"
+                  }
+                ]
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Section Angle 60/25 0.5 x 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B38",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D19"
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200 pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B39",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D19"
+                      },
+                      {
+                        "cell": "D18"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D17"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Concrete Screwbolt 7.5x100mm (100pcs)",
+          "factorPerM2": 0.5555555555555557,
+          "unit": "pcs",
+          "sourceCell": "B40",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D19"
+                  },
+                  {
+                    "cell": "D18"
+                  }
+                ]
+              },
+              {
+                "cell": "D17"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "KW115": {
+    "base": {
+      "sheet": "KW( )115",
+      "areaCell": "D19",
+      "cells": {
+        "D22": 3.0,
+        "D20": 0.6,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 15x1200x2400mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 3.4533333333333336,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "+",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D21"
+                              },
+                              {
+                                "cell": "D20"
+                              }
+                            ]
+                          },
+                          2.0
+                        ]
+                      },
+                      {
+                        "cell": "D22"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm (200pcs)",
+          "factorPerM2": 2.2222222222222228,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              4.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Acoustic Selant 280ml",
+          "factorPerM2": 0.19047619047619047,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              4.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Self Tapping Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF TN 45 Self Tapping Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF Acoustical Sealing Tape 50mmx25m",
+          "factorPerM2": 1.666666666666667,
+          "unit": "m",
+          "sourceCell": "B33",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B34"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B35"
+        }
+      ],
+      "deflectionMaterials": []
+    },
+    "head": {
+      "sheet": "KW( )115+HW",
+      "areaCell": "D19",
+      "cells": {
+        "D20": 0.6,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "J20": 4.0,
+        "J19": 0.07,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J19",
+          "label": "Width of GB(m)",
+          "defaultValue": 0.07
+        },
+        {
+          "key": "J20",
+          "label": "No. of strips",
+          "defaultValue": 4.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 15x1200x2400mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW 70/35/0.6mm",
+          "factorPerM2": 3.4533333333333336,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "+",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D21"
+                              },
+                              {
+                                "cell": "D20"
+                              }
+                            ]
+                          },
+                          2.0
+                        ]
+                      },
+                      {
+                        "cell": "D22"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/32/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 70/60/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm (200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Acoustic Selant 280ml",
+          "factorPerM2": 0.19047619047619047,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              4.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Self Tapping Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF TN 45 Self Tapping Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF Acoustical Sealing Tape 50mmx25m",
+          "factorPerM2": 1.666666666666667,
+          "unit": "m",
+          "sourceCell": "B33",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B34"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B35"
+        }
+      ],
+      "deflectionMaterials": [
+        {
+          "productName": "KNAUF FR Gypsum Board 12.5x1200x2400mm) (board strip)",
+          "factorPerM2": 0.1866666666666667,
+          "unit": "m²",
+          "sourceCell": "B40",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "cell": "J19"
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "J20"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Section Angle 60/25 0.5 x 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B41",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200 pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B42",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Concrete Screwbolt 7.5x100mm (100pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B43",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "KW116": {
+    "base": {
+      "sheet": "KW( )116",
+      "areaCell": "D19",
+      "cells": {
+        "D20": 0.6,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "J21": {
+          "op": "-",
+          "args": [
+            {
+              "cell": "J19"
+            },
+            {
+              "cell": "J20"
+            }
+          ]
+        },
+        "J20": 50.0,
+        "J19": 200.0,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J19",
+          "label": "Partition thickness",
+          "defaultValue": 200.0
+        },
+        {
+          "key": "J20",
+          "label": "Total board thickness",
+          "defaultValue": 50.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 12.5x1200x2400mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW Stud 50/35/0.6mm 3000mm",
+          "factorPerM2": 3.4533333333333336,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "+",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D21"
+                              },
+                              {
+                                "cell": "D20"
+                              }
+                            ]
+                          },
+                          2.0
+                        ]
+                      },
+                      {
+                        "cell": "D22"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Track 50/32/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Deep Track 50/60/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Track 50/32/0.6mm 3000mm (bracing)",
+          "factorPerM2": 0.20833333333333337,
+          "unit": "m",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "op": "*",
+                            "args": [
+                              {
+                                "op": "/",
+                                "args": [
+                                  {
+                                    "cell": "D22"
+                                  },
+                                  1.2
+                                ]
+                              },
+                              {
+                                "cell": "D21"
+                              }
+                            ]
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "J21"
+                      }
+                    ]
+                  },
+                  1000.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 2.2222222222222228,
+          "unit": "pcs",
+          "sourceCell": "B29",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              4.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B30"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.19047619047619047,
+          "unit": "pcs",
+          "sourceCell": "B31",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      4.0
+                    ]
+                  },
+                  7.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF TN 35 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B33"
+        },
+        {
+          "productName": "KNAUF Waferhead LN11mm (1000 pcs/pkt)",
+          "factorPerM2": 5.555555555555556,
+          "unit": "pcs",
+          "sourceCell": "B34",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D22"
+                              },
+                              1.2
+                            ]
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  4.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B35"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B36"
+        }
+      ],
+      "deflectionMaterials": []
+    },
+    "head": {
+      "sheet": "KW( )116+HW",
+      "areaCell": "D19",
+      "cells": {
+        "D20": 0.6,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "J29": 4.0,
+        "J28": 0.07,
+        "J25": {
+          "op": "-",
+          "args": [
+            {
+              "cell": "J23"
+            },
+            {
+              "cell": "J24"
+            }
+          ]
+        },
+        "J24": 50.0,
+        "J23": 200.0,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J23",
+          "label": "Partition thickness",
+          "defaultValue": 200.0
+        },
+        {
+          "key": "J24",
+          "label": "Total board thickness",
+          "defaultValue": 50.0
+        },
+        {
+          "key": "J28",
+          "label": "Width of GB(m)",
+          "defaultValue": 0.07
+        },
+        {
+          "key": "J29",
+          "label": "No. of strips",
+          "defaultValue": 4.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 12.5x1200x2400mm",
+          "factorPerM2": 4.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW Stud 50/35/0.6mm 3000mm",
+          "factorPerM2": 3.4533333333333336,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "+",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D21"
+                              },
+                              {
+                                "cell": "D20"
+                              }
+                            ]
+                          },
+                          2.0
+                        ]
+                      },
+                      {
+                        "cell": "D22"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Track 50/32/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Deep Track 50/60/0.6mm 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Track 50/32/0.6mm 3000mm (bracing)",
+          "factorPerM2": 0.20833333333333337,
+          "unit": "m",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "op": "*",
+                            "args": [
+                              {
+                                "op": "/",
+                                "args": [
+                                  {
+                                    "cell": "D22"
+                                  },
+                                  1.2
+                                ]
+                              },
+                              {
+                                "cell": "D21"
+                              }
+                            ]
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "J25"
+                      }
+                    ]
+                  },
+                  1000.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 2.2222222222222228,
+          "unit": "pcs",
+          "sourceCell": "B29",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              4.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B30"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.19047619047619047,
+          "unit": "pcs",
+          "sourceCell": "B31",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      4.0
+                    ]
+                  },
+                  7.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF TN 35 Drywall Screw (1000 pcs)",
+          "factorPerM2": 23.0,
+          "unit": "pcs",
+          "sourceCell": "B33"
+        },
+        {
+          "productName": "KNAUF Waferhead LN11mm (1000 pcs/pkt)",
+          "factorPerM2": 5.555555555555556,
+          "unit": "pcs",
+          "sourceCell": "B34",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "op": "/",
+                            "args": [
+                              {
+                                "cell": "D22"
+                              },
+                              1.2
+                            ]
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  4.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B35"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B36"
+        }
+      ],
+      "deflectionMaterials": [
+        {
+          "productName": "KNAUF FR Gypsum Board 12.5x1200x2400mm) (board strip)",
+          "factorPerM2": 0.1866666666666667,
+          "unit": "m²",
+          "sourceCell": "B41",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "cell": "J28"
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "J29"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Section Angle 60/25 0.5 x 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B42",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200 pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B43",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Concrete Screwbolt 7.5x100mm (100pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B44",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "KSW120": {
+    "base": {
+      "sheet": "KS( )120",
+      "areaCell": "D19",
+      "cells": {
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "D20": 0.609,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.609
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF (FR) GW-TX Gypsumboard 15.9x1220x2400mm",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Coreboard 25.4 610x2200mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B25"
+        },
+        {
+          "productName": "KNAUF C-T Shaftwall Stud 64/38/0.9 3000mm",
+          "factorPerM2": 1.7020361247947455,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF C-T Shaftwall Stud 64/38/0.9 mm (Horizontal joints)",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "roundDown",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D22"
+                          },
+                          2.2
+                        ]
+                      },
+                      0.0
+                    ]
+                  },
+                  {
+                    "cell": "D21"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF J Shaftwall Track 164/25/50/0.9 mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Deep Flange 64/60/0.9 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B29",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF FR Sealant 280ml",
+          "factorPerM2": 0.12121212121212123,
+          "unit": "pcs",
+          "sourceCell": "B31",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      2.0
+                    ]
+                  },
+                  5.5
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF TB 25 Self-drilling Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B33"
+        },
+        {
+          "productName": "KNAUF TB 45 Self-drilling Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B34"
+        },
+        {
+          "productName": "KNAUF Readygips Joint Compound (28kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B35"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B36"
+        }
+      ],
+      "deflectionMaterials": []
+    },
+    "head": {
+      "sheet": "KS( )120+HW",
+      "areaCell": "D19",
+      "cells": {
+        "D20": 0.609,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "J21": 4.0,
+        "J20": 0.064,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.609
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        },
+        {
+          "key": "J20",
+          "label": "Width of GB(m)",
+          "defaultValue": 0.064
+        },
+        {
+          "key": "J21",
+          "label": "No. of strips",
+          "defaultValue": 4.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF (FR) GW-TX Gypsumboard 15.9x1220x2400mm",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Coreboard 25.4 610x2200mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B25"
+        },
+        {
+          "productName": "KNAUF C-T Shaftwall Stud 64/38/0.9 3000mm",
+          "factorPerM2": 1.7020361247947455,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF C-T Shaftwall Stud 64/38/0.9 mm (Horizontal joints)",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "roundDown",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D22"
+                          },
+                          2.2
+                        ]
+                      },
+                      0.0
+                    ]
+                  },
+                  {
+                    "cell": "D21"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF J Shaftwall Track 164/25/50/0.9 mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW Deep Flange 64/60/0.9 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B29",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF FR Sealant 280ml",
+          "factorPerM2": 0.12121212121212123,
+          "unit": "pcs",
+          "sourceCell": "B31",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      2.0
+                    ]
+                  },
+                  5.5
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF TB 25 Self-drilling Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B33"
+        },
+        {
+          "productName": "KNAUF TB 45 Self-drilling Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B34"
+        },
+        {
+          "productName": "KNAUF Readygips Joint Compound (28kg)",
+          "factorPerM2": 0.5,
+          "unit": "kg",
+          "sourceCell": "B35"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B36"
+        }
+      ],
+      "deflectionMaterials": [
+        {
+          "productName": "KNAUF (FR) GW-TX 12.7x1200x2400mm) (board strip)",
+          "factorPerM2": 0.11866666666666668,
+          "unit": "m²",
+          "sourceCell": "B41",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.1
+                    ]
+                  },
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "cell": "J20"
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "J21"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Section Angle 60/25 0.5 x 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B42",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Wedge Anchor 6x40mm (200 pcs)",
+          "factorPerM2": 1.0946907498631637,
+          "unit": "pcs",
+          "sourceCell": "B43",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Concrete Screwbolt 7.5x100mm (100pcs)",
+          "factorPerM2": 0.5473453749315819,
+          "unit": "pcs",
+          "sourceCell": "B44",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  {
+                    "cell": "D20"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "KW625": {
+    "base": {
+      "sheet": "KW( )625",
+      "areaCell": "D19",
+      "cells": {
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "D20": 0.6,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 15x1200x2400mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW 92/35/0.6mm 3000mm",
+          "factorPerM2": 1.7266666666666668,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 92/32/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 92/60/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.09523809523809523,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B33"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KWB626": {
+    "base": {
+      "sheet": "KW( )626",
+      "areaCell": "D19",
+      "cells": {
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "D20": 0.6,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board 15x1200x2400mm",
+          "factorPerM2": 2.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CW 92/35/0.6mm 3000mm",
+          "factorPerM2": 1.7266666666666668,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 92/32/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UW 92/60/0.6mm 3000mm",
+          "factorPerM2": 0.33333333333333337,
+          "unit": "m",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "cell": "D21"
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 1.1111111111111114,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      0.6
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 2.45,
+          "unit": "m",
+          "sourceCell": "B29"
+        },
+        {
+          "productName": "KNAUF Acoustic Sealant 280ml",
+          "factorPerM2": 0.09523809523809523,
+          "unit": "pcs",
+          "sourceCell": "B30",
+          "factorExpression": {
+            "op": "*",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      7.0
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              2.0
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B31"
+        },
+        {
+          "productName": "KNAUF TN 35 Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF Readygips Joint compound (28 kg)",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B33"
+        },
+        {
+          "productName": "KNAUF Insulation 50mm 16 kg/m3",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B34"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KWA611": {
+    "base": {
+      "sheet": "KW( )611",
+      "areaCell": "D19",
+      "cells": {
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "D20": 0.6,
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board (GW-R) 12.7 mm 1220x2400mm ( 80 sheets/pallet)",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Furring Channel 67/35/22/0.5mm",
+          "factorPerM2": 2.3333333333333335,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D22"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      2.0
+                    ]
+                  },
+                  {
+                    "cell": "D21"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixing 6x40mm(200pcs)",
+          "factorPerM2": 7.777777777777779,
+          "unit": "pcs",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "op": "+",
+                            "args": [
+                              {
+                                "op": "/",
+                                "args": [
+                                  {
+                                    "cell": "D22"
+                                  },
+                                  {
+                                    "cell": "D20"
+                                  }
+                                ]
+                              },
+                              2.0
+                            ]
+                          },
+                          {
+                            "cell": "D21"
+                          }
+                        ]
+                      },
+                      0.6
+                    ]
+                  },
+                  2.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF TN 25 Drywall Screw (1000 pcs)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B27"
+        },
+        {
+          "productName": "KNAUF FiberGlass Joint Tape 50mm (90m)",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B28"
+        },
+        {
+          "productName": "KNAUF Readygips Joint Compound (28kg)",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B29"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KWD623": {
+    "base": {
+      "sheet": "KWD63",
+      "areaCell": "D19",
+      "cells": {
+        "B27": {
+          "op": "/",
+          "args": [
+            {
+              "op": "/",
+              "args": [
+                {
+                  "op": "*",
+                  "args": [
+                    {
+                      "op": "/",
+                      "args": [
+                        {
+                          "cell": "D21"
+                        },
+                        {
+                          "cell": "D20"
+                        }
+                      ]
+                    },
+                    {
+                      "cell": "D22"
+                    }
+                  ]
+                },
+                1.2
+              ]
+            },
+            {
+              "cell": "D19"
+            }
+          ]
+        },
+        "D22": 3.0,
+        "D20": 0.6,
+        "D21": {
+          "op": "/",
+          "args": [
+            {
+              "cell": "D19"
+            },
+            {
+              "cell": "D22"
+            }
+          ]
+        },
+        "D19": 100.0
+      },
+      "inputs": [
+        {
+          "key": "D20",
+          "label": "Stud Spacing (m)",
+          "defaultValue": 0.6
+        },
+        {
+          "key": "D22",
+          "label": "Wall Height (m)",
+          "defaultValue": 3.0
+        }
+      ],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF Regular Gypsum Board (GW-R) 12.7 mm 1220x2400mm ( 80 sheets/pallet)",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF CD Channel 60/27/0.6 3000mm",
+          "factorPerM2": 1.666666666666667,
+          "unit": "m",
+          "sourceCell": "B25",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D22"
+                  }
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF UD Channel 28/27/0.6 3000mm",
+          "factorPerM2": 0.6666666666666667,
+          "unit": "m",
+          "sourceCell": "B26",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "cell": "D21"
+                  },
+                  2.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Universal Bracket for CD 60/27 50mm (100pcs)",
+          "factorPerM2": 1.388888888888889,
+          "unit": "pcs",
+          "sourceCell": "B27",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "/",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          {
+                            "cell": "D20"
+                          }
+                        ]
+                      },
+                      {
+                        "cell": "D22"
+                      }
+                    ]
+                  },
+                  1.2
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Hammer Fixings (200pcs)",
+          "factorPerM2": 2.5000000000000004,
+          "unit": "pcs",
+          "sourceCell": "B28",
+          "factorExpression": {
+            "op": "+",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "/",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "cell": "D21"
+                          },
+                          2.0
+                        ]
+                      },
+                      {
+                        "cell": "D20"
+                      }
+                    ]
+                  },
+                  {
+                    "cell": "D19"
+                  }
+                ]
+              },
+              {
+                "cell": "B27"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Acoustical Sealant (280 ml)",
+          "factorPerM2": 0.09523809523809523,
+          "unit": "pcs",
+          "sourceCell": "B29",
+          "factorExpression": {
+            "op": "/",
+            "args": [
+              {
+                "op": "/",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "cell": "D21"
+                      },
+                      2.0
+                    ]
+                  },
+                  7.0
+                ]
+              },
+              {
+                "cell": "D19"
+              }
+            ]
+          }
+        },
+        {
+          "productName": "KNAUF Fibre Glass Joint Tape (90m)",
+          "factorPerM2": 1.5,
+          "unit": "m",
+          "sourceCell": "B30"
+        },
+        {
+          "productName": "KNAUF LN11 Self-Drilling Drywall Screw (1000pcs)",
+          "factorPerM2": 1.388888888888889,
+          "unit": "pcs",
+          "sourceCell": "B31",
+          "factorExpression": {
+            "cell": "B27"
+          }
+        },
+        {
+          "productName": "KNAUF Drywall Screw TN25 (1000 pcs/pkt)",
+          "factorPerM2": 12.0,
+          "unit": "pcs",
+          "sourceCell": "B32"
+        },
+        {
+          "productName": "KNAUF Joint Compound 28kg",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B33"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  },
+  "KWD611": {
+    "base": {
+      "sheet": "KWD611",
+      "areaCell": "D20",
+      "cells": {
+        "D20": 100.0
+      },
+      "inputs": [],
+      "baseMaterials": [
+        {
+          "productName": "KNAUF GW-TX (FR)Gypsum Board 12.7x1220x2400mm",
+          "factorPerM2": 1.0,
+          "unit": "m²",
+          "sourceCell": "B22"
+        },
+        {
+          "productName": "KNAUF Perlfix Bonding Compound 30Kg",
+          "factorPerM2": 5.0,
+          "unit": "kg",
+          "sourceCell": "B23"
+        },
+        {
+          "productName": "KNAUF FiberGlass Joint Tape (90m)",
+          "factorPerM2": 1.1,
+          "unit": "m",
+          "sourceCell": "B24"
+        },
+        {
+          "productName": "KNAUF Readygips Joint Compound (28kg)",
+          "factorPerM2": 0.25,
+          "unit": "kg",
+          "sourceCell": "B25"
+        }
+      ],
+      "deflectionMaterials": []
+    }
+  }
+}

@@ -1,103 +1,39 @@
 import { KnaufSystemDefinition, CalculationResult, CalculatedItem } from './types';
+import { resolveReferenceSystem } from './reference';
 
 export function calculateQuotation(
   system: KnaufSystemDefinition,
   scaleM2: number,
   unitPrices: Record<string, number>,
-  includeDeflection: boolean = false,
-  customItems?: { base?: CalculatedItem[]; deflection?: CalculatedItem[] }
+  includeDeflection = false,
+  customItems?: { base?: CalculatedItem[]; deflection?: CalculatedItem[] },
+  technicalParameters: Record<string, number> = {},
 ): CalculationResult {
-  const safeScale = scaleM2 > 0 ? scaleM2 : 1;
-
-  // If custom items are provided from the interactive grid, recalculate based on their factors/quantities & prices
-  let baseItems: CalculatedItem[];
-  if (customItems?.base !== undefined) {
-    baseItems = customItems.base.map((item) => {
-      const totalQuantity = Number((safeScale * item.factorPerM2).toFixed(3));
-      const unitPriceAed = item.unitPriceAed ?? unitPrices[item.productName] ?? 0;
-      const totalPriceAed = Number((totalQuantity * unitPriceAed).toFixed(2));
-      return {
-        ...item,
-        totalQuantity,
-        unitPriceAed,
-        totalPriceAed,
-        isHeadDeflection: false,
-      };
+  if (!Number.isFinite(scaleM2) || scaleM2 <= 0) throw new Error('Area must be greater than zero.');
+  const resolved = resolveReferenceSystem(system, scaleM2, includeDeflection, technicalParameters);
+  const calculateItems = (section: 'base' | 'deflection'): CalculatedItem[] => {
+    const head = section === 'deflection';
+    const definitions = head ? resolved.deflectionMaterials ?? [] : resolved.baseMaterials;
+    return (customItems?.[section] ?? definitions).map(item => {
+      const reference = definitions.find(definition => definition.productName === item.productName);
+      const factor = 'factorOverridden' in item && item.factorOverridden === false && reference ? reference.factorPerM2 : item.factorPerM2;
+      const price = 'unitPriceAed' in item ? Number(item.unitPriceAed) : unitPrices[item.productName] ?? 0;
+      if (!item.productName.trim() || !Number.isFinite(item.factorPerM2) || item.factorPerM2 < 0 || !Number.isFinite(price) || price < 0) {
+        throw new Error('Material factors and rates must be valid non-negative numbers.');
+      }
+      // Excel's display formats do not round its stored quantities or line amounts.
+      const totalQuantity = scaleM2 * factor;
+      return { ...item, factorPerM2: factor, factorOverridden: 'factorOverridden' in item ? Boolean(item.factorOverridden) : false, totalQuantity, unitPriceAed: price, totalPriceAed: totalQuantity * price, isHeadDeflection: head };
     });
-  } else {
-    baseItems = system.baseMaterials.map((mat) => {
-      const totalQuantity = Number((safeScale * mat.factorPerM2).toFixed(3));
-      const unitPriceAed = unitPrices[mat.productName] ?? 0;
-      const totalPriceAed = Number((totalQuantity * unitPriceAed).toFixed(2));
-      return {
-        productName: mat.productName,
-        factorPerM2: mat.factorPerM2,
-        unit: mat.unit,
-        totalQuantity,
-        unitPriceAed,
-        totalPriceAed,
-        isHeadDeflection: false,
-      };
-    });
-  }
-
-  const baseTotalAed = Number(
-    baseItems.reduce((acc, it) => acc + it.totalPriceAed, 0).toFixed(2)
-  );
-  const baseRatePerM2 = Number((baseTotalAed / safeScale).toFixed(2));
-
-  // Head Deflection Items
-  let deflectionItems: CalculatedItem[] = [];
-  if (includeDeflection && system.supportsDeflection) {
-    if (customItems?.deflection !== undefined) {
-      deflectionItems = customItems.deflection.map((item) => {
-        const totalQuantity = Number((safeScale * item.factorPerM2).toFixed(3));
-        const unitPriceAed = item.unitPriceAed ?? unitPrices[item.productName] ?? 0;
-        const totalPriceAed = Number((totalQuantity * unitPriceAed).toFixed(2));
-        return {
-          ...item,
-          totalQuantity,
-          unitPriceAed,
-          totalPriceAed,
-          isHeadDeflection: true,
-        };
-      });
-    } else if (system.deflectionMaterials) {
-      deflectionItems = system.deflectionMaterials.map((mat) => {
-        const totalQuantity = Number((safeScale * mat.factorPerM2).toFixed(3));
-        const unitPriceAed = unitPrices[mat.productName] ?? 0;
-        const totalPriceAed = Number((totalQuantity * unitPriceAed).toFixed(2));
-        return {
-          productName: mat.productName,
-          factorPerM2: mat.factorPerM2,
-          unit: mat.unit,
-          totalQuantity,
-          unitPriceAed,
-          totalPriceAed,
-          isHeadDeflection: true,
-        };
-      });
-    }
-  }
-
-  const deflectionTotalAed = Number(
-    deflectionItems.reduce((acc, it) => acc + it.totalPriceAed, 0).toFixed(2)
-  );
-  const deflectionRatePerM2 = Number((deflectionTotalAed / safeScale).toFixed(2));
-
-  const grandTotalAed = Number((baseTotalAed + deflectionTotalAed).toFixed(2));
-  const grandRatePerM2 = Number((grandTotalAed / safeScale).toFixed(2));
-
-  return {
-    scaleM2: safeScale,
-    baseItems,
-    deflectionItems,
-    baseTotalAed,
-    baseRatePerM2,
-    deflectionTotalAed,
-    deflectionRatePerM2,
-    grandTotalAed,
-    grandRatePerM2,
   };
+  const baseItems = calculateItems('base');
+  const deflectionItems = includeDeflection && system.supportsDeflection ? calculateItems('deflection') : [];
+  const baseTotalAed = baseItems.reduce((sum, item) => sum + item.totalPriceAed, 0);
+  const deflectionTotalAed = deflectionItems.reduce((sum, item) => sum + item.totalPriceAed, 0);
+  const grandTotalAed = baseTotalAed + deflectionTotalAed;
+  return { technicalParameters, includeDeflection, scaleM2, baseItems, deflectionItems, baseTotalAed, baseRatePerM2: baseTotalAed / scaleM2, deflectionTotalAed, deflectionRatePerM2: deflectionTotalAed / scaleM2, grandTotalAed, grandRatePerM2: grandTotalAed / scaleM2 };
 }
 
+export function emptyCalculation(): CalculationResult {
+  return { scaleM2: 0, baseItems: [], deflectionItems: [], baseTotalAed: 0, baseRatePerM2: 0, deflectionTotalAed: 0, deflectionRatePerM2: 0, grandTotalAed: 0, grandRatePerM2: 0 };
+}

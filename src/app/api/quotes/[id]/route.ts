@@ -1,171 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import prisma from '@/lib/db';
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const quote = await prisma.quotation.findUnique({
-      where: { id },
-      include: {
-        system: {
-          include: {
-            materials: true,
-          },
-        },
-        items: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
-    });
-
-    if (!quote) {
-      return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(quote);
-  } catch (error: any) {
-    console.error('Failed to get quote:', error);
-    return NextResponse.json({ error: 'Failed to retrieve quotation' }, { status: 500 });
-  }
+import { getCurrentUser } from '@/lib/auth/session';
+import { canEditQuoteMeta, canEditQuoteItems, canDeleteQuote } from '@/lib/auth/permissions';
+import { calculateQuotation } from '@/lib/engine/calculator';
+import { getQuotationPrices } from '@/lib/engine/prices';
+import { itemSchema, parametersSchema, requirePricedForIssue, statuses } from '@/lib/engine/validation';
+import systems from '@/data/knauf-systems.json';
+import type { KnaufSystemDefinition } from '@/lib/engine/types';
+type Context={params:Promise<{id:string}>};
+const schema=z.object({scaleM2:z.number().finite().positive().optional(),includeDeflection:z.boolean().optional(),status:z.enum(statuses).optional(),technicalParameters:parametersSchema.optional(),rebuildFromReference:z.boolean().optional(),calculation:z.object({baseItems:z.array(itemSchema).max(300),deflectionItems:z.array(itemSchema).max(100)}).optional()});
+export async function GET(_req:NextRequest,{params}:Context){
+ try{const {id}=await params;const quote=await prisma.quotation.findUnique({where:{id},include:{system:true,items:{orderBy:{sortOrder:'asc'}}}});return quote?NextResponse.json(quote):NextResponse.json({error:'Quotation not found.'},{status:404});}catch{return NextResponse.json({error:'Could not load quotation.'},{status:503});}
 }
-
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const { getCurrentUser } = await import('@/lib/auth/session');
-    const { canEditQuoteItems, canEditQuoteMeta } = await import('@/lib/auth/permissions');
-    const user = await getCurrentUser();
-
-    if (user && !canEditQuoteMeta(user.role)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Read-only viewers cannot update quotations.' },
-        { status: 403 }
-      );
-    }
-
-    const body = await req.json();
-    const {
-      quoteNumber,
-      projectName,
-      clientName,
-      salesman,
-      scaleM2,
-      includeDeflection,
-      calculation,
-      status,
-      termsAndConditions,
-    } = body;
-
-    // Check if non-estimator/admin tries to edit items
-    if (calculation?.baseItems && user && !canEditQuoteItems(user.role)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Only Estimators and Administrators can modify calculated material items.' },
-        { status: 403 }
-      );
-    }
-
-    const existing = await prisma.quotation.findUnique({ where: { id } });
-    if (!existing) {
-      return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
-    }
-
-    // Delete existing items and recreate if new calculation passed
-    if (calculation?.baseItems) {
-      await prisma.quotationItem.deleteMany({
-        where: { quotationId: id },
-      });
-
-      const allItems = [
-        ...(calculation.baseItems || []),
-        ...(calculation.deflectionItems || []),
-      ];
-
-      await prisma.quotationItem.createMany({
-        data: allItems.map((it: any, idx: number) => ({
-          quotationId: id,
-          productName: it.productName,
-          factorPerM2: Number(it.factorPerM2),
-          unit: it.unit,
-          totalQuantity: Number(it.totalQuantity),
-          unitPriceAed: Number(it.unitPriceAed),
-          totalPriceAed: Number(it.totalPriceAed),
-          isHeadDeflection: Boolean(it.isHeadDeflection),
-          sortOrder: idx,
-        })),
-      });
-    }
-
-    const updated = await prisma.quotation.update({
-      where: { id },
-      data: {
-        quoteNumber: quoteNumber ?? existing.quoteNumber,
-        projectName: projectName ?? existing.projectName,
-        clientName: clientName ?? existing.clientName,
-        salesman: salesman ?? existing.salesman,
-        scaleM2: scaleM2 !== undefined ? Number(scaleM2) : existing.scaleM2,
-        includeDeflection:
-          includeDeflection !== undefined ? Boolean(includeDeflection) : existing.includeDeflection,
-        baseTotalAed: calculation?.baseTotalAed ?? existing.baseTotalAed,
-        baseRatePerM2: calculation?.baseRatePerM2 ?? existing.baseRatePerM2,
-        deflectionTotalAed:
-          calculation?.deflectionTotalAed !== undefined
-            ? Number(calculation.deflectionTotalAed)
-            : existing.deflectionTotalAed,
-        deflectionRatePerM2:
-          calculation?.deflectionRatePerM2 !== undefined
-            ? Number(calculation.deflectionRatePerM2)
-            : existing.deflectionRatePerM2,
-        grandTotalAed: calculation?.grandTotalAed ?? existing.grandTotalAed,
-        grandRatePerM2: calculation?.grandRatePerM2 ?? existing.grandRatePerM2,
-        status: status ?? existing.status,
-        termsAndConditions: termsAndConditions
-          ? JSON.stringify(termsAndConditions)
-          : existing.termsAndConditions,
-      },
-      include: {
-        system: true,
-        items: { orderBy: { sortOrder: 'asc' } },
-      },
-    });
-
-    return NextResponse.json(updated);
-  } catch (error: any) {
-    console.error('Failed to update quote:', error);
-    return NextResponse.json({ error: error.message || 'Failed to update quotation' }, { status: 500 });
-  }
+export async function PUT(req:NextRequest,{params}:Context){
+ try{
+  const user=await getCurrentUser();if(!user||!canEditQuoteMeta(user.role))return NextResponse.json({error:'You cannot edit this quotation.'},{status:403});
+  const body=schema.parse(await req.json());const itemEdit=body.calculation||body.scaleM2!==undefined||body.includeDeflection!==undefined||body.technicalParameters||body.rebuildFromReference;
+  if(itemEdit&&!canEditQuoteItems(user.role))return NextResponse.json({error:'Only administrators and estimators can edit quantities and rates.'},{status:403});
+  const {id}=await params;const existing=await prisma.quotation.findUnique({where:{id},include:{system:true,items:true}});if(!existing)return NextResponse.json({error:'Quotation not found.'},{status:404});
+  const system=(systems as KnaufSystemDefinition[]).find(system=>system.code===existing.system.code);if(!system)throw new Error('Unknown system.');
+  const scale=body.scaleM2??existing.scaleM2;const include=body.includeDeflection??existing.includeDeflection;const parameters=body.technicalParameters??JSON.parse(existing.technicalParameters);
+  const snapshot=body.calculation??{baseItems:existing.items.filter(item=>!item.isHeadDeflection),deflectionItems:existing.items.filter(item=>item.isHeadDeflection)};
+  const base=snapshot.baseItems.map(item=>({...item,totalQuantity:0,totalPriceAed:0,isHeadDeflection:false,factorOverridden:existing.calculationVersion==='legacy'&&!body.rebuildFromReference?true:item.factorOverridden??false}));
+  const head=snapshot.deflectionItems.map(item=>({...item,totalQuantity:0,totalPriceAed:0,isHeadDeflection:true,factorOverridden:existing.calculationVersion==='legacy'&&!body.rebuildFromReference?true:item.factorOverridden??false}));
+  const prices=await getQuotationPrices(); for (const item of existing.items) prices[item.productName]=item.unitPriceAed;
+  const calc=calculateQuotation(system,scale,prices,include,body.rebuildFromReference?undefined:{base,deflection:head},parameters);
+  const items=[...calc.baseItems,...calc.deflectionItems];requirePricedForIssue(body.status??existing.status,items);
+  const updated=await prisma.$transaction(async tx=>{
+   if(itemEdit)await tx.quotationItem.deleteMany({where:{quotationId:id}});
+   return tx.quotation.update({where:{id},data:{status:body.status??existing.status,...(itemEdit?{scaleM2:scale,includeDeflection:include,technicalParameters:JSON.stringify(parameters),calculationVersion:body.rebuildFromReference?'workbook-v1':existing.calculationVersion,baseTotalAed:calc.baseTotalAed,baseRatePerM2:calc.baseRatePerM2,deflectionTotalAed:calc.deflectionTotalAed,deflectionRatePerM2:calc.deflectionRatePerM2,grandTotalAed:calc.grandTotalAed,grandRatePerM2:calc.grandRatePerM2,items:{create:items.map((item,sortOrder)=>({productName:item.productName,factorPerM2:item.factorPerM2,factorOverridden:Boolean(item.factorOverridden),unit:item.unit,totalQuantity:item.totalQuantity,unitPriceAed:item.unitPriceAed,totalPriceAed:item.totalPriceAed,isHeadDeflection:item.isHeadDeflection,sortOrder}))}}:{})},include:{system:true,items:{orderBy:{sortOrder:'asc'}}}});
+  });return NextResponse.json(updated);
+ }catch(error){return NextResponse.json({error:error instanceof z.ZodError?'Check area, technical dimensions and rates.':error instanceof Error&&error.message.includes('rate for every')?error.message:'Could not update quotation. No changes were saved.'},{status:400});}
 }
-
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { getCurrentUser } = await import('@/lib/auth/session');
-    const { canDeleteQuote } = await import('@/lib/auth/permissions');
-    const user = await getCurrentUser();
-
-    if (user && !canDeleteQuote(user.role)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Only Administrator can delete commercial quotations.' },
-        { status: 403 }
-      );
-    }
-
-    const { id } = await params;
-    await prisma.quotation.delete({
-      where: { id },
-    });
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error('Failed to delete quote:', error);
-    return NextResponse.json({ error: 'Failed to delete quotation' }, { status: 500 });
-  }
+export async function DELETE(_req:NextRequest,{params}:Context){
+ const user=await getCurrentUser();if(!user||!canDeleteQuote(user.role))return NextResponse.json({error:'Only administrators can delete quotations.'},{status:403});
+ try{const {id}=await params;await prisma.quotation.delete({where:{id}});return NextResponse.json({success:true});}catch{return NextResponse.json({error:'Could not delete quotation.'},{status:400});}
 }
-
-

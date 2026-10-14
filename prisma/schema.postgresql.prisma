@@ -1,33 +1,17 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL") // Recommended for Supabase/Neon connection pooling
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-enum SystemCategory {
-  CEILING
-  PARTITION
-  SHAFT_WALL
-  WALL_LINING
-}
-
-enum QuoteStatus {
-  DRAFT
-  ISSUED
-  APPROVED
-  REVISED
-  CANCELLED
-}
-
 model KnaufSystem {
   id                  String           @id @default(cuid())
-  code                String           @unique // e.g. "KW111", "D127", "KC_A001"
-  name                String           // e.g. "KNAUF SYSTEM KW 111"
-  category            SystemCategory
+  code                String           @unique
+  name                String
+  category            String           // "CEILING", "PARTITION", "SHAFT_WALL", "WALL_LINING"
   description         String?
   supportsDeflection  Boolean          @default(false)
   materials           SystemMaterial[]
@@ -40,7 +24,7 @@ model SystemMaterial {
   systemId         String
   system           KnaufSystem  @relation(fields: [systemId], references: [id], onDelete: Cascade)
   productName      String
-  factorPerM2      Decimal      @db.Decimal(10, 4)
+  factorPerM2      Float
   unit             String       // "m²", "m", "pcs", "kg"
   isHeadDeflection Boolean      @default(false)
   sortOrder        Int          @default(0)
@@ -52,7 +36,7 @@ model MasterProductPrice {
   id               String       @id @default(cuid())
   productName      String       @unique
   unit             String
-  defaultPriceAed  Decimal      @db.Decimal(10, 3)
+  defaultPriceAed  Float
   updatedAt        DateTime     @updatedAt
 }
 
@@ -62,24 +46,41 @@ model Quotation {
   projectName         String
   clientName          String
   salesman            String          @default("Ram")
-  scaleM2             Decimal         @db.Decimal(12, 2)
+  scaleM2             Float
   systemId            String
   system              KnaufSystem     @relation(fields: [systemId], references: [id])
   includeDeflection   Boolean         @default(false)
+  technicalParameters String          @default("{}")
+  calculationVersion  String          @default("legacy")
   
   // Computed financial snapshots
-  baseTotalAed        Decimal         @db.Decimal(12, 2)
-  baseRatePerM2       Decimal         @db.Decimal(10, 2)
-  deflectionTotalAed  Decimal?        @db.Decimal(12, 2)
-  deflectionRatePerM2 Decimal?        @db.Decimal(10, 2)
-  grandTotalAed       Decimal         @db.Decimal(12, 2)
-  grandRatePerM2      Decimal         @db.Decimal(10, 2)
+  baseTotalAed        Float
+  baseRatePerM2       Float
+  deflectionTotalAed  Float?
+  deflectionRatePerM2 Float?
+  grandTotalAed       Float
+  grandRatePerM2      Float
   
-  status              QuoteStatus     @default(DRAFT)
+  status              String          @default("DRAFT") // DRAFT, ISSUED, APPROVED, REVISED, CANCELLED
   items               QuotationItem[]
-  termsAndConditions  String[]
+  termsAndConditions  String          @default("[]") // JSON stringified array of terms
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
+
+  userId              String?
+  user                User?           @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String
+  passwordHash  String
+  role          String       @default("ESTIMATOR") // "ADMIN", "ESTIMATOR", "SALES", "VIEWER"
+  avatarUrl     String?
+  quotations    Quotation[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 model QuotationItem {
@@ -87,14 +88,14 @@ model QuotationItem {
   quotationId      String
   quotation        Quotation    @relation(fields: [quotationId], references: [id], onDelete: Cascade)
   productName      String
-  factorPerM2      Decimal      @db.Decimal(10, 4)
+  factorPerM2      Float
+  factorOverridden Boolean      @default(false)
   unit             String
-  totalQuantity    Decimal      @db.Decimal(12, 3)
-  unitPriceAed     Decimal      @db.Decimal(10, 3)
-  totalPriceAed    Decimal      @db.Decimal(12, 2)
+  totalQuantity    Float
+  unitPriceAed     Float
+  totalPriceAed    Float
   isHeadDeflection Boolean      @default(false)
   sortOrder        Int          @default(0)
 
   @@index([quotationId])
 }
-

@@ -20,6 +20,7 @@ export interface KnaufSystemDefinition {
 }
 
 export interface CalculatedItem {
+  factorOverridden?: boolean;
   id?: string;
   productName: string;
   factorPerM2: number;
@@ -31,6 +32,8 @@ export interface CalculatedItem {
 }
 
 export interface CalculationResult {
+  technicalParameters?: Record<string, number>;
+  includeDeflection?: boolean;
   scaleM2: number;
   baseItems: CalculatedItem[];
   deflectionItems: CalculatedItem[];

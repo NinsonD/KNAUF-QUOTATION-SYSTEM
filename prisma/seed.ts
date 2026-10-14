@@ -11,28 +11,28 @@ async function main() {
   console.log('--- Seeding Al Namariq Users & Roles ---');
   const defaultUsers = [
     {
-      email: 'admin@alnamariq.ae',
+      email: 'admin@namariqgroup.ae',
       name: 'Corporate Admin',
       role: 'ADMIN',
       password: 'Admin@1234',
       avatarUrl: '/avatars/admin.png',
     },
     {
-      email: 'estimator@alnamariq.ae',
+      email: 'estimator@namariqgroup.ae',
       name: 'Lora Piterson (Senior Estimator)',
       role: 'ESTIMATOR',
       password: 'Estimator@1234',
       avatarUrl: '/avatars/estimator.png',
     },
     {
-      email: 'sales@alnamariq.ae',
+      email: 'sales@namariqgroup.ae',
       name: 'Ram (Commercial Sales)',
       role: 'SALES',
       password: 'Sales@1234',
       avatarUrl: '/avatars/sales.png',
     },
     {
-      email: 'viewer@alnamariq.ae',
+      email: 'viewer@namariqgroup.ae',
       name: 'Audit Viewer',
       role: 'VIEWER',
       password: 'Viewer@1234',

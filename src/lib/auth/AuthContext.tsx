@@ -18,7 +18,6 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  quickSwitchRole: (role: UserRole) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -28,13 +27,12 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   login: async () => ({ success: false }),
   logout: async () => {},
-  quickSwitchRole: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [roleMeta, setRoleMeta] = useState<any | null>(null);
-  const [permissions, setPermissions] = useState<any | null>(null);
+  const [roleMeta, setRoleMeta] = useState<AuthContextType['roleMeta']>(null);
+  const [permissions, setPermissions] = useState<AuthContextType['permissions']>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchSession = async () => {
@@ -54,7 +52,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    fetchSession();
+    void fetch('/api/auth/me').then(async res => {
+      if (res.ok) { const data = await res.json(); setUser(data.user); setRoleMeta(data.roleMeta); setPermissions(data.permissions); }
+    }).catch(() => {}).finally(() => setIsLoading(false));
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -70,8 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       await fetchSession();
       return { success: true };
-    } catch (e: any) {
-      return { success: false, error: e.message || 'Network error' };
+    } catch (e: unknown) {
+      return { success: false, error: e instanceof Error ? e.message : 'Network error' };
     }
   };
 
@@ -87,19 +87,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const quickSwitchRole = async (role: UserRole) => {
-    const roleCredentials: Record<UserRole, { email: string; pass: string }> = {
-      ADMIN: { email: 'admin@alnamariq.ae', pass: 'Admin@1234' },
-      ESTIMATOR: { email: 'estimator@alnamariq.ae', pass: 'Estimator@1234' },
-      SALES: { email: 'sales@alnamariq.ae', pass: 'Sales@1234' },
-      VIEWER: { email: 'viewer@alnamariq.ae', pass: 'Viewer@1234' },
-    };
-
-    const cred = roleCredentials[role];
-    if (cred) {
-      await login(cred.email, cred.pass);
-    }
-  };
 
   return (
     <AuthContext.Provider
@@ -110,7 +97,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
-        quickSwitchRole,
       }}
     >
       {children}

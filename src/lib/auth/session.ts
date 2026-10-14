@@ -4,7 +4,11 @@ import { NextResponse } from 'next/server';
 import { AuthUser, UserRole } from './permissions';
 
 const SESSION_COOKIE = 'alnamariq_session';
-const SESSION_SECRET = process.env.AUTH_SECRET || 'alnamariq-knauf-secret-auth-key-2026';
+function sessionSecret(): string {
+  if (process.env.AUTH_SECRET) return process.env.AUTH_SECRET;
+  if (process.env.NODE_ENV === 'production') throw new Error('AUTH_SECRET is required in production.');
+  return 'local-development-session-secret';
+}
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days in seconds
 
 export interface SessionPayload {
@@ -32,7 +36,7 @@ export function signSession(user: AuthUser): string {
 
   const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const signature = crypto
-    .createHmac('sha256', SESSION_SECRET)
+    .createHmac('sha256', sessionSecret())
     .update(payloadBase64)
     .digest('base64url');
 
@@ -48,7 +52,7 @@ export function verifySessionToken(token: string): SessionPayload | null {
     if (!payloadBase64 || !signature) return null;
 
     const expectedSignature = crypto
-      .createHmac('sha256', SESSION_SECRET)
+      .createHmac('sha256', sessionSecret())
       .update(payloadBase64)
       .digest('base64url');
 

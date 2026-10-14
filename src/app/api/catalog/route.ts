@@ -1,52 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import prisma from '@/lib/db';
 import knaufSystemsData from '@/data/knauf-systems.json';
-import defaultPricesData from '@/data/default-prices.json';
+import { getQuotationPrices } from '@/lib/engine/prices';
 
 export async function GET() {
-  try {
-    let systems = await prisma.knaufSystem.findMany({
-      include: {
-        materials: {
-          orderBy: { sortOrder: 'asc' },
-        },
-      },
-      orderBy: { code: 'asc' },
-    });
-
-    if (!systems || systems.length === 0) {
-      systems = knaufSystemsData as any;
-    }
-
-    let prices = await prisma.masterProductPrice.findMany({
-      orderBy: { productName: 'asc' },
-    });
-
-    // Format prices as key-value map as well as list
-    const pricesMap: Record<string, number> = {};
-    if (prices && prices.length > 0) {
-      for (const p of prices) {
-        pricesMap[p.productName] = p.defaultPriceAed;
-      }
-    } else {
-      Object.assign(pricesMap, defaultPricesData);
-    }
-
-    return NextResponse.json({
-      systems,
-      prices: pricesMap,
-      rawPrices: prices,
-    });
-  } catch (error: any) {
-    console.error('Failed to get catalog:', error);
-    return NextResponse.json({
-      systems: knaufSystemsData,
-      prices: defaultPricesData,
-      error: error.message,
-    });
-  }
+ try { return NextResponse.json({systems:knaufSystemsData,prices:await getQuotationPrices()}); }
+ catch { return NextResponse.json({error:'The database is unavailable. Please try again.'},{status:503}); }
 }
-
 export async function POST(req: NextRequest) {
   try {
     const { getCurrentUser } = await import('@/lib/auth/session');
@@ -60,7 +21,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json();
+    const body = z.object({productName:z.string().trim().min(1).max(500),unit:z.string().trim().min(1).max(30).optional(),priceAed:z.coerce.number().finite().nonnegative()}).parse(await req.json());
     const { productName, unit, priceAed } = body;
 
     if (!productName || priceAed === undefined) {
@@ -70,19 +31,19 @@ export async function POST(req: NextRequest) {
     const updated = await prisma.masterProductPrice.upsert({
       where: { productName },
       update: {
-        defaultPriceAed: parseFloat(priceAed),
+        defaultPriceAed: priceAed,
         ...(unit ? { unit } : {}),
       },
       create: {
         productName,
-        defaultPriceAed: parseFloat(priceAed),
+        defaultPriceAed: priceAed,
         unit: unit || 'pcs',
       },
     });
 
     return NextResponse.json(updated);
-  } catch (error: any) {
-    console.error('Failed to update price:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+
+    return NextResponse.json({ error: error instanceof z.ZodError ? 'Enter a valid material and non-negative rate.' : 'Could not update material price.' }, { status: error instanceof z.ZodError ? 400 : 503 });
   }
 }

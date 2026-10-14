@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/prepare-database.cjs && next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:workbook": "tsx tests/workbook-calculations.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

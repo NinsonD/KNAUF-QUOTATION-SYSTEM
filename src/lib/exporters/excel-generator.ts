@@ -1,4 +1,5 @@
 import ExcelJS from 'exceljs';
+import { addTechnicalCalculations } from './excel-technical';
 import { CalculationResult, QuoteMetaData, KnaufSystemDefinition } from '../engine/types';
 
 export const AL_NAMARIQ_TERMS = [
@@ -6,9 +7,10 @@ export const AL_NAMARIQ_TERMS = [
   '2) Material will be supplied as per bundle/packaging multiple in full trailer load only.',
   '3) Non standard materials leadtime is approx 3-4 weeks upon receipt of confirmed order.',
   '4) Merchandise or imported goods will take 6-8 weeks.',
-  '5) Delivery schedule is a must to plan supply and initiate production.',
-  '6) The technical proposal for this project will be submitted upon confirmation.',
-  '7) Standard sales terms & conditions apply.'
+  '5) Custom made products and sizes may carry a 3% additional charge on standard prices. Confirm the applicable rate when preparing the quotation.',
+  '6) Delivery schedule is a must to plan supply and initiate production.',
+  '7) The technical proposal for this project will be submitted upon confirmation.',
+  '8) Standard sales terms & conditions apply.'
 ];
 
 export async function generateAlNamariqExcel(
@@ -18,7 +20,9 @@ export async function generateAlNamariqExcel(
   logoSource?: Buffer | ArrayBuffer | string
 ): Promise<Buffer> {
   const wb = new ExcelJS.Workbook();
-  const ws = wb.addWorksheet(meta.quoteNumber || 'Quotation');
+  const safeSheetName = (meta.quoteNumber || 'Quotation').replace(/[\\/*?:\[\]]/g, '_').replace(/^'+|'+$/g, '').slice(0,31) || 'Quotation';
+  const ws = wb.addWorksheet(safeSheetName);
+  const factorFormulas = addTechnicalCalculations(wb, ws, system, calc);
 
   // Page Setup
   ws.views = [{ showGridLines: true }];
@@ -128,7 +132,7 @@ export async function generateAlNamariqExcel(
   // Render Base Items
   calc.baseItems.forEach((item) => {
     ws.getCell(`A${currentRow}`).value = item.productName;
-    ws.getCell(`F${currentRow}`).value = item.factorPerM2;
+    ws.getCell(`F${currentRow}`).value = !item.factorOverridden && factorFormulas[item.productName] ? { formula: factorFormulas[item.productName], result: item.factorPerM2 } : item.factorPerM2;
     ws.getCell(`G${currentRow}`).value = item.unit;
     ws.getCell(`H${currentRow}`).value = { formula: `H10*F${currentRow}`, result: item.totalQuantity };
     ws.getCell(`I${currentRow}`).value = item.unitPriceAed;
@@ -148,7 +152,7 @@ export async function generateAlNamariqExcel(
   ws.getCell(`I${baseTotalRow}`).value = 'TOTAL (AED)';
   ws.getCell(`I${baseTotalRow}`).font = { bold: true };
   ws.getCell(`I${baseTotalRow}`).font = { bold: true, color: { argb: 'FF00488E' } };
-  ws.getCell(`J${baseTotalRow}`).value = { formula: `SUM(J${startRowBase}:J${endRowBase})`, result: calc.baseTotalAed };
+  ws.getCell(`J${baseTotalRow}`).value = { formula: calc.baseItems.length ? `SUM(J${startRowBase}:J${endRowBase})` : '0', result: calc.baseTotalAed };
   ws.getCell(`J${baseTotalRow}`).font = { bold: true };
   ws.getCell(`J${baseTotalRow}`).font = { bold: true, color: { argb: 'FF00488E' } };
   ws.getCell(`J${baseTotalRow}`).numFmt = '#,##0.00';
@@ -173,7 +177,7 @@ export async function generateAlNamariqExcel(
 
     calc.deflectionItems.forEach((item) => {
       ws.getCell(`A${currentRow}`).value = item.productName;
-      ws.getCell(`F${currentRow}`).value = item.factorPerM2;
+      ws.getCell(`F${currentRow}`).value = !item.factorOverridden && factorFormulas[item.productName] ? { formula: factorFormulas[item.productName], result: item.factorPerM2 } : item.factorPerM2;
       ws.getCell(`G${currentRow}`).value = item.unit;
       ws.getCell(`H${currentRow}`).value = { formula: `H10*F${currentRow}`, result: item.totalQuantity };
       ws.getCell(`I${currentRow}`).value = item.unitPriceAed;
@@ -216,6 +220,13 @@ export async function generateAlNamariqExcel(
     ws.getCell(`J${grandRateRow}`).font = { bold: true };
     ws.getCell(`J${grandRateRow}`).font = { bold: true, color: { argb: 'FFF86C29' } };
     ws.getCell(`J${grandRateRow}`).numFmt = '#,##0.00';
+  }
+
+  if (calc.deflectionItems.length === 0) {
+    currentRow += 2;
+    ws.getCell(`I${currentRow}`).value = 'GRAND TOTAL (AED)';
+    ws.getCell(`J${currentRow}`).value = { formula: `J${baseTotalRow}`, result: calc.grandTotalAed };
+    ws.getCell(`J${currentRow}`).numFmt = '#,##0.00';
   }
 
   // Terms & Conditions
