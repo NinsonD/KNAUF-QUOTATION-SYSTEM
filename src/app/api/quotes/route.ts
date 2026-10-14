@@ -1,12 +1,13 @@
+import { requireApiUser } from '@/lib/auth/security';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import prisma from '@/lib/db';
-import { getCurrentUser } from '@/lib/auth/session';
 import { canCreateQuote, canEditQuoteItems } from '@/lib/auth/permissions';
 import { AL_NAMARIQ_TERMS } from '@/lib/exporters/excel-generator';
 import { calculationInput, buildCalculation, itemSchema, requirePricedForIssue, statuses } from '@/lib/engine/validation';
 import { getQuotationPrices } from '@/lib/engine/prices';
 export async function GET(req: NextRequest) {
+ const access = await requireApiUser(req); if (access instanceof NextResponse) return access;
  try {
   const {searchParams}=new URL(req.url);const search=searchParams.get('search')||'';const status=searchParams.get('status');
   const quotes=await prisma.quotation.findMany({where:{AND:[search?{OR:[{quoteNumber:{contains:search}},{projectName:{contains:search}},{clientName:{contains:search}},{salesman:{contains:search}}]}:{},status?{status}:{}]},include:{system:true,items:{orderBy:{sortOrder:'asc'}}},orderBy:{createdAt:'desc'}});
@@ -15,8 +16,9 @@ export async function GET(req: NextRequest) {
 }
 const requestSchema=calculationInput.extend({quoteNumber:z.string().trim().min(1).max(100),projectName:z.string().trim().min(1).max(300),clientName:z.string().trim().min(1).max(300),salesman:z.string().trim().max(150).optional(),status:z.enum(statuses).default('DRAFT'),termsAndConditions:z.array(z.string()).max(30).optional(),calculation:z.object({baseItems:z.array(itemSchema).max(300),deflectionItems:z.array(itemSchema).max(100)}).optional()});
 export async function POST(req: NextRequest) {
+ const access = await requireApiUser(req); if (access instanceof NextResponse) return access;
  try {
-  const user=await getCurrentUser();if(!user||!canCreateQuote(user.role))return NextResponse.json({error:'Log in with an account allowed to create quotations.'},{status:403});
+  const user=access;if(!user||!canCreateQuote(user.role))return NextResponse.json({error:'Log in with an account allowed to create quotations.'},{status:403});
   const body=requestSchema.parse(await req.json());
   const {calculation}=buildCalculation({...body,customItems:body.calculation?{base:body.calculation.baseItems,deflection:body.calculation.deflectionItems}:body.customItems},{...await getQuotationPrices(),...Object.fromEntries([...(body.calculation?.baseItems??[]),...(body.calculation?.deflectionItems??[])].map(item=>[item.productName,item.unitPriceAed]))},canEditQuoteItems(user.role));
   const items=[...calculation.baseItems,...calculation.deflectionItems];requirePricedForIssue(body.status,items);

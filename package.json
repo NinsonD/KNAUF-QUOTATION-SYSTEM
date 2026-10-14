@@ -7,7 +7,9 @@
     "build": "node scripts/prepare-database.cjs && next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test:workbook": "tsx tests/workbook-calculations.ts"
+    "test:workbook": "tsx tests/workbook-calculations.ts",
+    "test:auth": "tsx tests/auth-unit-tests.ts",
+    "test:auth:http": "tsx tests/auth-http-tests.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

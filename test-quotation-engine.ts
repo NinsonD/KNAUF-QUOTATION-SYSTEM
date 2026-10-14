@@ -50,7 +50,7 @@ async function runVerification() {
     quoteNumber: 'ANM-TEST-001',
     projectName: 'Dubai Marina Luxury Tower Partitions',
     clientName: 'Al Futtaim Carillion LLC',
-    salesman: 'Ram Prasad',
+    salesman: 'Name',
     date: '11/09/2026',
   };
 

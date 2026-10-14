@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthUser, UserRole, ROLE_CONFIG } from './permissions';
 
@@ -16,7 +17,7 @@ interface AuthContextType {
     canManageUsers: boolean;
   } | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string; mustChangePassword?: boolean }>;
   logout: () => Promise<void>;
 }
 
@@ -30,6 +31,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [roleMeta, setRoleMeta] = useState<AuthContextType['roleMeta']>(null);
   const [permissions, setPermissions] = useState<AuthContextType['permissions']>(null);
@@ -69,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: data.error || 'Login failed' };
       }
       await fetchSession();
-      return { success: true };
+      return { success: true, mustChangePassword: Boolean(data.mustChangePassword) };
     } catch (e: unknown) {
       return { success: false, error: e instanceof Error ? e.message : 'Network error' };
     }
@@ -77,13 +79,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      const response = await fetch('/api/auth/logout', { method: 'POST' });
+      if (!response.ok) { alert('Could not log out. Please try again.'); return; }
       setUser(null);
       setRoleMeta(null);
       setPermissions(null);
-      window.location.href = '/login';
+      router.replace('/login'); router.refresh();
     } catch (e) {
       console.error('Logout error', e);
+      alert('Could not log out. Please try again.');
     }
   };
 

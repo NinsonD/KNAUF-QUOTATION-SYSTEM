@@ -6,6 +6,7 @@ export interface AuthUser {
   name: string;
   role: UserRole;
   avatarUrl?: string | null;
+  mustChangePassword?: boolean;
 }
 
 export const ROLE_CONFIG: Record<

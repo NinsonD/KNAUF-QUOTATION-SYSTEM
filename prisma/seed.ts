@@ -8,6 +8,7 @@ import { hashPassword } from '../src/lib/auth/password';
 const prisma = new PrismaClient();
 
 async function main() {
+  if (!process.env.DATABASE_URL?.startsWith('file:')) throw new Error('Demo seed is restricted to local SQLite. Use initialize-catalog for production.');
   console.log('--- Seeding Al Namariq Users & Roles ---');
   const defaultUsers = [
     {
@@ -46,11 +47,8 @@ async function main() {
     const passwordHash = hashPassword(u.password);
     const user = await prisma.user.upsert({
       where: { email: u.email },
-      update: {
-        name: u.name,
-        role: u.role,
-        passwordHash,
-      },
+      // Seeding must not restore default passwords or change existing access.
+      update: {},
       create: {
         email: u.email,
         name: u.name,
@@ -165,7 +163,7 @@ async function main() {
           quoteNumber: 'ANM-2026-001',
           projectName: 'BUTEC - Dubai Hills Estate Luxury Villas',
           clientName: 'BUTEC Engineering Contracting LLC',
-          salesman: 'Ram Prasad',
+          salesman: 'Name',
           scaleM2: scale,
           systemId: kw111Db.id,
           includeDeflection: true,

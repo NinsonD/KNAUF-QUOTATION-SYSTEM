@@ -112,7 +112,7 @@ export default function ProjectMetaForm({
             type="text"
             value={meta.salesman}
             onChange={(e) => onChangeMeta({ salesman: e.target.value })}
-            placeholder="e.g. Ram Prasad / Vishnu"
+            placeholder="e.g. Name / Vishnu"
             className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00488e] focus:border-transparent bg-slate-50/50 font-medium"
           />
         </div>
