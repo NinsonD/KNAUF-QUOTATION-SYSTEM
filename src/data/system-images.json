@@ -1,0 +1,437 @@
+{
+  "KC_B001": {
+    "base": {
+      "sheet": "KCB001",
+      "images": [
+        {
+          "src": "/systems/drawing-19.webp",
+          "width": 500,
+          "height": 307,
+          "label": "Ceiling overview"
+        },
+        {
+          "src": "/systems/drawing-15.webp",
+          "width": 492,
+          "height": 1293,
+          "label": "Perimeter angle"
+        },
+        {
+          "src": "/systems/drawing-16.webp",
+          "width": 684,
+          "height": 1380,
+          "label": "Primary channel"
+        },
+        {
+          "src": "/systems/drawing-17.webp",
+          "width": 1164,
+          "height": 1389,
+          "label": "Furring channel"
+        },
+        {
+          "src": "/systems/drawing-18.webp",
+          "width": 1344,
+          "height": 1029,
+          "label": "Ceiling edge detail"
+        }
+      ]
+    }
+  },
+  "KC_A001": {
+    "base": {
+      "sheet": "KCA001",
+      "images": [
+        {
+          "src": "/systems/drawing-20.webp",
+          "width": 1768,
+          "height": 882,
+          "label": "Ceiling overview"
+        },
+        {
+          "src": "/systems/drawing-15.webp",
+          "width": 492,
+          "height": 1293,
+          "label": "Perimeter angle"
+        },
+        {
+          "src": "/systems/drawing-16.webp",
+          "width": 684,
+          "height": 1380,
+          "label": "Primary channel"
+        },
+        {
+          "src": "/systems/drawing-17.webp",
+          "width": 1164,
+          "height": 1389,
+          "label": "Furring channel"
+        },
+        {
+          "src": "/systems/drawing-18.webp",
+          "width": 1344,
+          "height": 1029,
+          "label": "Ceiling edge detail"
+        }
+      ]
+    }
+  },
+  "KC_A001_FR": {
+    "base": {
+      "sheet": "KCA001- FR",
+      "images": [
+        {
+          "src": "/systems/drawing-20.webp",
+          "width": 1768,
+          "height": 882,
+          "label": "Ceiling overview"
+        },
+        {
+          "src": "/systems/drawing-15.webp",
+          "width": 492,
+          "height": 1293,
+          "label": "Perimeter angle"
+        },
+        {
+          "src": "/systems/drawing-16.webp",
+          "width": 684,
+          "height": 1380,
+          "label": "Primary channel"
+        },
+        {
+          "src": "/systems/drawing-17.webp",
+          "width": 1164,
+          "height": 1389,
+          "label": "Furring channel"
+        },
+        {
+          "src": "/systems/drawing-18.webp",
+          "width": 1344,
+          "height": 1029,
+          "label": "Ceiling edge detail"
+        }
+      ]
+    }
+  },
+  "D127": {
+    "base": {
+      "sheet": "KCD127",
+      "images": [
+        {
+          "src": "/systems/drawing-21.webp",
+          "width": 1416,
+          "height": 747,
+          "label": "Ceiling overview"
+        },
+        {
+          "src": "/systems/drawing-22.webp",
+          "width": 179,
+          "height": 148,
+          "label": "Suspension detail"
+        }
+      ]
+    }
+  },
+  "KW111": {
+    "base": {
+      "sheet": "KW( )111",
+      "images": [
+        {
+          "src": "/systems/drawing-25.webp",
+          "width": 276,
+          "height": 283,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-23.webp",
+          "width": 274,
+          "height": 263,
+          "label": "Head detail"
+        },
+        {
+          "src": "/systems/drawing-24.webp",
+          "width": 264,
+          "height": 250,
+          "label": "Base detail"
+        }
+      ]
+    },
+    "head": {
+      "sheet": "KW( )111+HW",
+      "images": [
+        {
+          "src": "/systems/drawing-25.webp",
+          "width": 276,
+          "height": 283,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-24.webp",
+          "width": 264,
+          "height": 250,
+          "label": "Base detail"
+        },
+        {
+          "src": "/systems/drawing-36.webp",
+          "width": 186,
+          "height": 180,
+          "label": "Head deflection detail"
+        }
+      ]
+    }
+  },
+  "KW112": {
+    "base": {
+      "sheet": "KW( )112",
+      "images": [
+        {
+          "src": "/systems/drawing-28.webp",
+          "width": 266,
+          "height": 275,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-26.webp",
+          "width": 270,
+          "height": 266,
+          "label": "Head detail"
+        },
+        {
+          "src": "/systems/drawing-27.webp",
+          "width": 266,
+          "height": 270,
+          "label": "Base detail"
+        }
+      ]
+    },
+    "head": {
+      "sheet": "KW( )112+HW",
+      "images": [
+        {
+          "src": "/systems/drawing-28.webp",
+          "width": 266,
+          "height": 275,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-27.webp",
+          "width": 266,
+          "height": 270,
+          "label": "Base detail"
+        },
+        {
+          "src": "/systems/drawing-37.webp",
+          "width": 278,
+          "height": 280,
+          "label": "Head deflection detail"
+        }
+      ]
+    }
+  },
+  "KW115": {
+    "base": {
+      "sheet": "KW( )115",
+      "images": [
+        {
+          "src": "/systems/drawing-31.webp",
+          "width": 274,
+          "height": 276,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-29.webp",
+          "width": 1411,
+          "height": 1412,
+          "label": "Head detail"
+        },
+        {
+          "src": "/systems/drawing-30.webp",
+          "width": 358,
+          "height": 329,
+          "label": "Base detail"
+        }
+      ]
+    },
+    "head": {
+      "sheet": "KW( )115+HW",
+      "images": [
+        {
+          "src": "/systems/drawing-31.webp",
+          "width": 274,
+          "height": 276,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-30.webp",
+          "width": 358,
+          "height": 329,
+          "label": "Base detail"
+        },
+        {
+          "src": "/systems/drawing-38.webp",
+          "width": 186,
+          "height": 181,
+          "label": "Head deflection detail"
+        }
+      ]
+    }
+  },
+  "KW116": {
+    "base": {
+      "sheet": "KW( )116",
+      "images": [
+        {
+          "src": "/systems/drawing-34.webp",
+          "width": 271,
+          "height": 268,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-32.webp",
+          "width": 266,
+          "height": 262,
+          "label": "Head and bracing detail"
+        },
+        {
+          "src": "/systems/drawing-33.webp",
+          "width": 279,
+          "height": 261,
+          "label": "Base and bracing detail"
+        }
+      ]
+    },
+    "head": {
+      "sheet": "KW( )116+HW",
+      "images": [
+        {
+          "src": "/systems/drawing-34.webp",
+          "width": 271,
+          "height": 268,
+          "label": "Partition overview"
+        },
+        {
+          "src": "/systems/drawing-32.webp",
+          "width": 266,
+          "height": 262,
+          "label": "Head and bracing detail"
+        },
+        {
+          "src": "/systems/drawing-33.webp",
+          "width": 279,
+          "height": 261,
+          "label": "Base and bracing detail"
+        }
+      ]
+    }
+  },
+  "KSW120": {
+    "base": {
+      "sheet": "KS( )120",
+      "images": [
+        {
+          "src": "/systems/drawing-35.webp",
+          "width": 330,
+          "height": 339,
+          "label": "Shaft wall overview"
+        }
+      ]
+    },
+    "head": {
+      "sheet": "KS( )120+HW",
+      "images": [
+        {
+          "src": "/systems/drawing-35.webp",
+          "width": 330,
+          "height": 339,
+          "label": "Shaft wall overview"
+        },
+        {
+          "src": "/systems/drawing-39.webp",
+          "width": 193,
+          "height": 187,
+          "label": "Head deflection detail"
+        }
+      ]
+    }
+  },
+  "KW625": {
+    "base": {
+      "sheet": "KW( )625",
+      "images": [
+        {
+          "src": "/systems/drawing-06.webp",
+          "width": 430,
+          "height": 430,
+          "label": "System overview"
+        },
+        {
+          "src": "/systems/drawing-07.webp",
+          "width": 325,
+          "height": 276,
+          "label": "Wall section"
+        }
+      ]
+    }
+  },
+  "KWB626": {
+    "base": {
+      "sheet": "KW( )626",
+      "images": [
+        {
+          "src": "/systems/drawing-06.webp",
+          "width": 430,
+          "height": 430,
+          "label": "System overview"
+        },
+        {
+          "src": "/systems/drawing-07.webp",
+          "width": 325,
+          "height": 276,
+          "label": "Wall section"
+        }
+      ]
+    }
+  },
+  "KWA611": {
+    "base": {
+      "sheet": "KW( )611",
+      "images": [
+        {
+          "src": "/systems/drawing-41.webp",
+          "width": 1248,
+          "height": 1374,
+          "label": "Wall lining overview"
+        },
+        {
+          "src": "/systems/drawing-40.webp",
+          "width": 828,
+          "height": 1011,
+          "label": "Profile detail"
+        }
+      ]
+    }
+  },
+  "KWD623": {
+    "base": {
+      "sheet": "KWD63",
+      "images": [
+        {
+          "src": "/systems/drawing-42.webp",
+          "width": 341,
+          "height": 180,
+          "label": "Wall lining overview and section"
+        }
+      ]
+    }
+  },
+  "KWD611": {
+    "base": {
+      "sheet": "KWD611",
+      "images": [
+        {
+          "src": "/systems/drawing-43.webp",
+          "width": 2076,
+          "height": 1257,
+          "label": "Wall lining overview"
+        }
+      ]
+    }
+  }
+}
