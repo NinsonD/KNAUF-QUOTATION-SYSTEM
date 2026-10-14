@@ -92,7 +92,7 @@ export default function MaterialGrid({
               <th className="py-3 px-3 w-32 text-right">Project Qty</th>
               <th className="py-3 px-3 w-36 text-right">Price (AED)</th>
               <th className="py-3 px-4 w-36 text-right">Total (AED)</th>
-              <th className="py-3 px-2 w-12 text-center">Action</th>
+              <th className="py-3 px-2 w-12 text-center"><span className="sr-only">Remove item</span></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-medium">
@@ -164,7 +164,7 @@ export default function MaterialGrid({
                     title={`Delete ${item.productName}`} aria-label={`Delete base item ${idx + 1}: ${item.productName}`} disabled={ratesOnly}
                     className="material-delete-button"
                   >
-                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /><span>Delete</span>
+                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
@@ -262,7 +262,7 @@ export default function MaterialGrid({
                         disabled={ratesOnly} aria-label={`Delete head item ${idx + 1}: ${item.productName}`}
                         className="material-delete-button"
                       >
-                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /><span>Delete</span>
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </td>
                   </tr>
