@@ -308,3 +308,46 @@ body { background: var(--desk-bg); color: var(--desk-text); font-size: 14px; }
   }
 }
 
+
+/* Keep quotation item actions visible at every available form width. */
+.desk-body-wide { max-width: 1680px; }
+.desk-new-quote-items { grid-column: 1 / -1; }
+.desk-material-grid { container-type: inline-size; }
+.material-table-wrap { min-width: 0; }
+.material-table { table-layout: fixed; width: 100%; }
+.material-table th:nth-child(1) { width: 36px; }
+.material-table th:nth-child(2) { width: auto; min-width: 0; }
+.material-table th:nth-child(3) { width: 96px; }
+.material-table th:nth-child(4) { width: 70px; }
+.material-table th:nth-child(5) { width: 100px; }
+.material-table th:nth-child(6) { width: 106px; }
+.material-table th:nth-child(7) { width: 120px; }
+.material-table th:nth-child(8) { width: 88px; }
+.material-table th, .material-table td { padding-left: 8px; padding-right: 8px; overflow-wrap: anywhere; }
+.material-table input, .material-table select, .material-table textarea { width: 100%; min-width: 0; max-width: 100%; }
+.material-table textarea { field-sizing: content; min-height: 52px; resize: vertical; white-space: normal; overflow-wrap: anywhere; }
+.material-table td[data-label]::before { display: none; }
+.material-delete-button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 34px; width: 100%; padding: 6px; border: 1px solid #fecdd3; border-radius: 6px; background: #fff1f2; color: #be123c; font-size: 11px; font-weight: 500; }
+.material-delete-button:hover:not(:disabled) { background: #ffe4e6; border-color: #fda4af; }
+.material-delete-button:focus-visible { outline: 2px solid #be123c; outline-offset: 2px; }
+.material-delete-button:disabled { opacity: .45; }
+@container (max-width: 880px) {
+  .material-table, .material-table tbody, .material-table tfoot { display: block; }
+  .material-table > thead:first-of-type { display: none; }
+  .material-table > thead:not(:first-of-type), .material-table > thead:not(:first-of-type) tr, .material-table > thead:not(:first-of-type) th { display: block; width: 100%; }
+  .material-table .material-item-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: 8px; gap: 4px 8px; border-bottom: 1px solid var(--desk-border); }
+  .material-item-row td { display: block; min-width: 0; padding: 6px; }
+  .material-item-row td:first-child { display: none; }
+  .material-item-row td:nth-child(2) { grid-column: 1 / -1; }
+  .material-item-row td[data-label]::before { content: attr(data-label); display: block; margin-bottom: 5px; color: #687178; font-family: inherit; font-size: 11px; font-weight: 400; text-align: left; }
+  .material-item-row td:last-child::before { content: ''; }
+  .material-item-row textarea { min-height: 44px; }
+  .material-item-row td:last-child { align-self: end; }
+  .material-delete-button { min-height: 40px; }
+  .material-summary-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(100px,auto); align-items: center; }
+  .material-summary-row td { display: block; padding: 10px; min-width: 0; }
+  .material-summary-row td:empty { display: none; }
+}
+@container (max-width: 880px) {
+  .material-summary-row .material-summary-helper { display: none; }
+}

@@ -81,38 +81,37 @@ export default function MaterialGrid({
       )}
 
       {/* Main Base Items Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-700">
+      <div className="material-table-wrap">
+        <table className="material-table w-full text-left text-xs text-slate-700">
           <thead className="bg-[#00488e] text-white uppercase text-[11px] font-bold border-b border-blue-900/40">
             <tr>
               <th className="py-3 px-3 w-10 text-center">#</th>
-              <th className="py-3 px-4 min-w-[280px]">Product Name / Specification</th>
+              <th className="py-3 px-4 ">Product Name / Specification</th>
               <th className="py-3 px-3 w-36 text-right">Req. / 1 m²</th>
               <th className="py-3 px-2 w-20 text-center">Unit</th>
               <th className="py-3 px-3 w-32 text-right">Project Qty</th>
               <th className="py-3 px-3 w-36 text-right">Price (AED)</th>
               <th className="py-3 px-4 w-36 text-right">Total (AED)</th>
-              <th className="py-3 px-2 w-12 text-center"></th>
+              <th className="py-3 px-2 w-12 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-medium">
             {baseItems.map((item, idx) => (
-              <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
-                <td className="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">
+              <tr key={idx} className="material-item-row hover:bg-blue-50/30 transition-colors">
+                <td data-label="Row" className="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">
                   {idx + 1}
                 </td>
-                <td className="py-2.5 px-4">
-                  <input
-                    type="text" disabled={ratesOnly}
+                <td data-label="Product / specification" className="py-2.5 px-4">
+                  <textarea
+                    rows={2} aria-label={`Specification for item ${idx + 1}`} disabled={ratesOnly}
                     value={item.productName}
                     onChange={(e) => onUpdateBaseItem(idx, { productName: e.target.value })}
-                    className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-[#00488e] focus:bg-white focus:outline-none transition-colors"
-                  />
+                    className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-slate-300 focus:border-[#00488e] focus:bg-white focus:outline-none transition-colors" />
                 </td>
-                <td className="py-2.5 px-3 text-right">
+                <td data-label="Req. / 1 m²" className="py-2.5 px-3 text-right">
                   <input
                     type="number"
-                    step="0.0001"
+                    step="0.0001" aria-label={`Requirement per square metre for ${item.productName}`}
                     min="0"
                     disabled={ratesOnly} value={item.factorPerM2}
                     onChange={(e) => {
@@ -124,8 +123,8 @@ export default function MaterialGrid({
                     className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-slate-200 focus:border-[#00488e] focus:outline-none"
                   />
                 </td>
-                <td className="py-2.5 px-2 text-center">
-                  <select
+                <td data-label="Unit" className="py-2.5 px-2 text-center">
+                  <select aria-label={`Unit for ${item.productName}`}
                     disabled={ratesOnly} value={item.unit}
                     onChange={(e) => onUpdateBaseItem(idx, { unit: e.target.value })}
                     className="text-center font-mono text-xs px-1 py-1 rounded border border-slate-200 focus:outline-none"
@@ -138,10 +137,10 @@ export default function MaterialGrid({
                     <option value="buckets">buckets</option>
                   </select>
                 </td>
-                <td className="py-2.5 px-3 text-right font-mono font-semibold text-slate-900">
+                <td data-label="Project quantity" className="py-2.5 px-3 text-right font-mono font-semibold text-slate-900">
                   {item.totalQuantity.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 3 })}
                 </td>
-                <td className="py-2.5 px-3 text-right">
+                <td data-label="Rate (AED)" className="py-2.5 px-3 text-right">
                   <input
                     type="number"
                     step="0.001"
@@ -155,24 +154,24 @@ export default function MaterialGrid({
                     className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-[#fed7aa] bg-[#fff3ec]/60 focus:border-[#f86c29] focus:outline-none text-[#e05615]"
                   />
                 </td>
-                <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-900">
+                <td data-label="Total (AED)" className="py-2.5 px-4 text-right font-mono font-bold text-slate-900">
                   AED {item.totalPriceAed.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="py-2.5 px-2 text-center">
+                <td data-label="Action" className="py-2.5 px-2 text-center">
                   <button
                     type="button"
                     onClick={() => onRemoveBaseItem(idx)}
-                    title="Remove item" disabled={ratesOnly}
-                    className="text-slate-400 hover:text-rose-500 p-1 transition-colors"
+                    title={`Delete ${item.productName}`} aria-label={`Delete base item ${idx + 1}: ${item.productName}`} disabled={ratesOnly}
+                    className="material-delete-button"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /><span>Delete</span>
                   </button>
                 </td>
               </tr>
             ))}
 
             {/* Base Subtotal Row */}
-            <tr className="bg-slate-100/90 font-bold border-t-2 border-slate-300">
+            <tr className="material-summary-row bg-slate-100/90 font-bold border-t-2 border-slate-300">
               <td colSpan={5} className="py-3 px-4 text-right uppercase tracking-wide text-xs text-[#00488e]">
                 Base Assembly Subtotal (AED):
               </td>
@@ -184,7 +183,7 @@ export default function MaterialGrid({
               </td>
               <td></td>
             </tr>
-            <tr className="bg-blue-50/40 font-bold border-b border-slate-200">
+            <tr className="material-summary-row bg-blue-50/40 font-bold border-b border-slate-200">
               <td colSpan={5} className="py-2 px-4 text-right text-xs text-slate-600">
                 Base Rate Per M²:
               </td>
@@ -207,22 +206,21 @@ export default function MaterialGrid({
               </thead>
               <tbody className="divide-y divide-emerald-100 font-medium bg-emerald-50/20">
                 {deflectionItems.map((item, idx) => (
-                  <tr key={`def-${idx}`} className="hover:bg-emerald-50/50 transition-colors">
-                    <td className="py-2.5 px-3 text-center text-emerald-700 font-mono text-[11px]">
+                  <tr key={`def-${idx}`} className="material-item-row hover:bg-emerald-50/50 transition-colors">
+                    <td data-label="Row" className="py-2.5 px-3 text-center text-emerald-700 font-mono text-[11px]">
                       D{idx + 1}
                     </td>
-                    <td className="py-2.5 px-4">
-                      <input
-                        type="text" disabled={ratesOnly}
+                    <td data-label="Product / specification" className="py-2.5 px-4">
+                      <textarea
+                        rows={2} aria-label={`Specification for item ${idx + 1}`} disabled={ratesOnly}
                         value={item.productName}
                         onChange={(e) => onUpdateDeflectionItem(idx, { productName: e.target.value })}
-                        className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-emerald-300 focus:border-emerald-600 focus:bg-white focus:outline-none"
-                      />
+                        className="w-full px-2 py-1 text-xs rounded border border-transparent hover:border-emerald-300 focus:border-emerald-600 focus:bg-white focus:outline-none" />
                     </td>
-                    <td className="py-2.5 px-3 text-right">
+                    <td data-label="Req. / 1 m²" className="py-2.5 px-3 text-right">
                       <input
                         type="number"
-                        step="0.0001"
+                        step="0.0001" aria-label={`Requirement per square metre for ${item.productName}`}
                         min="0"
                         disabled={ratesOnly} value={item.factorPerM2}
                         onChange={(e) => {
@@ -234,13 +232,13 @@ export default function MaterialGrid({
                         className="w-24 px-2 py-1 text-right font-mono text-xs rounded border border-emerald-200 focus:border-emerald-600 focus:outline-none"
                       />
                     </td>
-                    <td className="py-2.5 px-2 text-center">
+                    <td data-label="Unit" className="py-2.5 px-2 text-center">
                       <span className="font-mono text-xs">{item.unit}</span>
                     </td>
-                    <td className="py-2.5 px-3 text-right font-mono font-semibold text-emerald-950">
+                    <td data-label="Project quantity" className="py-2.5 px-3 text-right font-mono font-semibold text-emerald-950">
                       {item.totalQuantity.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 3 })}
                     </td>
-                    <td className="py-2.5 px-3 text-right">
+                    <td data-label="Rate (AED)" className="py-2.5 px-3 text-right">
                       <input
                         type="number"
                         step="0.001"
@@ -254,35 +252,34 @@ export default function MaterialGrid({
                         className="w-24 px-2 py-1 text-right font-mono text-xs font-bold rounded border border-emerald-300 bg-emerald-50 focus:border-emerald-600 focus:outline-none text-emerald-900"
                       />
                     </td>
-                    <td className="py-2.5 px-4 text-right font-mono font-bold text-emerald-950">
+                    <td data-label="Total (AED)" className="py-2.5 px-4 text-right font-mono font-bold text-emerald-950">
                       AED {item.totalPriceAed.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
-                    <td className="py-2.5 px-2 text-center">
+                    <td data-label="Action" className="py-2.5 px-2 text-center">
                       <button
                         type="button"
                         onClick={() => onRemoveDeflectionItem(idx)}
-                        className="text-slate-400 hover:text-rose-500 p-1 transition-colors"
+                        disabled={ratesOnly} aria-label={`Delete head item ${idx + 1}: ${item.productName}`}
+                        className="material-delete-button"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /><span>Delete</span>
                       </button>
                     </td>
                   </tr>
                 ))}
 
                 {/* Deflection Subtotal */}
-                <tr className="bg-emerald-100 font-bold border-t border-emerald-300">
+                <tr className="material-summary-row bg-emerald-100 font-bold border-t border-emerald-300">
                   <td colSpan={5} className="py-2.5 px-4 text-right uppercase tracking-wide text-xs text-emerald-950">
                     Deflection Total (AED):
                   </td>
-                  <td className="py-2.5 px-3 text-right text-xs text-emerald-800 font-mono">
-                    DEF. RATE:
-                  </td>
+                  <td className="material-summary-helper" aria-hidden="true"></td>
                   <td className="py-2.5 px-4 text-right font-mono text-sm text-emerald-950">
                     AED {defSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                   <td></td>
                 </tr>
-                <tr className="bg-emerald-50 font-bold">
+                <tr className="material-summary-row bg-emerald-50 font-bold">
                   <td colSpan={5} className="py-2 px-4 text-right text-xs text-emerald-800">
                     Deflection Rate Per M²:
                   </td>
@@ -297,19 +294,17 @@ export default function MaterialGrid({
 
           {/* Grand Totals Footer with Brand Blue & Orange */}
           <tfoot>
-            <tr className="bg-[#002d5a] text-white font-bold text-sm">
+            <tr className="material-summary-row bg-[#002d5a] text-white font-bold text-sm">
               <td colSpan={5} className="py-4 px-4 text-right uppercase tracking-wider text-white">
                 Commercial Grand Total (AED):
               </td>
-              <td className="py-4 px-3 text-right text-xs text-blue-200 uppercase font-mono">
-                Grand Rate:
-              </td>
+              <td className="material-summary-helper" aria-hidden="true"></td>
               <td className="py-4 px-4 text-right font-mono text-lg text-[#f86c29]">
                 AED {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </td>
               <td></td>
             </tr>
-            <tr className="bg-[#001f3f] text-blue-200 font-medium text-xs">
+            <tr className="material-summary-row bg-[#001f3f] text-blue-200 font-medium text-xs">
               <td colSpan={5} className="py-2.5 px-4 text-right">
                 Grand Rate Per M² (Base + Deflection):
               </td>

@@ -13,7 +13,7 @@ export default function DeskShell({ children }: { children: React.ReactNode }) {
   const { permissions } = useAuth();
   const fullPage = pathname === '/login' || pathname.endsWith('/print');
   return <div className="app-bento-canvas desk-shell"><Navbar onToggle={() => setMobileOpen(value => !value)} expanded={mobileOpen} showToggle={!fullPage} />
-    <div className={`desk-body ${fullPage ? 'desk-body-full' : ''}`}>
+    <div className={`desk-body ${pathname === '/quotes/new' ? 'desk-body-wide' : ''} ${fullPage ? 'desk-body-full' : ''}`}>
       {!fullPage && <><button hidden={!mobileOpen} className="desk-sidebar-backdrop no-print" aria-label="Close navigation" onClick={() => setMobileOpen(false)} /><aside id="desk-sidebar" className={`desk-sidebar no-print ${mobileOpen ? 'is-open' : ''}`}>
         <div className="desk-workspace-title"><span className="desk-workspace-icon"><FileText size={16} /></span><span>Selling</span><ChevronDown size={14} className="ml-auto" /></div>
         <p className="desk-sidebar-label">Workspace</p>
